@@ -1,3 +1,13 @@
+# jb-image-input
+## instruction
+### usage
+```cmd
+npm i jb-image-input
+```
+```html
+<jb-image-input></jb-image-input>
+```
+### current status
 you can access current image input status by `element.status`
 
 ### check validation
