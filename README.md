@@ -42,3 +42,11 @@ document.querySelector('jb-image-input').addEventListener('imageSelected',functi
 
 ```
 remember first file is uploaded by orginal image input and you dont need to inject it to another input and thats why we start from index 1
+
+### image accept type
+
+tell webcomponent what image mimetype are acceptable 
+```js
+ document.querySelectorAll('jb-image-input').acceptTypes = "image/jpeg,image/jpg,image/png,image/svg+xml"
+
+```
