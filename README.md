@@ -1,13 +1,33 @@
 # jb-image-input
+
+image input web component let user upload image and see what is uploaded
+
+- ability multiple image upload
+
+- can connect to your custom REST service bridge (you can have your own way of uploading image)
+
+- show loading
+
+- can be used in both instant upload or keep image and upload image on form submit
+
+- customizable format
+
+sample: <https://codepen.io/javadbat/pen/XWpoEYY>
+
 ## instruction
+
 ### usage
+
 ```cmd
 npm i jb-image-input
 ```
+
 ```html
 <jb-image-input></jb-image-input>
 ```
+
 ### current status
+
 you can access current image input status by `element.status`
 
 ### check validation
@@ -25,9 +45,11 @@ we have 4 step to help you implement multi image input
 ```html
 <jb-image-input multiple="true">
 ```
+
 2- `imageSelected` event is fired on user select image and in `event.detail.files`you can get all files that user selected
 3- create new `<jb-image-input>` dom by js with `document.createElement('jb-image-input')`
 4- inject the files you get in step 2 into your component by a `selectImageByFile` function
+
 ```js
 document.querySelector('jb-image-input').addEventListener('imageSelected',function(e){
     const files = e.detail.files;
@@ -41,11 +63,13 @@ document.querySelector('jb-image-input').addEventListener('imageSelected',functi
 });
 
 ```
+
 remember first file is uploaded by orginal image input and you dont need to inject it to another input and thats why we start from index 1
 
 ### image accept type
 
-tell webcomponent what image mimetype are acceptable 
+tell webcomponent what image mimetype are acceptable
+
 ```js
  document.querySelectorAll('jb-image-input').acceptTypes = "image/jpeg,image/jpg,image/png,image/svg+xml"
 
