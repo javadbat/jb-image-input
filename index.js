@@ -1,1 +1,1 @@
-import './dist/JBImageInput'
+import './dist/JBImageInput.js';

@@ -1,6 +1,7 @@
 {
   "name": "jb-image-input",
   "description": "image input web component",
+  "type": "module",
   "author": {
 		"name": "mohammad javad bathaei",
 		"email": "javadbat@gmail.com"
@@ -11,7 +12,7 @@
     "image input",
     "web component"
   ],
-  "version": "1.0.4",
+  "version": "1.0.5",
   "bugs": "https://github.com/javadbat/jb-image-input/issues",
   "license": "MIT",
   "files": [
