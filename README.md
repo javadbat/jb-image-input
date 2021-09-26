@@ -108,3 +108,16 @@ this.config = {
         };
 ```
 
+### custom placeholder
+if you want to show your custom content when uploader is empty and ready to recieve image in first place ypo can put your own content by using custom slot.
+to make that happen you just have to put your div and content in `jb-image-input` tag like below example:
+
+```HTML
+<jb-image-input>
+    <div slot="placeholder">
+            <div>custom placeholder</div>
+    </div>
+</jb-image-input>
+```
+you can place any element you need base on you design in `<div slot="placeholder">` you can use anything other than div too for example `<h1 slot="placeholder">` but you must set attribute `slot="placeholder"` in it
+
