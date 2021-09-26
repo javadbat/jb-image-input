@@ -74,3 +74,37 @@ tell webcomponent what image mimetype are acceptable
  document.querySelectorAll('jb-image-input').acceptTypes = "image/jpeg,image/jpg,image/png,image/svg+xml"
 
 ```
+### set bridge for upload and download image
+
+`jb-image-input` do not upload and download image automatically. it just handle ui states.
+you must provide 2 function `uploader` and `downloader` to component like this:
+
+```javascript
+document.querySelectorAll('jb-image-input').bridge = {
+            uploader: function (file,config,uploadProgressCallbackFunction) { /*put your functionality here*/},
+            downloader: function (value, config) { /*put your functionality here*/}
+        };
+```
+
+you can create a class and pass class instance or create a simple object and pass it to component, depend on your need.
+both uploader and downloader must return `Promise` and resolve it on task completed
+
+| argumant variable name              | description                                                                                   |
+| -------------                       | -------------                                                                                 |
+| file                                | the file that user select from his computer                                                   |
+| config                              | the config developer provided to component. most of the times projects has a one bridge instance for many image input so in this case you build only one bridge and pass it to all of your components and pass parameter like `url`, `method` , `fieldName`, ... in config so your bridge can decide how to upload and download app |
+| uploadProgressCallbackFunction      | its a optional parameter you can use to tell component how much file uploaded currently                                     |
+| value                               | value is a data that your uploader promise resolved for example if your uploader is: `uploader:()=>{upload().then(()=>{resolve({fileName:'img.jpg',path:'x.com/img.jpg',id:'10'})})}` then your value wil be `{fileName:'img.jpg',path:'x.com/img.jpg',id:'10'}`|
+
+### set config
+
+config is not something that our component use, it just the config you need in your bridge so you can set it however you want base on your need. we just keep it in component and send it to your uploader and downloader function so you can structure it your self. we just make a defualt structure as following object
+
+```javascript
+this.config = {
+            uploadUrl: '',
+            downloadUrl: '',
+            // developer can add every config he want's to get on bridge functions
+        };
+```
+
