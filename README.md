@@ -119,5 +119,31 @@ to make that happen you just have to put your div and content in `jb-image-input
     </div>
 </jb-image-input>
 ```
-you can place any element you need base on you design in `<div slot="placeholder">` you can use anything other than div too for example `<h1 slot="placeholder">` but you must set attribute `slot="placeholder"` in it
+you can place any element you need base on you design in `<div slot="placeholder">` you can use anything other than div too for example `<h1 slot="placeholder">` but you must set attribute `slot="placeholder"` in it.
+
+### max File Size
+
+you can set max for user file size so user cant upload file larger than your limit. to do so just set `maxFileSize` like following example:
+
+```javascript
+//set max file size to 2MB
+document.querySelector('jb-image-input').maxFileSize = 2*1024*1024;
+```
+when user select fiile bigger than that image input will ignore file and dispatch(fire) the `maxSizeExceed` event
+```javascript
+//set max file size to 2MB
+document.querySelector('jb-image-input').addEventListener('maxSizeExceed',(e)=>{
+    alert(`your file is ${e.detail.file.size} size and it's bigger than 2MB`);
+});
+```
+### set custome style
+
+in some cases in your project you need to change defualt style of web-component for example you need zero margin or different border-radius and etc.    
+if you want to set a custom style to this web-component all you need is to set css variable in parent scope of web-component 
+| css variable name                  | description                                                                                   |
+| -------------                      | -------------                                                                                 |
+| --jb-image-input-width             | web-component width defualt is `100%`                                                         |
+| --jb-image-input-height            | web-component height defualt is `100%`                                                        |
+| --jb-image-input-bg-color          | web-component background-color defualt is `#f7f6f6`                                           |
+| --jb-image-input-border-radius     | web-component border radius defualt is `24px`                                                 |
 
