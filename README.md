@@ -140,10 +140,10 @@ document.querySelector('jb-image-input').addEventListener('maxSizeExceed',(e)=>{
 
 in some cases in your project you need to change defualt style of web-component for example you need zero margin or different border-radius and etc.    
 if you want to set a custom style to this web-component all you need is to set css variable in parent scope of web-component 
-| css variable name                  | description                                                                                   |
-| -------------                      | -------------                                                                                 |
-| --jb-image-input-width             | web-component width defualt is `100%`                                                         |
-| --jb-image-input-height            | web-component height defualt is `100%`                                                        |
-| --jb-image-input-bg-color          | web-component background-color defualt is `#f7f6f6`                                           |
-| --jb-image-input-border-radius     | web-component border radius defualt is `24px`                                                 |
-
+| css variable name                     | description                                                                                   |
+| -------------                         | -------------                                                                                 |
+| --jb-image-input-width                | web-component width defualt is `100%`                                                         |
+| --jb-image-input-height               | web-component height defualt is `100%`                                                        |
+| --jb-image-input-bg-color             | web-component background-color defualt is `#f7f6f6`                                           |
+| --jb-image-input-border-radius        | web-component border radius defualt is `24px`                                                 |
+| --jb-image-input-placeholder-bg-color | web-component placholder background-color defualt is transparent                              |
