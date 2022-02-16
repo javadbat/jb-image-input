@@ -1,12 +1,12 @@
 import HTML from './JBImageInput.html';
 import CSS from './JBImageInput.scss';
-
-class JBImageInputWebComponent extends HTMLElement {
+import {JBImageInputBridge, JBImageInputConfig, JBImageInputValidationErrorTypes, JBImagesImageInputElements} from './Types';
+export class JBImageInputWebComponent extends HTMLElement {
     get value() {
-        return this._value;
+        return this.#value;
     }
     set value(value) {
-        this._value = value;
+        this.#value = value;
         if (value != null) {
             if(this.uploadType == "AUTO"){
                 this.bridge.downloader(value, this.config).then(this.onSuccessImageDownload.bind(this));
@@ -16,32 +16,39 @@ class JBImageInputWebComponent extends HTMLElement {
            
         }
     }
+    #status: string | null = null;
+    #virtualInputFile!: HTMLInputElement;
+    #elements!:JBImagesImageInputElements
+    selectedImageType : null | string = null;
     get status() {
         //it is read only variable
-        return this._status;
+        return this.#status;
     }
     get multiple(){
-        return this._multiple;
+        return this.#multiple;
     }
     set multiple(value){
-        this._multiple = value;
-        if(this._multiple){
-            this._virtualInputFile.setAttribute('multiple','multiple');
+        this.#multiple = value;
+        if(this.#multiple){
+            this.#virtualInputFile.setAttribute('multiple','multiple');
         }else{
-            this._virtualInputFile.removeAttribute('multiple');
+            this.#virtualInputFile.removeAttribute('multiple');
         }
        
     }
+    #acceptType = "image/jpeg,image/jpg,image/png,image/svg+xml";
     get acceptTypes(){
-        return this._acceptTypes;
+        return this.#acceptType;
     }
     set acceptTypes(value){
-        this._acceptTypes = value;
-        if(this._virtualInputFile){
-            this._virtualInputFile.accept = value;
+        this.#acceptType = value;
+        if(this.#virtualInputFile){
+            this.#virtualInputFile.accept = value;
         }
     }
     #maxFileSize = null;
+    #value:any = null;
+    imageBase64Value:string | null = null;
     get maxFileSize(){
         return this.#maxFileSize;
     }
@@ -64,48 +71,46 @@ class JBImageInputWebComponent extends HTMLElement {
         const shadowRoot = this.attachShadow({
             mode: 'open'
         });
-        this._html = `<style>${CSS}</style>` + '\n' + HTML;
+        const html = `<style>${CSS}</style>` + '\n' + HTML;
         const element = document.createElement('template');
-        element.innerHTML = this._html;
+        element.innerHTML = html;
         shadowRoot.appendChild(element.content.cloneNode(true));
-        this.elements= {
-            webComponent:shadowRoot.querySelector('.jb-image-input-web-component'),
-            placeHolderWrapper:shadowRoot.querySelector('.placeholder-wrapper'),
-            placeHolderTitle:shadowRoot.querySelector('.placeholder-title'),
-            image:shadowRoot.querySelector('.image-wrapper img'),
+        this.#elements= {
+            webComponent:shadowRoot.querySelector('.jb-image-input-web-component')!,
+            placeHolderWrapper:shadowRoot.querySelector('.placeholder-wrapper')!,
+            placeHolderTitle:shadowRoot.querySelector('.placeholder-title')!,
+            image:shadowRoot.querySelector('.image-wrapper img')!,
         };
     }
+    uploadType = "AUTO"
+    #multiple = false;
+    config:JBImageInputConfig = {
+        uploadUrl: '',
+        downloadUrl: '',
+        // developer can add every config he want to get on bridge functions
+    };
+    bridge:JBImageInputBridge = {
+        uploader: function () { console.error('you must set uploader function by bridge to component for upload functionality'); return Promise.reject(); },
+        downloader: function () { console.error('you must set downloader function by bridge to component for download functionality'); return Promise.reject(); },
+    };
+    required = false;
     initProp() {
         this.acceptTypes = "image/jpeg,image/jpg,image/png,image/svg+xml";
         this.setStatus("empty");
         this.createVirtualInputFile();
-        this._value = null;
-        this.imageBase64Value = null;
-        this.uploadType = "AUTO";
-        this._multiple = false;
-        this.config = {
-            uploadUrl: '',
-            downloadUrl: '',
-            // developer can add every config he want to get on bridge functions
-        };
-        this.bridge = {
-            uploader: function () { console.error('you must set uploader function by bridge to component for upload functionality');},
-            downloader: function () { console.error('you must set downloader function by bridge to component for download functionality');}
-        };
-        this.required = false;
     }
     registerEventListener() {
-        this.elements.placeHolderWrapper.addEventListener('click', this.openImageSelector.bind(this));
-        this.elements.image.addEventListener('click', this.openImageSelector.bind(this));
+        this.#elements.placeHolderWrapper.addEventListener('click', this.openImageSelector.bind(this));
+        this.#elements.image.addEventListener('click', this.openImageSelector.bind(this));
     }
     createVirtualInputFile() {
-        this._virtualInputFile = document.createElement('input');
-        this._virtualInputFile.type = "file";
-        this._virtualInputFile.accept = this.acceptTypes;
-        this._virtualInputFile.addEventListener('change', (e) => this.onImageSelected(e));
+        this.#virtualInputFile = document.createElement('input');
+        this.#virtualInputFile.type = "file";
+        this.#virtualInputFile.accept = this.acceptTypes;
+        this.#virtualInputFile.addEventListener('change', (e) => this.onImageSelected(e));
     }
     openImageSelector() {
-        this._virtualInputFile.click();
+        this.#virtualInputFile.click();
     }
     static get observedAttributes() {
         return ['required', 'placeholder-title', 'upload-type', 'multiple'];
@@ -124,8 +129,8 @@ class JBImageInputWebComponent extends HTMLElement {
                 }
                 break;
             case 'placeholder-title':
-                if(this.elements.placeHolderTitle){
-                    this.elements.placeHolderTitle.innerHTML = value;
+                if(this.#elements.placeHolderTitle){
+                    this.#elements.placeHolderTitle.innerHTML = value;
                 }
                 break;
             case 'upload-type':
@@ -151,7 +156,7 @@ class JBImageInputWebComponent extends HTMLElement {
             //if user select file and not click on cancel
             //when user select a image from his computer but dont want to edit
             this.callOnImageSelected(e.target.files);
-            let file = e.target.files[0];
+            const file = e.target.files[0];
             this.selectImageByFile(file);
         }
     }
@@ -188,10 +193,14 @@ class JBImageInputWebComponent extends HTMLElement {
     }
     Extractbase64ImageFromFile(file){
         return new Promise ((resolved, rejected)=>{
-            var reader = new FileReader();
+            const reader = new FileReader();
             reader.onload = e => {
-                const mainImageSource = e.target.result;
-                resolved(mainImageSource);
+                const mainImageSource = e.target?.result;
+                if(mainImageSource){
+                    resolved(mainImageSource);
+                }else{
+                    rejected(e);
+                }
             };
             reader.readAsDataURL(file);
         });
@@ -217,7 +226,7 @@ class JBImageInputWebComponent extends HTMLElement {
         } else {
             this.setStatus('empty');
         }
-        this._virtualInputFile.value = '';
+        this.#virtualInputFile.value = '';
     }
     onProgressImageUpload(e) {
         //TODO: add animation for upload
@@ -229,11 +238,11 @@ class JBImageInputWebComponent extends HTMLElement {
     onSuccessImageDownload(base64Image) {
         this.setStatus('downloaded');
         this.imageBase64Value = base64Image;
-        this.elements.image.setAttribute('src', base64Image);
+        this.#elements.image.setAttribute('src', base64Image);
     }
     setStatus(status) {
-        this.elements.webComponent.setAttribute('status', status);
-        this._status = status;
+        this.#elements.webComponent.setAttribute('status', status);
+        this.#status = status;
     }
     /**
      * 
@@ -243,7 +252,7 @@ class JBImageInputWebComponent extends HTMLElement {
     triggerInputValidation(showError = true) {
         // this method is public and used outside of component to check if field validity param are met
 
-        let errorType = '';
+        let errorType:JBImageInputValidationErrorTypes = '';
         let requiredValid = true;
         if (this.required) {
 
@@ -252,7 +261,7 @@ class JBImageInputWebComponent extends HTMLElement {
                 errorType = 'REQUIRED';
             }
         }
-        let isAllValid = requiredValid; //& other validation if they added
+        const isAllValid = requiredValid; //& other validation if they added
         if (isAllValid) {
             this.clearValidationError();
         } else if (showError) {
@@ -262,13 +271,13 @@ class JBImageInputWebComponent extends HTMLElement {
             isAllValid
         };
     }
-    showValidationError(errorType) {
+    showValidationError(errorType: JBImageInputValidationErrorTypes) {
         if (errorType == 'REQUIRED') {
-            this.elements.webComponent.classList.add('--has-error');
+            this.#elements.webComponent.classList.add('--has-error');
         }
     }
-    clearValidationError(errorType) {
-        this.elements.webComponent.classList.remove('--has-error');
+    clearValidationError() {
+        this.#elements.webComponent.classList.remove('--has-error');
     }
 }
 const myElementNotExists = !customElements.get('jb-image-input');
