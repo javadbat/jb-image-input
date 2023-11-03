@@ -12,7 +12,7 @@
     "image input",
     "web component"
   ],
-  "version": "2.0.0",
+  "version": "2.0.2",
   "bugs": "https://github.com/javadbat/jb-image-input/issues",
   "license": "MIT",
   "files": [
@@ -23,6 +23,12 @@
   ],
   "main": "index.js",
   "types": "./dist/JBImageInput.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": ["./dist/JBImageInput.d.ts"],
+      "types":["./dist/Types.d.ts"]
+    }
+  },
   "repository": {
 		"type": "git",
 		"url": "git@github.com:javadbat/jb-image-input.git"

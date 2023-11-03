@@ -46,7 +46,7 @@ export class JBImageInputWebComponent extends HTMLElement {
             this.#virtualInputFile.accept = value;
         }
     }
-    #maxFileSize = null;
+    #maxFileSize:number | null = null;
     #value:any = null;
     imageBase64Value:string | null = null;
     get maxFileSize(){
