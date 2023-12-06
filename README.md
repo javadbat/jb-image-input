@@ -146,4 +146,6 @@ if you want to set a custom style to this web-component all you need is to set c
 | --jb-image-input-height               | web-component height defualt is `100%`                                                        |
 | --jb-image-input-bg-color             | web-component background-color defualt is `#f7f6f6`                                           |
 | --jb-image-input-border-radius        | web-component border radius defualt is `24px`                                                 |
+| --jb-image-input-placeholder-p-color  | web-component placholder icon primary color                                                   |
 | --jb-image-input-placeholder-bg-color | web-component placholder background-color defualt is transparent                              |
+| --jb-image-input-placeholder-sec-color| placeholder secendary color                                                                   |

@@ -27,15 +27,15 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        background-color:var(--jb-image-input-placeholder-bg-color,transparent) ;
+        background-color:var(--jb-image-input-placeholder-bg-color, transparent) ;
         .icon-wrapper {
             svg {
                 width: 64px;
                 height: 64px;
-                fill: #1e2832;
+                fill:var(--jb-image-input-placeholder-p-color, #1e2832);
 
                 .cls-1 {
-                    fill: #ff1229
+                    fill:var(--jb-image-input-placeholder-sec-color, #ff1229);
                 }
             }
         }
