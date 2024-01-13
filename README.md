@@ -32,12 +32,12 @@ you can access current image input status by `element.status`
 
 ### check validation
 
-you can check is image input value meet your validation standad by `dom.triggerInputValidation(showError)`
-the `showError` parameter is optional and its defualt is true but you cant set it false so if value is invalid component dont react and show error to user and just return validation object
+you can check is image input value meet your validation standard by `dom.triggerInputValidation(showError)`
+the `showError` parameter is optional and its default is true but you cant set it false so if value is invalid component don't react and show error to user and just return validation object
 
 ### multi image selector
 
-by defualt jb-image-input dont support multi image upload but in set of hack you can implement a system that user can select and upload multiple image
+by default jb-image-input don't support multi image upload but in set of hack you can implement a system that user can select and upload multiple image
 we have 4 step to help you implement multi image input
 
 1- set `multiple` attribute to dom to let user select multiple image
@@ -64,11 +64,11 @@ document.querySelector('jb-image-input').addEventListener('imageSelected',functi
 
 ```
 
-remember first file is uploaded by orginal image input and you dont need to inject it to another input and thats why we start from index 1
+remember first file is uploaded by original image input and you don't need to inject it to another input and thats why we start from index 1
 
 ### image accept type
 
-tell webcomponent what image mimetype are acceptable
+tell web-component what image mimetype are acceptable
 
 ```js
  document.querySelectorAll('jb-image-input').acceptTypes = "image/jpeg,image/jpg,image/png,image/svg+xml"
@@ -98,7 +98,7 @@ both uploader and downloader must return `Promise` and resolve it on task comple
 
 ### set config
 
-config is not something that our component use, it just the config you need in your bridge so you can set it however you want base on your need. we just keep it in component and send it to your uploader and downloader function so you can structure it your self. we just make a defualt structure as following object
+config is not something that our component use, it just the config you need in your bridge so you can set it however you want base on your need. we just keep it in component and send it to your uploader and downloader function so you can structure it your self. we just make a default structure as following object
 
 ```javascript
 this.config = {
@@ -109,7 +109,7 @@ this.config = {
 ```
 
 ### custom placeholder
-if you want to show your custom content when uploader is empty and ready to recieve image in first place ypo can put your own content by using custom slot.
+if you want to show your custom content when uploader is empty and ready to receive image in first place ypo can put your own content by using custom slot.
 to make that happen you just have to put your div and content in `jb-image-input` tag like below example:
 
 ```HTML
@@ -129,23 +129,23 @@ you can set max for user file size so user cant upload file larger than your lim
 //set max file size to 2MB
 document.querySelector('jb-image-input').maxFileSize = 2*1024*1024;
 ```
-when user select fiile bigger than that image input will ignore file and dispatch(fire) the `maxSizeExceed` event
+when user select file bigger than that image input will ignore file and dispatch(fire) the `maxSizeExceed` event
 ```javascript
 //set max file size to 2MB
 document.querySelector('jb-image-input').addEventListener('maxSizeExceed',(e)=>{
     alert(`your file is ${e.detail.file.size} size and it's bigger than 2MB`);
 });
 ```
-### set custome style
+### set custom style
 
-in some cases in your project you need to change defualt style of web-component for example you need zero margin or different border-radius and etc.    
+in some cases in your project you need to change default style of web-component for example you need zero margin or different border-radius and etc.    
 if you want to set a custom style to this web-component all you need is to set css variable in parent scope of web-component 
 | css variable name                     | description                                                                                   |
 | -------------                         | -------------                                                                                 |
-| --jb-image-input-width                | web-component width defualt is `100%`                                                         |
-| --jb-image-input-height               | web-component height defualt is `100%`                                                        |
-| --jb-image-input-bg-color             | web-component background-color defualt is `#f7f6f6`                                           |
-| --jb-image-input-border-radius        | web-component border radius defualt is `24px`                                                 |
-| --jb-image-input-placeholder-p-color  | web-component placholder icon primary color                                                   |
-| --jb-image-input-placeholder-bg-color | web-component placholder background-color defualt is transparent                              |
-| --jb-image-input-placeholder-sec-color| placeholder secendary color                                                                   |
+| --jb-image-input-width                | web-component width default is `100%`                                                         |
+| --jb-image-input-height               | web-component height default is `100%`                                                        |
+| --jb-image-input-bg-color             | web-component background-color default is `#f7f6f6`                                           |
+| --jb-image-input-border-radius        | web-component border radius default is `24px`                                                 |
+| --jb-image-input-placeholder-p-color  | web-component placeholder icon primary color                                                   |
+| --jb-image-input-placeholder-bg-color | web-component placeholder background-color default is transparent                              |
+| --jb-image-input-placeholder-sec-color| placeholder secondary color                                                                   |
