@@ -1,27 +1,32 @@
+import { ValidationHelper } from "../../../common/scripts/validation/validation-helper";
+import { ValidationItem } from "../../../common/scripts/validation/validation-helper-types";
 import HTML from "./JBImageInput.html";
 import CSS from "./JBImageInput.scss";
 import {
   JBImageInputBridge,
   JBImageInputConfig,
-  JBImageInputValidationErrorTypes,
   JBImagesImageInputElements,
+  ValidationValue,
 } from "./Types";
-export class JBImageInputWebComponent extends HTMLElement {
+export class JBImageInputWebComponent<TValue> extends HTMLElement {
+  //TODO: this component need refactor for ui design to show better loading in download & upload and better effect for succeed upload and Download
   get value() {
     return this.#value;
   }
   set value(value) {
     this.#value = value;
     if (value != null) {
-      if (this.uploadType == "AUTO") {
+      if (value instanceof File){
+        if(value instanceof File){
+          this.#ExtractBase64ImageFromFile(value).then(
+            this.onSuccessImageDownload.bind(this)
+          );
+        }
+      } else{
         this.bridge
           .downloader(value, this.config)
           .then(this.onSuccessImageDownload.bind(this));
-      } else {
-        this.Extractbase64ImageFromFile(value).then(
-          this.onSuccessImageDownload.bind(this)
-        );
-      }
+      }  
     }
   }
   #status: string | null = null;
@@ -54,7 +59,12 @@ export class JBImageInputWebComponent extends HTMLElement {
     }
   }
   #maxFileSize: number | null = null;
-  #value: any = null;
+  #value: TValue| null = null;
+  #file:File | null = null;
+  #uploadProgressPercent: number | null = null;
+  get file(){
+    return this.#file;
+  }
   imageBase64Value: string | null = null;
   get maxFileSize() {
     return this.#maxFileSize;
@@ -68,11 +78,18 @@ export class JBImageInputWebComponent extends HTMLElement {
       }
     }
   }
+  #validation = new ValidationHelper<ValidationValue>(this.showValidationError.bind(this),this.clearValidationError.bind(this),()=>({file:this.#file}),()=>this.fileName,this.#getInsideValidation.bind(this));
+  get validation(){
+    return this.#validation;
+  }
   constructor() {
     super();
     this.initWebComponent();
     this.initProp();
     this.registerEventListener();
+  }
+  get fileName():string{
+    return this.#file.name;
   }
   initWebComponent() {
     const shadowRoot = this.attachShadow({
@@ -89,14 +106,13 @@ export class JBImageInputWebComponent extends HTMLElement {
       image: shadowRoot.querySelector(".image-wrapper img")!,
     };
   }
-  uploadType = "AUTO";
   #multiple = false;
   config: JBImageInputConfig = {
     uploadUrl: "",
     downloadUrl: "",
     // developer can add every config he want to get on bridge functions
   };
-  bridge: JBImageInputBridge = {
+  bridge: JBImageInputBridge<TValue> = {
     uploader: function () {
       console.error(
         "you must set uploader function by bridge to component for upload functionality"
@@ -138,7 +154,7 @@ export class JBImageInputWebComponent extends HTMLElement {
     this.#virtualInputFile.click();
   }
   static get observedAttributes() {
-    return ["required", "placeholder-title", "upload-type", "multiple"];
+    return ["required", "placeholder-title", "multiple"];
   }
   attributeChangedCallback(name:string, oldValue:string, newValue:string) {
     // do something when an attribute has changed
@@ -156,13 +172,6 @@ export class JBImageInputWebComponent extends HTMLElement {
       case "placeholder-title":
         if (this.#elements.placeHolderTitle) {
           this.#elements.placeHolderTitle.innerHTML = value;
-        }
-        break;
-      case "upload-type":
-        if (value == "AUTO" || value == "MANUAL") {
-          this.uploadType = value;
-        } else {
-          console.error("please set valid upload-type for jb-image-input");
         }
         break;
       case "multiple":
@@ -196,28 +205,23 @@ export class JBImageInputWebComponent extends HTMLElement {
   selectImageByFile(file:File) {
     //this function is public too and can be used outside of component so external resource can inject file in component to upload and show
     if (this.maxFileSize && file.size > this.maxFileSize) {
-      this.dispatchMaxSizeExceedEvent(file);
+      this.#dispatchMaxSizeExceedEvent(file);
     } else {
-      if (this.uploadType == "MANUAL") {
-        this.setImageToSelectedFile(file);
-      }
-      if (this.uploadType == "AUTO") {
-        this.uploadImage(file);
-      }
-
+      this.setImageToSelectedFile(file);
+      this.uploadImage(file);
       this.selectedImageType = file.type;
     }
   }
   setImageToSelectedFile(file:File) {
     //this function called when user select file and upload type is manual so we show image from local
-    this.value = file;
+    this.#file = file;
     this.triggerOnChangeEvent();
   }
-  dispatchMaxSizeExceedEvent(file:File) {
+  #dispatchMaxSizeExceedEvent(file:File) {
     const event = new CustomEvent("maxSizeExceed", { detail: { file } });
     this.dispatchEvent(event);
   }
-  Extractbase64ImageFromFile(file:File) {
+  #ExtractBase64ImageFromFile(file:File) {
     return new Promise((resolved, rejected) => {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -260,12 +264,9 @@ export class JBImageInputWebComponent extends HTMLElement {
     }
     this.#virtualInputFile.value = "";
   }
-  onProgressImageUpload() {
+  onProgressImageUpload(percent:number) {
     //TODO: add animation for upload
-    // this.progressPercent = e;
-    // if(this.props.onProgress){
-    //     this.props.onProgress(e);
-    // }
+    this.#uploadProgressPercent = percent;
   }
   onSuccessImageDownload(base64Image:string) {
     this.setStatus("downloaded");
@@ -277,30 +278,10 @@ export class JBImageInputWebComponent extends HTMLElement {
     this.#status = status;
   }
   /**
-   *
-   * @param {boolean} showError will show error in component ui. false value will just return result and not show eeror to user
-   * @return {Object}
+   * @deprecated use dom.validation.checkValidity instead
    */
   triggerInputValidation(showError = true) {
-    // this method is public and used outside of component to check if field validity param are met
-
-    let errorType: JBImageInputValidationErrorTypes = "";
-    let requiredValid = true;
-    if (this.required) {
-      requiredValid = this.value != null;
-      if (!requiredValid) {
-        errorType = "REQUIRED";
-      }
-    }
-    const isAllValid = requiredValid; //& other validation if they added
-    if (isAllValid) {
-      this.clearValidationError();
-    } else if (showError) {
-      this.showValidationError(errorType);
-    }
-    return {
-      isAllValid,
-    };
+    return this.#validation.checkValidity(showError);
   }
   showValidationError(errorType: JBImageInputValidationErrorTypes) {
     if (errorType == "REQUIRED") {
@@ -309,6 +290,20 @@ export class JBImageInputWebComponent extends HTMLElement {
   }
   clearValidationError() {
     this.#elements.webComponent.classList.remove("--has-error");
+  }
+  #getInsideValidation(){
+    const ValidationList:ValidationItem<ValidationValue>[] = [];
+    if(this.required){
+      const message = `فایل حتما باید انتخاب شود`;
+      ValidationList.push({
+        validator:({file})=>{
+          return file !== null;
+        },
+        message:message,
+      });
+    }
+    //TODO: add validation for file size
+    return ValidationList;
   }
 }
 const myElementNotExists = !customElements.get("jb-image-input");
