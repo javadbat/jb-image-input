@@ -283,10 +283,8 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement {
   triggerInputValidation(showError = true) {
     return this.#validation.checkValidity(showError);
   }
-  showValidationError(errorType: JBImageInputValidationErrorTypes) {
-    if (errorType == "REQUIRED") {
-      this.#elements.webComponent.classList.add("--has-error");
-    }
+  showValidationError(message:string) {
+    this.#elements.webComponent.classList.add("--has-error");
   }
   clearValidationError() {
     this.#elements.webComponent.classList.remove("--has-error");
