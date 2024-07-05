@@ -1,5 +1,5 @@
 import { ValidationHelper } from "../../../common/scripts/validation/validation-helper";
-import { ValidationItem } from "../../../common/scripts/validation/validation-helper-types";
+import { ValidationItem, WithValidation } from "../../../common/scripts/validation/validation-helper-types";
 import HTML from "./JBImageInput.html";
 import CSS from "./JBImageInput.scss";
 import {
@@ -8,7 +8,7 @@ import {
   JBImagesImageInputElements,
   ValidationValue,
 } from "./Types";
-export class JBImageInputWebComponent<TValue> extends HTMLElement {
+export class JBImageInputWebComponent<TValue> extends HTMLElement implements WithValidation<ValidationValue> {
   //TODO: this component need refactor for ui design to show better loading in download & upload and better effect for succeed upload and Download
   get value() {
     return this.#value;
