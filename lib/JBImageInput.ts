@@ -1,5 +1,5 @@
-import { ValidationHelper } from "../../../common/scripts/validation/validation-helper";
-import { ValidationItem, WithValidation } from "../../../common/scripts/validation/validation-helper-types";
+import { ValidationHelper } from "jb-validation";
+import { ValidationItem, WithValidation } from "jb-validation/types";
 import HTML from "./JBImageInput.html";
 import CSS from "./JBImageInput.scss";
 import {
