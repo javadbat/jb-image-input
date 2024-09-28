@@ -29,6 +29,13 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
       }  
     }
   }
+  #isAutoValidationDisabled = false;
+  get isAutoValidationDisabled():boolean{
+    return this.#isAutoValidationDisabled;
+  }
+  set isAutoValidationDisabled(value:boolean){
+    this.#isAutoValidationDisabled = value;
+  }
   #status: string | null = null;
   #virtualInputFile!: HTMLInputElement;
   #elements!: JBImagesImageInputElements;
