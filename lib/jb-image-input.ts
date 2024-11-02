@@ -8,7 +8,7 @@ import {
   JBImageInputConfig,
   JBImagesImageInputElements,
   ValidationValue,
-} from "./types1";
+} from "./types";
 export class JBImageInputWebComponent<TValue> extends HTMLElement implements WithValidation<ValidationValue>, JBFormInputStandards<TValue> {
   //TODO: this component need refactor for ui design to show better loading in download & upload and better effect for succeed upload and Download
   get value() {
