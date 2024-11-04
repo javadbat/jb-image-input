@@ -22,13 +22,7 @@
     "dist/"
   ],
   "main": "index.js",
-  "types": "./dist/JBImageInput.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": ["./dist/JBImageInput.d.ts"],
-      "types":["./dist/Types.d.ts"]
-    }
-  },
+  "types": "./dist/web-component/jb-image-input/lib/jb-image-input.d.ts",
   "repository": {
 		"type": "git",
 		"url": "git@github.com:javadbat/jb-image-input.git"
