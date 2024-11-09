@@ -32,8 +32,19 @@ you can access current image input status by `element.status`
 
 ### check validation
 
-you can check is image input value meet your validation standard by `dom.triggerInputValidation(showError)`
-the `showError` parameter is optional and its default is true but you cant set it false so if value is invalid component don't react and show error to user and just return validation object
+jb-image-input use [jb-validation](https://github.com/javadbat/jb-validation) inside to handle validation. so for more information you can read [jb-validation](https://github.com/javadbat/jb-validation) documentation.
+by set `required` and `maxFileSize` you can easily have these 2 validation but for more advanced validation functions you can provide your own validation function list
+
+```javascript
+imageInput.validation.list = [
+        {
+            validator: ({file})=>{return file.size < 500 * 1024},
+            message: 'your file size must be above 500KB'
+        },
+    ];
+//check and show validations by simple calling the function (pass false if you dont want to show error and just want to check silently)
+const result = imageInput.validation.checkValidation(true);
+```
 
 ### multi image selector
 
@@ -129,13 +140,14 @@ you can set max for user file size so user cant upload file larger than your lim
 //set max file size to 2MB
 document.querySelector('jb-image-input').maxFileSize = 2*1024*1024;
 ```
-when user select file bigger than that image input will ignore file and dispatch(fire) the `maxSizeExceed` event
+when user select file bigger than that image input will  dispatch(fire) the `maxSizeExceed` event.
 ```javascript
 //set max file size to 2MB
 document.querySelector('jb-image-input').addEventListener('maxSizeExceed',(e)=>{
     alert(`your file is ${e.detail.file.size} size and it's bigger than 2MB`);
 });
 ```
+
 ### set custom style
 
 in some cases in your project you need to change default style of web-component for example you need zero margin or different border-radius and etc.    
@@ -149,3 +161,11 @@ if you want to set a custom style to this web-component all you need is to set c
 | --jb-image-input-placeholder-p-color  | web-component placeholder icon primary color                                                   |
 | --jb-image-input-placeholder-bg-color | web-component placeholder background-color default is transparent                              |
 | --jb-image-input-placeholder-sec-color| placeholder secondary color                                                                   |
+
+## Other Related Docs:
+
+- see [jb-image-input-react](https://github.com/javadbat/jb-image-input-react) if you want to use this component in react.
+
+- see [All JB Design system Component List](https://github.com/javadbat/design-system/blob/master/docs/component-list.md) for more components.
+
+- use [Contribution Guide](https://github.com/javadbat/design-system/blob/master/docs/contribution-guide.md) if you want to contribute in this component.

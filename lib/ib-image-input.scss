@@ -1,18 +1,24 @@
+:host {
+    --border-radius: var(--jb-image-input-border-radius, 1.5rem);
+}
+
 .jb-image-input-web-component {
+    position: relative;
     background-color: var(--jb-image-input-bg-color, #f7f6f6);
     width: var(--jb-image-input-width, 100%);
     height: var(--jb-image-input-height, 100%);
-    border-radius: var(--jb-image-input-border-radius, 24px);
+    border-radius: var(--border-radius);
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     box-sizing: border-box;
-    &.--has-error{
-        border: solid 1px #ff1229;
-        border-bottom: solid 3px #ff1229;
-        background-color: #fdf1f1;
-    }
+    // &.--has-error {
+    //     border: solid 1px #ff1229;
+    //     border-bottom: solid 3px #ff1229;
+    //     background-color: #fdf1f1;
+    // }
+
     &[status="empty"] {
         .placeholder-wrapper {
             display: flex;
@@ -24,26 +30,53 @@
         height: 100%;
         display: none;
         cursor: pointer;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        background-color:var(--jb-image-input-placeholder-bg-color, transparent) ;
-        .icon-wrapper {
-            svg {
-                width: 64px;
-                height: 64px;
-                fill:var(--jb-image-input-placeholder-p-color, #1e2832);
 
-                .cls-1 {
-                    fill:var(--jb-image-input-placeholder-sec-color, #ff1229);
+        background-color: var(--jb-image-input-placeholder-bg-color, transparent);
+
+        .default-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 0.25rem;
+            padding: 0.5rem;
+
+            .icon-wrapper {
+                svg {
+                    width: 64px;
+                    height: 64px;
+                    fill: var(--jb-image-input-placeholder-p-color, #1e2832);
+
+                    .cls-1 {
+                        fill: var(--jb-image-input-placeholder-sec-color, #ff1229);
+                    }
+                }
+            }
+
+            .placeholder-title {
+                color: #1e2832;
+                font-variation-settings: "wght" 600;
+            }
+
+            .message-box {
+                font-size: var(--jb-image-input-message-font-size, 0.7rem);
+                padding: 2px 8px;
+                color: var(--jb-image-input-message-color, #929292);
+                display: var(--jb-image-input-message-box-display, block);
+
+                &:empty {
+                    padding: 0;
+                }
+
+                &.error {
+                    color: var(--jb-image-input-message-error-color, red);
                 }
             }
         }
 
-        .placeholder-title {
-            color: #1e2832;
-            font-variation-settings: "wght"600;
-        }
+
     }
 
     &[status="uploading"] {
@@ -51,31 +84,152 @@
             display: flex;
         }
     }
-    .upload-loading-wrapper{
+
+    .upload-loading-wrapper {
         display: none;
     }
+
     &[status="uploaded"] {
         .download-loading-wrapper {
             display: flex;
         }
     }
-    .download-loading-wrapper{
+
+    .download-loading-wrapper {
         display: none;
     }
+
     &[status="downloaded"] {
         .image-wrapper {
             display: block;
-            img{
+
+            img {
                 object-fit: contain;
                 width: 100%;
                 height: 100%;
             }
         }
     }
-    .image-wrapper{
+
+    .image-wrapper {
+        position: relative;
         display: none;
         width: 100%;
         height: 100%;
         object-fit: contain;
+
+        &:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .image-overlay {
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s 0s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba($color: #000, $alpha: 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 1;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            //
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+
+            .delete-button {
+                background-color: transparent;
+                color: #ff1229;
+                border-radius: 1rem;
+                width: 2.5rem;
+                height: 2.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                &:hover {
+                    background-color: #fff;
+                }
+
+                #DeleteIcon {
+                    object-fit: contain;
+                    stroke-width: 1.5;
+                    stroke: #ff1229;
+                    width: 80%;
+                    height: 80%;
+                }
+            }
+
+            .download-button {
+                background-color: transparent;
+                color: #fff;
+                border-radius: 1rem;
+                stroke: #fff;
+                width: 2.5rem;
+                height: 2.5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                &:hover {
+                    background-color: #fff;
+                    stroke: #000;
+                }
+
+                #DownloadIcon {
+                    object-fit: contain;
+                    stroke-width: 1.5;
+                    width: 80%;
+                    height: 80%;
+                }
+            }
+
+            .reselect-button {
+                background-color: transparent;
+                border-radius: 1rem;
+                padding: 0.25rem 0.5rem;
+                color: #fff;
+            }
+        }
     }
+
+    .error-overlay {
+        display: none;
+        transition: all 0.3s 0s ease;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba($color: #ff1229, $alpha: 0.5);
+        backdrop-filter: blur(8px);
+        z-index: 1;
+        overflow: hidden;
+        border-radius: var(--border-radius);
+        //
+        justify-content: center;
+        align-items: center;
+        .error-content{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap:1rem;
+            .error-icon{
+                fill:#fff;
+                width: 4rem;
+                height: 4rem;
+            }
+            .error-message{
+                color:#fff;
+                outline: #000;
+                font-size: 1.3rem;
+            }
+        }
+    }
+
 }

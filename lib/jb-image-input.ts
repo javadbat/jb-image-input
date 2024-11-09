@@ -8,10 +8,12 @@ import {
   JBImageInputConfig,
   JBImagesImageInputElements,
   ValidationValue,
+  ViewStatus,
 } from "./types";
+import { MouseEvent } from "react";
 export * from './types.js';
-export class JBImageInputWebComponent<TValue> extends HTMLElement implements WithValidation<ValidationValue>, JBFormInputStandards<TValue> {
-  static get formAssociated(){
+export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue>, JBFormInputStandards<TValue> {
+  static get formAssociated() {
     return true;
   }
   //TODO: this component need refactor for ui design to show better loading in download & upload and better effect for succeed upload and Download
@@ -19,21 +21,9 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
     return this.#value;
   }
   set value(value) {
-    this.#value = value;
-    if (value != null) {
-      if (value instanceof File) {
-        if (value instanceof File) {
-          this.#ExtractBase64ImageFromFile(value).then(
-            this.onSuccessImageDownload.bind(this)
-          );
-        }
-      } else {
-        this.bridge
-          .downloader(value, this.config)
-          .then(this.onSuccessImageDownload.bind(this));
-      }
-    }
+    this.#setValue(value);
   }
+
   #isAutoValidationDisabled = false;
   get isAutoValidationDisabled(): boolean {
     return this.#isAutoValidationDisabled;
@@ -44,7 +34,9 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
   #status: string | null = null;
   #virtualInputFile!: HTMLInputElement;
   #elements!: JBImagesImageInputElements;
-  selectedImageType: null | string = null;
+  get selectedImageType() {
+    return this.#file.type;
+  }
   get status() {
     //it is read only variable
     return this.#status;
@@ -70,6 +62,7 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
       this.#virtualInputFile.accept = value;
     }
   }
+
   #maxFileSize: number | null = null;
   #value: TValue | null = null;
   #file: File | null = null;
@@ -81,6 +74,9 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
   get maxFileSize() {
     return this.#maxFileSize;
   }
+  /**
+   * @description max file size in bytes
+   */
   set maxFileSize(value) {
     if (value == null) {
       this.#maxFileSize = null;
@@ -116,27 +112,28 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
   get validation() {
     return this.#validation;
   }
-  get name(){
+  get name() {
     return this.getAttribute('name') || '';
   }
-  initialValue:TValue | null = null;
-  get isDirty(): boolean{
+  initialValue: TValue | null = null;
+  get isDirty(): boolean {
     return this.#value !== this.initialValue;
   }
+
   constructor() {
     super();
     if (typeof this.attachInternals == "function") {
       //some browser dont support attachInternals
       this.#internals = this.attachInternals();
     }
-    this.initWebComponent();
-    this.initProp();
-    this.registerEventListener();
+    this.#initWebComponent();
+    this.#initProp();
+    this.#registerEventListener();
   }
   get fileName(): string {
     return this.#file.name;
   }
-  initWebComponent() {
+  #initWebComponent() {
     const shadowRoot = this.attachShadow({
       mode: "open",
     });
@@ -148,7 +145,17 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
       webComponent: shadowRoot.querySelector(".jb-image-input-web-component")!,
       placeHolderWrapper: shadowRoot.querySelector(".placeholder-wrapper")!,
       placeHolderTitle: shadowRoot.querySelector(".placeholder-title")!,
+      placeHolderMessageBox: shadowRoot.querySelector(".message-box")!,
       image: shadowRoot.querySelector(".image-wrapper img")!,
+      overlay: {
+        container: shadowRoot.querySelector(".image-overlay")!,
+        deleteButton: shadowRoot.querySelector(".image-overlay .delete-button")!,
+        downloadButton: shadowRoot.querySelector(".image-overlay .download-button")!
+      },
+      errorOverlay:{
+        container:shadowRoot.querySelector(".error-overlay"),
+        message:shadowRoot.querySelector('.error-overlay .error-message')!
+      }
     };
   }
   #multiple = false;
@@ -158,53 +165,56 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
     // developer can add every config he want to get on bridge functions
   };
   bridge: JBImageInputBridge<TValue> = {
-    uploader: function () {
-      console.error(
-        "you must set uploader function by bridge to component for upload functionality"
-      );
-      return Promise.reject();
+    uploader: function (file: File) {
+      return new Promise((resolve) => {
+        resolve(file as TValue);
+      });
     },
-    downloader: function () {
-      console.error(
-        "you must set downloader function by bridge to component for download functionality"
-      );
-      return Promise.reject();
+    downloader: function (value) {
+      return new Promise((resolve, reject) => {
+        this.#ExtractBase64ImageFromFile(value).then((base64: string) => {
+          resolve(base64);
+
+        }
+        );
+      });
     },
   };
-  initProp() {
+  #initProp() {
     this.acceptTypes = "image/jpeg,image/jpg,image/png,image/svg+xml";
-    this.setStatus("empty");
-    this.createVirtualInputFile();
+    this.#setStatus("empty");
+    this.#createVirtualInputFile();
   }
-  registerEventListener() {
-    this.#elements.placeHolderWrapper.addEventListener(
-      "click",
-      this.openImageSelector.bind(this)
-    );
-    this.#elements.image.addEventListener(
-      "click",
-      this.openImageSelector.bind(this)
-    );
+  #registerEventListener() {
+    this.#elements.placeHolderWrapper.addEventListener("click", this.openImageSelector.bind(this));
+    this.#elements.image.addEventListener("click", this.openImageSelector.bind(this));
+    this.#elements.overlay.container.addEventListener("click", this.openImageSelector.bind(this));
+    this.#elements.overlay.deleteButton.addEventListener("click", this.#onDeleteButtonClicked.bind(this));
+    this.#elements.overlay.downloadButton.addEventListener("click", this.#onDownloadButtonClicked.bind(this));
   }
-  createVirtualInputFile() {
+  #createVirtualInputFile() {
     this.#virtualInputFile = document.createElement("input");
     this.#virtualInputFile.type = "file";
     this.#virtualInputFile.accept = this.acceptTypes;
     this.#virtualInputFile.addEventListener("change", (e) =>
-      this.onImageSelected(e)
+      this.#onImageSelected(e)
     );
   }
+  /**
+   * @public 
+   * @description will open image selector
+   */
   openImageSelector() {
     this.#virtualInputFile.click();
   }
   static get observedAttributes() {
-    return ["required", "placeholder-title", "multiple"];
+    return ["required", "placeholder-title", "multiple", "message"];
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     // do something when an attribute has changed
-    this.onAttributeChange(name, newValue);
+    this.#onAttributeChange(name, newValue);
   }
-  onAttributeChange(name: string, value: string) {
+  #onAttributeChange(name: string, value: string) {
     switch (name) {
       case "required":
         if (value === "" || value == "true") {
@@ -221,9 +231,12 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
       case "multiple":
         this.multiple = value === "true";
         break;
+      case "message":
+        this.#elements.placeHolderMessageBox.innerHTML = value;
+        break;
     }
   }
-  callOnImageSelected(files: FileList) {
+  #dispatchOnImagesSelected(files: FileList) {
     const event = new CustomEvent("imageSelected", {
       detail: {
         files: files,
@@ -231,13 +244,15 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
     });
     this.dispatchEvent(event);
   }
-  onImageSelected(e: Event) {
+  #onImageSelected(e: Event) {
     const files = (e.target as HTMLInputElement).files;
     if (files && files?.length > 0) {
       //if user select file and not click on cancel
       //when user select a image from his computer but dont want to edit
-      this.callOnImageSelected(files);
+      this.#dispatchOnImagesSelected(files);
       const file = files[0];
+      //reset virtual input value so it can reselect image
+      this.#virtualInputFile.value = null;
       this.selectImageByFile(file);
     }
   }
@@ -247,22 +262,23 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
    * @param {File} file
    */
   selectImageByFile(file: File) {
-    //this function is public too and can be used outside of component so external resource can inject file in component to upload and show
-    if (this.maxFileSize && file.size > this.maxFileSize) {
+    const validationRes = this.validation.checkValidity(true,{file});
+    const maxSizeExceed = this.maxFileSize ? file.size > this.maxFileSize : false;
+    if (maxSizeExceed) {
       this.#dispatchMaxSizeExceedEvent(file);
-    } else {
-      this.setImageToSelectedFile(file);
-      this.uploadImage(file);
-      this.selectedImageType = file.type;
+    }
+    if (validationRes.isAllValid) {
+      this.#setImageToSelectedFile(file);
+      this.#uploadImage(file);
     }
   }
-  setImageToSelectedFile(file: File) {
+  #setImageToSelectedFile(file: File) {
     //this function called when user select file and upload type is manual so we show image from local
     this.#file = file;
-    this.triggerOnChangeEvent();
+    this.#dispatchOnChangeEvent();
   }
   #dispatchMaxSizeExceedEvent(file: File) {
-    const event = new CustomEvent("maxSizeExceed", { detail: { file } });
+    const event = new CustomEvent("maxSizeExceed", { detail: { file }, cancelable: false });
     this.dispatchEvent(event);
   }
   #ExtractBase64ImageFromFile(file: File) {
@@ -279,32 +295,32 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
       reader.readAsDataURL(file);
     });
   }
-  uploadImage(file: File) {
-    this.setStatus("uploading");
+  #uploadImage(file: File) {
+    this.#setStatus("uploading");
     const promise = this.bridge.uploader(
       file,
       this.config,
       this.onProgressImageUpload.bind(this)
     );
     promise
-      .then((data: any) => this.onSuccessImageUpload(data))
-      .catch(() => this.onErrorImageUpload());
+      .then((data: TValue) => this.#onSuccessImageUpload(data))
+      .catch(() => this.#onErrorImageUpload());
   }
-  onSuccessImageUpload(data: any) {
-    this.setStatus("uploaded");
+  #onSuccessImageUpload(data: TValue) {
+    this.#setStatus("uploaded");
     this.value = data;
-    this.triggerOnChangeEvent();
+    this.#dispatchOnChangeEvent();
   }
-  triggerOnChangeEvent() {
-    const event = new CustomEvent("change");
+  #dispatchOnChangeEvent() {
+    const event = new Event("change");
     this.dispatchEvent(event);
   }
-  onErrorImageUpload() {
+  #onErrorImageUpload() {
     // //we reset our virtual input becuase selected image does not upload well
     if (this.value) {
-      this.setStatus("downloaded");
+      this.#setStatus("downloaded");
     } else {
-      this.setStatus("empty");
+      this.#setStatus("empty");
     }
     this.#virtualInputFile.value = "";
   }
@@ -312,26 +328,36 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
     //TODO: add animation for upload
     this.#uploadProgressPercent = percent;
   }
-  onSuccessImageDownload(base64Image: string) {
-    this.setStatus("downloaded");
+  #onSuccessImageDownload(base64Image: string) {
+    this.#setStatus("downloaded");
     this.imageBase64Value = base64Image;
     this.#elements.image.setAttribute("src", base64Image);
   }
-  setStatus(status: string) {
+  #setStatus(status: ViewStatus) {
     this.#elements.webComponent.setAttribute("status", status);
     this.#status = status;
   }
-  /**
-   * @deprecated use dom.validation.checkValidity instead
-   */
-  triggerInputValidation(showError = true) {
-    return this.#validation.checkValidity(showError);
-  }
   showValidationError(message: string) {
     this.#elements.webComponent.classList.add("--has-error");
+    if(this.#value){
+      this.#showOverlayError(message);
+    }else{
+      this.#elements.placeHolderMessageBox.innerHTML = message;
+      this.#elements.placeHolderMessageBox.classList.add("error");
+    }
   }
   clearValidationError() {
     this.#elements.webComponent.classList.remove("--has-error");
+    this.#elements.placeHolderMessageBox.innerHTML = this.getAttribute("message") || "";
+    this.#elements.placeHolderMessageBox.classList.remove("error");
+  }
+  #showOverlayError(message:string){
+    this.#elements.errorOverlay.message.innerHTML = message;
+    this.#elements.errorOverlay.container.style.display = "flex";
+    setTimeout(()=>{
+      this.#elements.errorOverlay.message.innerHTML = "";
+      this.#elements.errorOverlay.container.style.display = "none";
+    },2000);
   }
   #getInsideValidation() {
     const ValidationList: ValidationItem<ValidationValue>[] = [];
@@ -345,7 +371,19 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
         stateType: "valueMissing",
       });
     }
-    //TODO: add validation for file size
+    if (this.#maxFileSize) {
+      ValidationList.push({
+        validator: ({ file }) => {
+          if (file == null) {
+            return true;
+          }
+          return file.size <= this.#maxFileSize;
+        },
+        //TODO: convert max size to mb or kb and show it in message
+        message: "حجم فایل بیشتر از حد مجاز است",
+        stateType: "rangeOverflow",
+      });
+    }
     return ValidationList;
   }
   /**
@@ -393,6 +431,38 @@ export class JBImageInputWebComponent<TValue> extends HTMLElement implements Wit
   }
   get validationMessage() {
     return this.#internals.validationMessage;
+  }
+  #onDeleteButtonClicked(e: MouseEvent) {
+    e.stopPropagation();
+    this.#setValue(null);
+    this.#dispatchOnChangeEvent();
+  }
+  #onDownloadButtonClicked(e: MouseEvent) {
+    e.stopPropagation();
+    const base64String = this.#elements.image.getAttribute('src');
+    const imageType = base64String.match(/[^:/]\w+(?=;|,)/)[0];
+    const a = document.createElement("a");
+    a.href = base64String;
+    a.download = "Image." + imageType;
+    a.click();
+  }
+  #setValue(value: TValue) {
+    this.#value = value;
+    if (value != null) {
+      if (value instanceof File) {
+        this.#file = value;
+        this.#ExtractBase64ImageFromFile(value).then(
+          this.#onSuccessImageDownload.bind(this)
+        );
+      } else {
+        this.bridge
+          .downloader(value, this.config)
+          .then(this.#onSuccessImageDownload.bind(this));
+      }
+    } else {
+      this.#file = null;
+      this.#setStatus("empty");
+    }
   }
 }
 const myElementNotExists = !customElements.get("jb-image-input");
