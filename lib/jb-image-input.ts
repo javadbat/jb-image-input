@@ -136,6 +136,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #initWebComponent() {
     const shadowRoot = this.attachShadow({
       mode: "open",
+      delegatesFocus:true
     });
     const html = `<style>${CSS}</style>` + "\n" + HTML;
     const element = document.createElement("template");
@@ -208,7 +209,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#virtualInputFile.click();
   }
   static get observedAttributes() {
-    return ["required", "placeholder-title", "multiple", "message"];
+    return ["required", "label", "multiple", "message"];
   }
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     // do something when an attribute has changed
@@ -223,7 +224,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
           this.required = false;
         }
         break;
-      case "placeholder-title":
+      case "label":
         if (this.#elements.placeHolderTitle) {
           this.#elements.placeHolderTitle.innerHTML = value;
         }
