@@ -28,7 +28,7 @@
 		"url": "git@github.com:javadbat/jb-image-input.git"
   },
   "dependencies": {
-    "jb-validation": ">=0.0.4"
+    "jb-validation": ">=0.0.5"
   },
   "devDependencies": {
     "jb-form":">=0.0.8"
