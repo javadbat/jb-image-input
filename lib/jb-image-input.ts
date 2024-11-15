@@ -1,5 +1,5 @@
 import { ValidationHelper, type ValidationItem, type ValidationResult, type WithValidation} from "jb-validation";
-import type { JBFormInputStandards } from 'jb-form/types.js';
+import type { JBFormInputStandards } from 'jb-form';
 import HTML from "./jb-image-input.html";
 import CSS from "./ib-image-input.scss";
 import {

@@ -31,6 +31,6 @@
     "jb-validation": ">=0.0.5"
   },
   "devDependencies": {
-    "jb-form":">=0.0.8"
+    "jb-form":">=0.0.9"
   }
 }
