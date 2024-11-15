@@ -1,4 +1,4 @@
-import { ValidationHelper, type ValidationItem, type ValidationResult, type WithValidation} from "jb-validation";
+import { ValidationHelper, type ValidationItem, type ValidationResult, type WithValidation } from "jb-validation";
 import type { JBFormInputStandards } from 'jb-form';
 import HTML from "./jb-image-input.html";
 import CSS from "./ib-image-input.scss";
@@ -11,7 +11,7 @@ import {
 } from "./types";
 import { MouseEvent } from "react";
 export * from './types.js';
-export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue>, JBFormInputStandards<TValue> {
+export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue<TValue>>, JBFormInputStandards<TValue> {
   static get formAssociated() {
     return true;
   }
@@ -107,7 +107,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     return this.#required;
   }
   #internals?: ElementInternals;
-  #validation = new ValidationHelper<ValidationValue>(this.showValidationError.bind(this), this.clearValidationError.bind(this), () => ({ file: this.#file }), () => this.fileName, this.#getInsideValidation.bind(this), this.#setValidationResult.bind(this));
+  #validation = new ValidationHelper<ValidationValue<TValue>>(this.showValidationError.bind(this), this.clearValidationError.bind(this), () => ({ file: this.#file, value: this.#value }), () => this.fileName, this.#getInsideValidation.bind(this), this.#setValidationResult.bind(this));
   get validation() {
     return this.#validation;
   }
@@ -135,7 +135,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #initWebComponent() {
     const shadowRoot = this.attachShadow({
       mode: "open",
-      delegatesFocus:true
+      delegatesFocus: true
     });
     const html = `<style>${CSS}</style>` + "\n" + HTML;
     const element = document.createElement("template");
@@ -152,9 +152,9 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
         deleteButton: shadowRoot.querySelector(".image-overlay .delete-button")!,
         downloadButton: shadowRoot.querySelector(".image-overlay .download-button")!
       },
-      errorOverlay:{
-        container:shadowRoot.querySelector(".error-overlay"),
-        message:shadowRoot.querySelector('.error-overlay .error-message')!
+      errorOverlay: {
+        container: shadowRoot.querySelector(".error-overlay"),
+        message: shadowRoot.querySelector('.error-overlay .error-message')!
       }
     };
   }
@@ -172,11 +172,23 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     },
     downloader: function (value) {
       return new Promise((resolve, reject) => {
-        this.#ExtractBase64ImageFromFile(value).then((base64: string) => {
-          resolve(base64);
-
+        if(typeof value == "string"){
+          fetch(value).then(res=>res.blob()).then((value)=>{
+            const reader = new window.FileReader();
+            reader.readAsDataURL(value);
+            reader.onload = function () {
+              const imageDataUrl = reader.result;
+              resolve(imageDataUrl as string);
+            };
+          }).catch(reject);
         }
-        );
+        if (value instanceof File) {
+          JBImageInputWebComponent.ExtractBase64ImageFromFile(value).then((base64: string) => {
+            resolve(base64);
+          }
+          );
+        }
+        
       });
     },
   };
@@ -262,7 +274,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
    * @param {File} file
    */
   selectImageByFile(file: File) {
-    const validationRes = this.validation.checkValidity(true,{file});
+    const validationRes = this.validation.checkValidity(true, { file, value: null });
     const maxSizeExceed = this.maxFileSize ? file.size > this.maxFileSize : false;
     if (maxSizeExceed) {
       this.#dispatchMaxSizeExceedEvent(file);
@@ -281,7 +293,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     const event = new CustomEvent("maxSizeExceed", { detail: { file }, cancelable: false });
     this.dispatchEvent(event);
   }
-  #ExtractBase64ImageFromFile(file: File) {
+  static ExtractBase64ImageFromFile(file: File) {
     return new Promise((resolved, rejected) => {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -339,9 +351,9 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   }
   showValidationError(message: string) {
     this.#elements.webComponent.classList.add("--has-error");
-    if(this.#value){
+    if (this.#value) {
       this.#showOverlayError(message);
-    }else{
+    } else {
       this.#elements.placeHolderMessageBox.innerHTML = message;
       this.#elements.placeHolderMessageBox.classList.add("error");
     }
@@ -351,21 +363,21 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#elements.placeHolderMessageBox.innerHTML = this.getAttribute("message") || "";
     this.#elements.placeHolderMessageBox.classList.remove("error");
   }
-  #showOverlayError(message:string){
+  #showOverlayError(message: string) {
     this.#elements.errorOverlay.message.innerHTML = message;
     this.#elements.errorOverlay.container.style.display = "flex";
-    setTimeout(()=>{
+    setTimeout(() => {
       this.#elements.errorOverlay.message.innerHTML = "";
       this.#elements.errorOverlay.container.style.display = "none";
-    },2000);
+    }, 2000);
   }
   #getInsideValidation() {
-    const ValidationList: ValidationItem<ValidationValue>[] = [];
+    const ValidationList: ValidationItem<ValidationValue<TValue>>[] = [];
     if (this.required) {
       const message = `تصویر حتما باید انتخاب شود`;
       ValidationList.push({
-        validator: ({ file }) => {
-          return file !== null;
+        validator: ({ file, value }) => {
+          return file !== null || value != null;
         },
         message: message,
         stateType: "valueMissing",
@@ -414,7 +426,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   /**
    * @description this method called on every checkValidity calls and update validation result of #internal
    */
-  #setValidationResult(result: ValidationResult<ValidationValue>) {
+  #setValidationResult(result: ValidationResult<ValidationValue<TValue>>) {
     if (result.isAllValid) {
       this.#internals.setValidity({}, '');
     } else {
@@ -451,7 +463,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     if (value != null) {
       if (value instanceof File) {
         this.#file = value;
-        this.#ExtractBase64ImageFromFile(value).then(
+        JBImageInputWebComponent.ExtractBase64ImageFromFile(value).then(
           this.#onSuccessImageDownload.bind(this)
         );
       } else {

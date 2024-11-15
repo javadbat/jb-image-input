@@ -26,6 +26,7 @@ export type JBImageInputConfig = {
     downloadUrl?: string,
     [key:string]:any
 }
-export type ValidationValue = {
-    file:File
+export type ValidationValue<TValue> = {
+    file:File,
+    value:TValue
 }
