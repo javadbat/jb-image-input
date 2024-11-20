@@ -12,7 +12,7 @@
     "image input",
     "web component"
   ],
-  "version": "3.1.2",
+  "version": "3.2.0",
   "bugs": "https://github.com/javadbat/jb-image-input/issues",
   "license": "MIT",
   "files": [
@@ -31,6 +31,6 @@
     "jb-validation": ">=0.0.6"
   },
   "devDependencies": {
-    "jb-form":">=0.0.11"
+    "jb-form":">=0.1.0"
   }
 }

@@ -319,13 +319,19 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
       .catch(() => this.#onErrorImageUpload());
   }
   #onSuccessImageUpload(data: TValue) {
+    const prevValue = this.value;
     this.#setStatus("uploaded");
     this.value = data;
-    this.#dispatchOnChangeEvent();
+    const dispatchedEvent = this.#dispatchOnChangeEvent();
+    if(dispatchedEvent.defaultPrevented){
+      //this will set status as well as value
+      this.value = prevValue;
+    }
   }
   #dispatchOnChangeEvent() {
-    const event = new Event("change");
+    const event = new Event("change",{bubbles:true,composed:true, cancelable:false});
     this.dispatchEvent(event);
+    return event;
   }
   #onErrorImageUpload() {
     // //we reset our virtual input becuase selected image does not upload well
