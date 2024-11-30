@@ -101,13 +101,20 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #required = false;
   set required(value: boolean) {
     this.#required = value;
-    this.#validation.checkValidity(false);
+    this.#validation.checkValidity({showError:false});
   }
   get required() {
     return this.#required;
   }
   #internals?: ElementInternals;
-  #validation = new ValidationHelper<ValidationValue<TValue>>(this.showValidationError.bind(this), this.clearValidationError.bind(this), () => ({ file: this.#file, value: this.#value }), () => this.fileName, this.#getInsideValidation.bind(this), this.#setValidationResult.bind(this));
+  #validation = new ValidationHelper<ValidationValue<TValue>>({
+    showValidationError:this.showValidationError.bind(this),
+    clearValidationError: this.clearValidationError.bind(this),
+    getInputtedValue:() => ({ file: this.#file, value: this.#value }),
+    getInsideValidations:this.#getInsideValidation.bind(this),
+    setValidationResult:this.#setValidationResult.bind(this),
+    getValueString:() => this.fileName
+  });
   get validation() {
     return this.#validation;
   }
@@ -273,8 +280,8 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
    * @public
    * @param {File} file
    */
-  selectImageByFile(file: File) {
-    const validationRes = this.validation.checkValidity(true, { file, value: null });
+  async selectImageByFile(file: File) {
+    const validationRes = await this.validation.checkValidity({showError:true, value:{ file, value: null }});
     const maxSizeExceed = this.maxFileSize ? file.size > this.maxFileSize : false;
     if (maxSizeExceed) {
       this.#dispatchMaxSizeExceedEvent(file);
@@ -410,7 +417,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
  * this method used by #internal of component
  */
   checkValidity(): boolean {
-    const validationResult = this.#validation.checkValidity(false);
+    const validationResult = this.#validation.checkValiditySync({showError:false});
     if (!validationResult.isAllValid) {
       const event = new CustomEvent('invalid');
       this.dispatchEvent(event);
@@ -422,7 +429,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
  * @description this method used to check for validity and show error to user
  */
   reportValidity(): boolean {
-    const validationResult = this.#validation.checkValidity(true);
+    const validationResult = this.#validation.checkValiditySync({showError:true});
     if (!validationResult.isAllValid) {
       const event = new CustomEvent('invalid');
       this.dispatchEvent(event);
