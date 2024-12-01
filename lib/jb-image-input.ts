@@ -1,4 +1,4 @@
-import { ValidationHelper, type ValidationItem, type ValidationResult, type WithValidation } from "jb-validation";
+import { ShowValidationErrorInput, ValidationHelper, type ValidationItem, type ValidationResult, type WithValidation } from "jb-validation";
 import type { JBFormInputStandards } from 'jb-form';
 import HTML from "./jb-image-input.html";
 import CSS from "./ib-image-input.scss";
@@ -362,7 +362,8 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#elements.webComponent.setAttribute("status", status);
     this.#status = status;
   }
-  showValidationError(message: string) {
+  showValidationError(error: ShowValidationErrorInput | string) {
+    const message = typeof error == "string"?error:error.message;
     this.#elements.webComponent.classList.add("--has-error");
     if (this.#value) {
       this.#showOverlayError(message);
