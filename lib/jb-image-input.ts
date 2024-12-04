@@ -110,8 +110,8 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #validation = new ValidationHelper<ValidationValue<TValue>>({
     showValidationError:this.showValidationError.bind(this),
     clearValidationError: this.clearValidationError.bind(this),
-    getInputtedValue:() => ({ file: this.#file, value: this.#value }),
-    getInsideValidations:this.#getInsideValidation.bind(this),
+    getValue:() => ({ file: this.#file, value: this.#value }),
+    getValidations:this.#getInsideValidation.bind(this),
     setValidationResult:this.#setValidationResult.bind(this),
     getValueString:() => this.fileName
   });
