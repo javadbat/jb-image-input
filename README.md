@@ -14,6 +14,10 @@ image input web component let user upload image and see what is uploaded
 
 sample: <https://codepen.io/javadbat/pen/XWpoEYY>
 
+## using with JS frameworks
+
+to use this component in **react** see [`jb-image-input/react`](https://github.com/javadbat/jb-image-input/tree/main/react);
+
 ## instruction
 
 ### usage
@@ -164,7 +168,7 @@ if you want to set a custom style to this web-component all you need is to set c
 
 ## Other Related Docs:
 
-- see [jb-image-input-react](https://github.com/javadbat/jb-image-input-react) if you want to use this component in react.
+- see [`jb-image-input/react`](https://github.com/javadbat/jb-image-input/tree/main/react) if you want to use this component in react.
 
 - see [All JB Design system Component List](https://github.com/javadbat/design-system/blob/master/docs/component-list.md) for more components.
 

@@ -5,7 +5,7 @@ import {JBImageInputWebComponent } from 'jb-image-input';
 import type {JBImageInputConfig, JBImageInputBridge } from 'jb-image-input/types.js';
 export {JBImageInputConfig, JBImageInputBridge };
 
-import { useEvent } from '../../../common/hooks/use-event.js';
+import { useBindEvent } from '../../../../common/hooks/use-event.js';
 // eslint-disable-next-line react/display-name
 
 
@@ -92,9 +92,9 @@ export const JBImageInput = React.forwardRef((props: JBImageInputProps<TValue>, 
       props.onMaxSizeExceed(e);
     }
   }
-  useEvent(element.current, 'change', onChange);
-  useEvent(element.current, 'imageSelected', onImageSelected);
-  useEvent(element.current, 'maxSizeExceed', onMaxSizeExceed);
+  useBindEvent(element, 'change', onChange);
+  useBindEvent(element, 'imageSelected', onImageSelected);
+  useBindEvent(element, 'maxSizeExceed', onMaxSizeExceed);
   return (
     <jb-image-input ref={element} class={props.className || ''} label={props.label} upload-type={props.uploadType || 'AUTO'} required={props.required} name={props.name} message={props.message||""}>
       {props.children}

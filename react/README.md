@@ -23,7 +23,7 @@ npm i jb-image-input
 ```
 
 ```JSX
-import {JBImageInput} from 'jb-image-input-react';
+import {JBImageInput} from 'jb-image-input/react';
 ...
 
 <JBImageInput></JBImageInput>
@@ -188,7 +188,7 @@ if you want to set a custom style to this web-component all you need is to set c
 
 ## Other Related Docs:
 
-- see [jb-image-input](https://github.com/javadbat/jb-image-input-react) if you want to use this component as a web-component.
+- see [jb-image-input](https://github.com/javadbat/jb-image-input) if you want to use this component as a web-component.
 
 - see [All JB Design system Component List](https://github.com/javadbat/design-system/blob/master/docs/component-list.md) for more components.
 
