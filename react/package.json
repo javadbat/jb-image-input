@@ -1,0 +1,39 @@
+{
+  "name": "jb-image-input-react",
+  "description": "react image input component",
+  "type": "module",
+  "author": {
+		"name": "mohammad javad bathaei",
+		"email": "javadbat@gmail.com"
+	},
+  "keywords": [
+    "jb",
+    "jb-image-input",
+    "image-input",
+    "image picker",
+    "image uploader",
+    "image selector",
+    "react"
+  ],
+  "version": "1.0.1",
+  "bugs": "https://github.com/javadbat/jb-image-input-react-react/issues",
+  "license": "MIT",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "lib/",
+    "dist/",
+    "index.js"
+  ],
+  "main": "index.js",
+  "types": "./dist/react-component/jb-image-input/lib/JBImageInput.d.ts",
+  "jsnext:main":"index.js",
+  "module": "index.js",
+  "repository": {
+		"type": "git",
+		"url": "git@github.com:javadbat/jb-image-input-react.git"
+  },
+  "dependencies": {
+    "jb-image-input":">=3.1.2"
+  }
+}

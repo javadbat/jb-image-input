@@ -19,7 +19,9 @@
     "LICENSE",
     "README.md",
     "lib/",
-    "dist/"
+    "dist/",
+    "react/",
+    "react/dist/"
   ],
   "main": "index.js",
   "types": "./dist/web-component/jb-image-input/lib/jb-image-input.d.ts",
