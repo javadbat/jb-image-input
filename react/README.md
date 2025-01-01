@@ -1,4 +1,4 @@
-# jb-image-input-react
+# jb-image-input React Component
 image input react component let user upload image and see what is uploaded
 this package use jb-image-input underneath so you can 
 
@@ -91,7 +91,7 @@ both uploader and downloader must return `Promise` and resolve it on task comple
 bridge example for typescript:
 
 ```typescript
-import { JBImageInputBridge, JBImageInputConfig } from "jb-image-input-react";
+import { JBImageInputBridge, JBImageInputConfig } from "jb-image-input/react";
 type ImageData = {
     alt:string | null,
     url:string
