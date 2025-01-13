@@ -9,7 +9,6 @@ import {
   ValidationValue,
   ViewStatus,
 } from "./types";
-import { MouseEvent } from "react";
 export * from './types.js';
 export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue<TValue>>, JBFormInputStandards<TValue> {
   static get formAssociated() {
