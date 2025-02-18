@@ -1,3 +1,5 @@
+import type {EventTypeWithTarget} from 'jb-core';
+import type { JBImageInputWebComponent } from './jb-image-input';
 export type JBImagesImageInputElements = {
     webComponent:HTMLDivElement;
     placeHolderWrapper:HTMLDivElement;
@@ -30,3 +32,5 @@ export type ValidationValue<TValue> = {
     file:File,
     value:TValue
 }
+
+export type JBImageInputEventType<TEvent,TValue> = EventTypeWithTarget<TEvent,JBImageInputWebComponent<TValue>>;

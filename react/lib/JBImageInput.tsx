@@ -4,8 +4,7 @@ import 'jb-image-input';
 import {JBImageInputWebComponent } from 'jb-image-input';
 import type {JBImageInputConfig, JBImageInputBridge } from 'jb-image-input/types.js';
 export {JBImageInputConfig, JBImageInputBridge };
-
-import { useBindEvent } from '../../../../common/hooks/use-event.js';
+import { EventProps, useEvents } from './events-hook.js';
 // eslint-disable-next-line react/display-name
 
 
@@ -77,49 +76,29 @@ export const JBImageInput = React.forwardRef((props: JBImageInputProps<TValue>, 
       element.current.maxFileSize = props.maxFileSize;
     }
   }, [props.maxFileSize]);
-  function onChange(e: JBImageInputEventType<Event,TValue>) {
-    if (typeof props.onChange == "function") {
-      props.onChange(e);
-    }
-  }
-  function onImageSelected(e: JBImageInputEventType<CustomEvent,TValue>) {
-    if (typeof props.onImageSelected == "function") {
-      props.onImageSelected(e);
-    }
-  }
-  function onMaxSizeExceed(e: JBImageInputEventType<CustomEvent,TValue>) {
-    if (typeof props.onMaxSizeExceed == "function") {
-      props.onMaxSizeExceed(e);
-    }
-  }
-  useBindEvent(element, 'change', onChange);
-  useBindEvent(element, 'imageSelected', onImageSelected);
-  useBindEvent(element, 'maxSizeExceed', onMaxSizeExceed);
+
+  useEvents(element,props);
+  
   return (
     <jb-image-input ref={element} class={props.className || ''} label={props.label} upload-type={props.uploadType || 'AUTO'} required={props.required} name={props.name} message={props.message||""}>
       {props.children}
     </jb-image-input>
   );
 });
-export type JBImageInputEventType<T,TValue> = T & {
-    target: JBImageInputWebComponent<TValue>
-}
-type JBImageInputProps<TValue> = {
+
+type JBImageInputProps<TValue> = EventProps<TValue> & {
     className?: string,
     message?:string,
     label?: string,
     required?: boolean,
     config?: JBImageInputConfig,
-    value?: any,
+    value?: TValue,
     uploadType?: string,
-    onChange?: (e: JBImageInputEventType<Event,TValue>) => void,
-    onImageSelected?: (e: JBImageInputEventType<CustomEvent,TValue>) => void,
     bridge?: JBImageInputBridge<TValue>,
     multiple?: boolean,
     file?: File,
     acceptTypes?: string,
     maxFileSize?: number,
-    onMaxSizeExceed?: (e: JBImageInputEventType<Event,TValue>) => void,
     children?: React.ReactNode,
     name?:string
 }
