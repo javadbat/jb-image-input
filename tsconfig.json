@@ -6,7 +6,6 @@
         "../global.d.ts",
         "lib/**/*.ts",
         "lib/**/*.js",
-        "../../common/scripts/**/*.ts"
     ],
     "exclude": [
         "node_modules",
