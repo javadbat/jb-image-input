@@ -18,10 +18,11 @@ export const reactComponentList: ReactComponentBuildConfig[] = [
     name: "jb-image-input-react",
     path: "./react/lib/JBImageInput.tsx",
     outputPath: "./react/dist/JBImageInput.js",
-    external: ["prop-types", "react", "jb-image-input", "jb-image-input/types", "jb-core", "jb-core/react"],
+    external: ["react", "jb-image-input", "jb-image-input/types", "jb-core", "jb-core/react"],
     globals: {
       react: "React",
       "prop-types": "PropTypes",
+      "jb-image-input": "JBImageInput",
       "jb-core":"JBCore",
       "jb-core/react":"JBCoreReact"
     },

@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState, useImperativeHandle } from 'react';
 import 'jb-image-input';
 // eslint-disable-next-line no-duplicate-imports
-import {JBImageInputWebComponent } from 'jb-image-input';
-import type {JBImageInputConfig, JBImageInputBridge } from 'jb-image-input/types.js';
-export {JBImageInputConfig, JBImageInputBridge };
-import { EventProps, useEvents } from './events-hook.js';
+import type {JBImageInputWebComponent, JBImageInputConfig, JBImageInputBridge } from 'jb-image-input';
+import { type EventProps, useEvents } from './events-hook.js';
 // eslint-disable-next-line react/display-name
 
+export {JBImageInputConfig, JBImageInputBridge };
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -26,6 +25,7 @@ declare global {
 }
 //TODO: refactor this after react remove forward ref
 type TValue = any;
+
 export const JBImageInput = React.forwardRef((props: JBImageInputProps<TValue>, ref) => {
   const element = useRef<JBImageInputWebComponent<TValue>>(null);
   const [refChangeCount, refChangeCountSetter] = useState(0);
