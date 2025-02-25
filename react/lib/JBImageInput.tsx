@@ -26,7 +26,7 @@ declare global {
 //TODO: refactor this after react remove forward ref
 type TValue = any;
 
-export const JBImageInput = React.forwardRef((props: JBImageInputProps<TValue>, ref) => {
+export const JBImageInput = React.forwardRef((props: Props<TValue>, ref) => {
   const element = useRef<JBImageInputWebComponent<TValue>>(null);
   const [refChangeCount, refChangeCountSetter] = useState(0);
   useImperativeHandle(
@@ -86,7 +86,7 @@ export const JBImageInput = React.forwardRef((props: JBImageInputProps<TValue>, 
   );
 });
 
-type JBImageInputProps<TValue> = EventProps<TValue> & {
+export type Props<TValue> = EventProps<TValue> & {
     className?: string,
     message?:string,
     label?: string,
