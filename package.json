@@ -24,7 +24,7 @@
     "react/dist/"
   ],
   "main": "index.js",
-  "types": "./dist/web-component/jb-image-input/lib/jb-image-input.d.ts",
+  "types": "./dist/jb-image-input.d.ts",
   "repository": {
 		"type": "git",
 		"url": "git@github.com:javadbat/jb-image-input.git"
