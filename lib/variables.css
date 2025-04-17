@@ -1,0 +1,20 @@
+:host{
+  --bg-color:var(--jb-image-input-bg-color, var(--jb-neutral-10));
+  --placeholder-neutral-color: var(--jb-image-input-placeholder-p-color, var(--jb-neutral));
+  --placeholder-primary-color: var(--jb-image-input-placeholder-sec-color, var(--jb-primary));
+  --placeholder-title-color:var(--jb-image-input-placeholder-title-color, var(--jb-neutral));
+  --message-color:var(--jb-image-input-message-color, var(--jb-text-secondary));
+  --message-error-color:var(--jb-image-input-message-error-color, var(--jb-red));
+  --overlay-bg-color:oklch(from var(--jb-neutral) l c h / calc(alpha - 0.5));
+  --delete-button-color:var(--jb-red);
+  --delete-button-bg-color:var(--jb-white);
+  --delete-icon-color:var(--jb-red);
+  --download-button-color:var(--jb-white);
+  --download-button--bg-color-hover:var(--jb-white);
+  --download-button-color-hover:var(--jb-neutral);
+  --reselect-button-color:var(--jb-white);
+  --error-overlay-bg-color:oklch(from var(--jb-red) l c h / calc(alpha - 0.5));
+  --error-overlay-color:var(--jb-white);
+  --error-overlay-icon-color:var(--jb-white);
+  --error-overlay-outline:var(--jb-black);
+}

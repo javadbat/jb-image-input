@@ -1,3 +1,5 @@
+@use './variables.css';
+
 :host {
     --border-radius: var(--jb-image-input-border-radius, 1.5rem);
     width: var(--jb-image-input-width, 100%);
@@ -6,7 +8,7 @@
 
 .jb-image-input-web-component {
     position: relative;
-    background-color: var(--jb-image-input-bg-color, #f7f6f6);
+    background-color: var(--bg-color);
     width: 100%;
     height: 100%;
     border-radius: var(--border-radius);
@@ -49,23 +51,23 @@
                 svg {
                     width: 64px;
                     height: 64px;
-                    fill: var(--jb-image-input-placeholder-p-color, #1e2832);
+                    fill: var(--placeholder-neutral-color);
 
                     .cls-1 {
-                        fill: var(--jb-image-input-placeholder-sec-color, #ff1229);
+                        fill: var(--placeholder-primary-color);
                     }
                 }
             }
 
             .placeholder-title {
-                color: #1e2832;
+                color: var(--placeholder-title-color);
                 font-variation-settings: "wght" 600;
             }
 
             .message-box {
                 font-size: var(--jb-image-input-message-font-size, 0.7rem);
                 padding: 2px 8px;
-                color: var(--jb-image-input-message-color, #929292);
+                color: var(--message-color);
                 display: var(--jb-image-input-message-box-display, block);
 
                 &:empty {
@@ -73,7 +75,7 @@
                 }
 
                 &.error {
-                    color: var(--jb-image-input-message-error-color, red);
+                    color: var(--message-error-color);
                 }
             }
         }
@@ -133,7 +135,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba($color: #000, $alpha: 0.5);
+            background-color: var(--overlay-bg-color);
             backdrop-filter: blur(8px);
             z-index: 1;
             overflow: hidden;
@@ -146,7 +148,7 @@
             flex-wrap: wrap;
             .delete-button {
                 background-color: transparent;
-                color: #ff1229;
+                color: var(--delete-button-color);
                 border-radius: 1rem;
                 width: 2.5rem;
                 height: 2.5rem;
@@ -155,13 +157,13 @@
                 align-items: center;
 
                 &:hover {
-                    background-color: #fff;
+                    background-color: var(--delete-button-bg-color);
                 }
 
                 #DeleteIcon {
                     object-fit: contain;
                     stroke-width: 1.5;
-                    stroke: #ff1229;
+                    stroke: var(--delete-icon-color);
                     width: 80%;
                     height: 80%;
                 }
@@ -169,9 +171,9 @@
 
             .download-button {
                 background-color: transparent;
-                color: #fff;
+                color: var(--download-button-color);
                 border-radius: 1rem;
-                stroke: #fff;
+                stroke: var(--download-button-color);
                 width: 2.5rem;
                 height: 2.5rem;
                 display: flex;
@@ -179,8 +181,8 @@
                 align-items: center;
 
                 &:hover {
-                    background-color: #fff;
-                    stroke: #000;
+                    background-color: var(--download-button--bg-color-hover);
+                    stroke: var(--download-button-color-hover);
                 }
 
                 #DownloadIcon {
@@ -195,7 +197,7 @@
                 background-color: transparent;
                 border-radius: 1rem;
                 padding: 0.25rem 0.5rem;
-                color: #fff;
+                color: var(--reselect-button-color);
             }
         }
     }
@@ -208,7 +210,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba($color: #ff1229, $alpha: 0.5);
+        background-color: var(--error-overlay-bg-color);
         backdrop-filter: blur(8px);
         z-index: 1;
         overflow: hidden;
@@ -222,13 +224,13 @@
             align-items: center;
             gap:1rem;
             .error-icon{
-                fill:#fff;
+                fill:var(--error-overlay-icon-color);
                 width: 4rem;
                 height: 4rem;
             }
             .error-message{
-                color:#fff;
-                outline: #000;
+                color:var(--error-overlay-color);
+                outline: var(--error-overlay-outline);
                 font-size: 1.3rem;
             }
         }
