@@ -1,7 +1,6 @@
 @use './variables.css';
 
 :host {
-    --border-radius: var(--jb-image-input-border-radius, 1.5rem);
     width: var(--jb-image-input-width, 100%);
     height: var(--jb-image-input-height, 100%);
 }
@@ -149,7 +148,7 @@
             .delete-button {
                 background-color: transparent;
                 color: var(--delete-button-color);
-                border-radius: 1rem;
+                border-radius: var(--button-border-radius);
                 width: 2.5rem;
                 height: 2.5rem;
                 display: flex;
@@ -172,7 +171,7 @@
             .download-button {
                 background-color: transparent;
                 color: var(--download-button-color);
-                border-radius: 1rem;
+                border-radius: var(--button-border-radius);
                 stroke: var(--download-button-color);
                 width: 2.5rem;
                 height: 2.5rem;

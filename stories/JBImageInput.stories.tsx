@@ -4,7 +4,7 @@ import JBImageInputActionTest from './JBImageInputActionTest.jsx';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<Props<any>> = {
-  title: "Example/form elements/JBImageInput",
+  title: "Components/form elements/JBImageInput",
   component: JBImageInput,
 };
 export default meta;

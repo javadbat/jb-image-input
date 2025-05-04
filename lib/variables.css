@@ -1,4 +1,7 @@
 :host{
+  --border-radius: var(--jb-image-input-border-radius, var(--jb-radius-xl));
+  --button-border-radius: var(--jb-image-input-button-border-radius, var(--jb-radius));
+  /*colors*/
   --bg-color:var(--jb-image-input-bg-color, var(--jb-neutral-10));
   --placeholder-neutral-color: var(--jb-image-input-placeholder-p-color, var(--jb-neutral));
   --placeholder-primary-color: var(--jb-image-input-placeholder-sec-color, var(--jb-primary));

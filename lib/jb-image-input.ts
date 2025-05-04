@@ -9,7 +9,7 @@ import {
   ValidationValue,
   ViewStatus,
 } from "./types";
-import {defineColors} from 'jb-core/theme';
+import {registerDefaultVariables} from 'jb-core/theme';
 export * from './types.js';
 export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue<TValue>>, JBFormInputStandards<TValue> {
   static get formAssociated() {
@@ -144,7 +144,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
       mode: "open",
       delegatesFocus: true
     });
-    defineColors();
+    registerDefaultVariables();
     const html = `<style>${CSS}</style>` + "\n" + HTML;
     const element = document.createElement("template");
     element.innerHTML = html;
