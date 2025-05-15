@@ -165,25 +165,29 @@ you can set max for user file size so user cant upload file larger than your lim
 //set max file size to 2MB
 <JBImageInput maxFileSize={2*1024*1024} />
 ```
+
 when user select file bigger than that image input will ignore file and dispatch(fire) the `maxSizeExceed` event
+
 ```jsx
 //set max file size to 2MB
 <JBImageInput maxSizeExceed={(e)=>{
 alert(`your file is ${e.detail.file.size} size and it's bigger than 2MB`);
 }} />
 ```
+
 ### set custom style
 
 in some cases in your project you need to change default style of web-component for example you need zero margin or different border-radius and etc.    
-if you want to set a custom style to this web-component all you need is to set css variable in parent scope of web-component 
+if you want to set a custom style to this web-component all you need is to set css variable in parent scope of web-component.    
+
 | css variable name                     | description                                                                                   |
 | -------------                         | -------------                                                                                 |
 | --jb-image-input-width                | web-component width default is `100%`                                                         |
 | --jb-image-input-height               | web-component height default is `100%`                                                        |
 | --jb-image-input-bg-color             | web-component background-color default is `#f7f6f6`                                           |
 | --jb-image-input-border-radius        | web-component border radius default is `24px`                                                 |
-| --jb-image-input-placeholder-p-color  | web-component placeholder icon primary color                                                   |
-| --jb-image-input-placeholder-bg-color | web-component placeholder background-color default is transparent                              |
+| --jb-image-input-placeholder-p-color  | web-component placeholder icon primary color                                                  |
+| --jb-image-input-placeholder-bg-color | web-component placeholder background-color default is transparent                             |
 | --jb-image-input-placeholder-sec-color| placeholder secondary color                                                                   |
 
 ## Other Related Docs:
