@@ -1,4 +1,6 @@
-<div class="jb-image-input-web-component">
+export function renderHTML(): string {
+  return /* html */ `
+  <div class="jb-image-input-web-component">
   <div class="placeholder-wrapper">
     <slot name="placeholder">
       <div class="default-placeholder">
@@ -61,3 +63,5 @@
      </div>
   </div>
 </div>
+`;
+}

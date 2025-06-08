@@ -1,6 +1,5 @@
 import { ShowValidationErrorParameters, ValidationHelper, type ValidationItem, type ValidationResult, type WithValidation } from "jb-validation";
 import type { JBFormInputStandards } from 'jb-form';
-import HTML from "./jb-image-input.html";
 import CSS from "./ib-image-input.scss";
 import {
   JBImageInputBridge,
@@ -10,6 +9,7 @@ import {
   ViewStatus,
 } from "./types";
 import {registerDefaultVariables} from 'jb-core/theme';
+import { renderHTML } from "./render";
 export * from './types.js';
 export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue<TValue>>, JBFormInputStandards<TValue> {
   static get formAssociated() {
@@ -145,7 +145,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
       delegatesFocus: true
     });
     registerDefaultVariables();
-    const html = `<style>${CSS}</style>` + "\n" + HTML;
+    const html = `<style>${CSS}</style>` + "\n" + renderHTML;
     const element = document.createElement("template");
     element.innerHTML = html;
     shadowRoot.appendChild(element.content.cloneNode(true));
