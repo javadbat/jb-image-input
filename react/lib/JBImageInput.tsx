@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useRef, useState, useImperativeHandle } from 'react';
 import 'jb-image-input';
 // eslint-disable-next-line no-duplicate-imports
@@ -8,7 +9,7 @@ import { useJBImageInputAttribute, type JBImageInputAttributes } from './attribu
 
 export { JBImageInputConfig, JBImageInputBridge };
 
-declare global {
+declare module "react" {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
