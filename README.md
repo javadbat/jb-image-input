@@ -22,7 +22,7 @@ to use this component in **react** see [`jb-image-input/react`](https://github.c
 
 ### usage
 
-```cmd
+```sh
 npm i jb-image-input
 ```
 

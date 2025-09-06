@@ -18,7 +18,7 @@ Demo :  Demo: [codeSandbox preview](https://3f63dj.csb.app/samples/jb-image-inpu
 
 ### usage
 
-```cmd
+```sh
 npm i jb-image-input
 ```
 
