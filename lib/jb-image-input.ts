@@ -239,11 +239,14 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
       case "required":
         if (value === "" || value == "true") {
           this.required = true;
+          this.ariaRequired = "true";
         } else {
           this.required = false;
+          this.ariaRequired = "false";
         }
         break;
       case "label":
+        this.#internals.ariaLabel = value;
         if (this.#elements.placeHolderTitle) {
           this.#elements.placeHolderTitle.innerHTML = value;
         }
@@ -253,6 +256,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
         break;
       case "message":
         this.#elements.placeHolderMessageBox.innerHTML = value;
+        this.#internals.ariaDescription = value;
         break;
     }
   }
