@@ -1,5 +1,3 @@
-@use './variables.css';
-
 :host {
     width: var(--jb-image-input-width, 100%);
     height: var(--jb-image-input-height, 100%);
@@ -16,11 +14,11 @@
     align-items: center;
     overflow: hidden;
     box-sizing: border-box;
-    // &.--has-error {
-    //     border: solid 1px #ff1229;
-    //     border-bottom: solid 3px #ff1229;
-    //     background-color: #fdf1f1;
-    // }
+    /* &.--has-error {
+         border: solid 1px #ff1229;
+         border-bottom: solid 3px #ff1229;
+         background-color: #fdf1f1;
+     }*/
 
     &[status="empty"] {
         .placeholder-wrapper {
@@ -139,7 +137,7 @@
             z-index: 1;
             overflow: hidden;
             border-radius: var(--border-radius);
-            //
+
             display: flex;
             justify-content: center;
             align-items: center;
@@ -214,7 +212,7 @@
         z-index: 1;
         overflow: hidden;
         border-radius: var(--border-radius);
-        //
+        /**/
         justify-content: center;
         align-items: center;
         .error-content{
