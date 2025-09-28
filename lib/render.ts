@@ -1,3 +1,6 @@
+import { i18n } from "jb-core/i18n";
+import { dictionary } from "./i18n";
+
 export function renderHTML(): string {
   return /* html */ `
   <div class="jb-image-input-web-component">
@@ -18,7 +21,7 @@ export function renderHTML(): string {
             </g>
           </svg>
         </div>
-        <div class="placeholder-title">انتخاب تصویر</div>
+        <div class="placeholder-title">${dictionary.get(i18n,"chooseImage")}</div>
         <div class="message-box" part="message"></div>
       </div>
       
@@ -26,15 +29,15 @@ export function renderHTML(): string {
 
   </div>
   <div class="upload-loading-wrapper">
-    <span>در حال آپلود</span>
+    <span>${dictionary.get(i18n,"uploading")}</span>
   </div>
   <div class="download-loading-wrapper">
-    <span>در حال آماده سازی</span>
+    <span>${dictionary.get(i18n,"preparing")}</span>
   </div>
   <div class="image-wrapper">
     <img src="">
     <div class="image-overlay">
-      <div class="reselect-button">انتخاب مجدد تصویر</div>
+      <div class="reselect-button">${dictionary.get(i18n,"reselectImage")}</div>
       <div class="download-button">
         <svg id="DownloadIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path id="S1" d="M15.0382 12.5084L12.1222 15.4364L9.20621 12.5084"  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

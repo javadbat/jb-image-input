@@ -6,10 +6,12 @@ export const webComponentList: WebComponentBuildConfig[] = [
     path: "./lib/jb-image-input.ts",
     outputPath: "./dist/jb-image-input.js",
     umdName: "JBDateImageInput",
-    external: ["jb-validation","jb-core"],
+    external: ["jb-validation","jb-core","jb-core/i18n", "jb-core/theme"],
     globals: {
       "jb-validation": "JBValidation",
-      "jb-core":"JBCore"
+      "jb-core":"JBCore",
+      "jb-core/theme":"JBCoreTheme",
+      "jb-core/i18n":"JBCoreI18N",
     },
   },
 ];

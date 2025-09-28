@@ -9,8 +9,10 @@ import {
   ValidationValue,
   ViewStatus,
 } from "./types";
-import {registerDefaultVariables} from 'jb-core/theme';
+import { registerDefaultVariables } from 'jb-core/theme';
 import { renderHTML } from "./render";
+import { dictionary } from "./i18n";
+import { i18n } from "jb-core/i18n";
 export * from './types.js';
 export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue<TValue>>, JBFormInputStandards<TValue> {
   static get formAssociated() {
@@ -102,19 +104,19 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #required = false;
   set required(value: boolean) {
     this.#required = value;
-    this.#validation.checkValidity({showError:false});
+    this.#validation.checkValidity({ showError: false });
   }
   get required() {
     return this.#required;
   }
   #internals?: ElementInternals;
   #validation = new ValidationHelper<ValidationValue<TValue>>({
-    showValidationError:this.showValidationError.bind(this),
+    showValidationError: this.showValidationError.bind(this),
     clearValidationError: this.clearValidationError.bind(this),
-    getValue:() => ({ file: this.#file, value: this.#value }),
-    getValidations:this.#getInsideValidation.bind(this),
-    setValidationResult:this.#setValidationResult.bind(this),
-    getValueString:() => this.fileName
+    getValue: () => ({ file: this.#file, value: this.#value }),
+    getValidations: this.#getInsideValidation.bind(this),
+    setValidationResult: this.#setValidationResult.bind(this),
+    getValueString: () => this.fileName
   });
   get validation() {
     return this.#validation;
@@ -181,8 +183,8 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     },
     downloader: function (value) {
       return new Promise((resolve, reject) => {
-        if(typeof value == "string"){
-          fetch(value).then(res=>res.blob()).then((value)=>{
+        if (typeof value == "string") {
+          fetch(value).then(res => res.blob()).then((value) => {
             const reader = new window.FileReader();
             reader.readAsDataURL(value);
             reader.onload = function () {
@@ -197,7 +199,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
           }
           );
         }
-        
+
       });
     },
   };
@@ -238,13 +240,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #onAttributeChange(name: string, value: string) {
     switch (name) {
       case "required":
-        if (value === "" || value == "true") {
-          this.required = true;
-          this.ariaRequired = "true";
-        } else {
-          this.required = false;
-          this.ariaRequired = "false";
-        }
+        this.required = (value || value === '') && value !== 'false';
         break;
       case "label":
         this.#internals.ariaLabel = value;
@@ -287,7 +283,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
    * @param {File} file
    */
   async selectImageByFile(file: File) {
-    const validationRes = await this.validation.checkValidity({showError:true, value:{ file, value: null }});
+    const validationRes = await this.validation.checkValidity({ showError: true, value: { file, value: null } });
     const maxSizeExceed = this.maxFileSize ? file.size > this.maxFileSize : false;
     if (maxSizeExceed) {
       this.#dispatchMaxSizeExceedEvent(file);
@@ -336,13 +332,13 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#setStatus("uploaded");
     this.value = data;
     const dispatchedEvent = this.#dispatchOnChangeEvent();
-    if(dispatchedEvent.defaultPrevented){
+    if (dispatchedEvent.defaultPrevented) {
       //this will set status as well as value
       this.value = prevValue;
     }
   }
   #dispatchOnChangeEvent() {
-    const event = new Event("change",{bubbles:true,composed:true, cancelable:false});
+    const event = new Event("change", { bubbles: true, composed: true, cancelable: false });
     this.dispatchEvent(event);
     return event;
   }
@@ -369,7 +365,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#status = status;
   }
   showValidationError(error: ShowValidationErrorParameters | string) {
-    const message = typeof error == "string"?error:error.message;
+    const message = typeof error == "string" ? error : error.message;
     this.#elements.webComponent.classList.add("--has-error");
     if (this.#value) {
       this.#showOverlayError(message);
@@ -394,7 +390,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #getInsideValidation() {
     const ValidationList: ValidationItem<ValidationValue<TValue>>[] = [];
     if (this.required) {
-      const message = `تصویر حتما باید انتخاب شود`;
+      const message = this.getAttribute("required").length > 0 ? this.getAttribute("required") : dictionary.get(i18n, "requiredMessage");
       ValidationList.push({
         validator: ({ file, value }) => {
           return file !== null || value != null;
@@ -409,10 +405,19 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
           if (file == null) {
             return true;
           }
-          return file.size <= this.#maxFileSize;
+          if (file.size >= this.#maxFileSize) {
+            const sizeFormatter = new Intl.NumberFormat(i18n.locale, {
+              style: 'unit',
+              unit: 'byte',
+              notation: "compact",
+              unitDisplay: "narrow",
+            })
+
+            return dictionary.get(i18n, "maxSizeExceed")(sizeFormatter.format(this.#maxFileSize), sizeFormatter.format(file.size))
+          }
+          return true;
         },
-        //TODO: convert max size to mb or kb and show it in message
-        message: "حجم فایل بیشتر از حد مجاز است",
+        message: "",
         stateType: "rangeOverflow",
       });
     }
@@ -424,7 +429,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
  * this method used by #internal of component
  */
   checkValidity(): boolean {
-    const validationResult = this.#validation.checkValiditySync({showError:false});
+    const validationResult = this.#validation.checkValiditySync({ showError: false });
     if (!validationResult.isAllValid) {
       const event = new CustomEvent('invalid');
       this.dispatchEvent(event);
@@ -436,7 +441,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
  * @description this method used to check for validity and show error to user
  */
   reportValidity(): boolean {
-    const validationResult = this.#validation.checkValiditySync({showError:true});
+    const validationResult = this.#validation.checkValiditySync({ showError: true });
     if (!validationResult.isAllValid) {
       const event = new CustomEvent('invalid');
       this.dispatchEvent(event);

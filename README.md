@@ -1,26 +1,30 @@
 # jb-image-input
 
-image input web component let user upload image and see what is uploaded
+image input web component let user upload image and see what is uploaded.
 
-- ability multiple image upload
+- Ability multiple image upload.
 
-- can connect to your custom REST service bridge (you can have your own way of uploading image)
+- Can connect to your custom REST service bridge (you can have your own way of uploading image).
 
-- show loading
+- Show loading.
 
-- can be used in both instant upload or keep image and upload image on form submit
+- Can be used in both instant upload or keep image and upload image on form submit.
 
-- customizable format
+- Customizable format.
 
-sample: <https://codepen.io/javadbat/pen/XWpoEYY>
+- Add Size & format limitation. 
+
+## Demo
+
+- [Storybook](https://javadbat.github.io/design-system/?path=/docs/components-form-elements-jbimageinput)
+- [CodePen](https://codepen.io/javadbat/pen/XWpoEYY)
 
 ## using with JS frameworks
 
 to use this component in **react** see [`jb-image-input/react`](https://github.com/javadbat/jb-image-input/tree/main/react);
 
-## instruction
 
-### usage
+## usage
 
 ```sh
 npm i jb-image-input
@@ -30,11 +34,11 @@ npm i jb-image-input
 <jb-image-input></jb-image-input>
 ```
 
-### current status
+## current status
 
 you can access current image input status by `element.status`
 
-### check validation
+## check validation
 
 jb-image-input use [jb-validation](https://github.com/javadbat/jb-validation) inside to handle validation. so for more information you can read [jb-validation](https://github.com/javadbat/jb-validation) documentation.
 by set `required` and `maxFileSize` you can easily have these 2 validation but for more advanced validation functions you can provide your own validation function list
@@ -50,7 +54,7 @@ imageInput.validation.list = [
 const result = imageInput.validation.checkValidation(true);
 ```
 
-### multi image selector
+## multi image selector
 
 by default jb-image-input don't support multi image upload but in set of hack you can implement a system that user can select and upload multiple image
 we have 4 step to help you implement multi image input
@@ -81,7 +85,7 @@ document.querySelector('jb-image-input').addEventListener('imageSelected',functi
 
 remember first file is uploaded by original image input and you don't need to inject it to another input and thats why we start from index 1
 
-### image accept type
+## image accept type
 
 tell web-component what image mimetype are acceptable
 
@@ -89,7 +93,7 @@ tell web-component what image mimetype are acceptable
  document.querySelectorAll('jb-image-input').acceptTypes = "image/jpeg,image/jpg,image/png,image/svg+xml"
 
 ```
-### set bridge for upload and download image
+## set bridge for upload and download image
 
 `jb-image-input` do not upload and download image automatically. it just handle ui states.
 you must provide 2 function `uploader` and `downloader` to component like this:
@@ -104,14 +108,14 @@ document.querySelectorAll('jb-image-input').bridge = {
 you can create a class and pass class instance or create a simple object and pass it to component, depend on your need.
 both uploader and downloader must return `Promise` and resolve it on task completed
 
-| argumant variable name              | description                                                                                   |
+| argument variable name              | description                                                                                   |
 | -------------                       | -------------                                                                                 |
 | file                                | the file that user select from his computer                                                   |
 | config                              | the config developer provided to component. most of the times projects has a one bridge instance for many image input so in this case you build only one bridge and pass it to all of your components and pass parameter like `url`, `method` , `fieldName`, ... in config so your bridge can decide how to upload and download app |
 | uploadProgressCallbackFunction      | its a optional parameter you can use to tell component how much file uploaded currently                                     |
 | value                               | value is a data that your uploader promise resolved for example if your uploader is: `uploader:()=>{upload().then(()=>{resolve({fileName:'img.jpg',path:'x.com/img.jpg',id:'10'})})}` then your value wil be `{fileName:'img.jpg',path:'x.com/img.jpg',id:'10'}`|
 
-### set config
+## set config
 
 config is not something that our component use, it just the config you need in your bridge so you can set it however you want base on your need. we just keep it in component and send it to your uploader and downloader function so you can structure it your self. we just make a default structure as following object
 
@@ -123,7 +127,7 @@ this.config = {
         };
 ```
 
-### custom placeholder
+## custom placeholder
 if you want to show your custom content when uploader is empty and ready to receive image in first place ypo can put your own content by using custom slot.
 to make that happen you just have to put your div and content in `jb-image-input` tag like below example:
 
@@ -137,7 +141,7 @@ to make that happen you just have to put your div and content in `jb-image-input
 
 you can place any element you need base on you design in `<div slot="placeholder">` you can use anything other than div too for example `<h1 slot="placeholder">` but you must set attribute `slot="placeholder"` in it.
 
-### max File Size
+## max File Size
 
 you can set max for user file size so user cant upload file larger than your limit. to do so just set `maxFileSize` like following example:
 
@@ -155,7 +159,7 @@ document.querySelector('jb-image-input').addEventListener('maxSizeExceed',(e)=>{
 });
 ```
 
-### set custom style
+## set custom style
 
 in some cases in your project you need to change default style of web-component for example you need zero margin or different border-radius and etc.    
 if you want to set a custom style to this web-component all you need is to set css variable in parent scope of web-component 
@@ -174,6 +178,6 @@ if you want to set a custom style to this web-component all you need is to set c
 
 - see [`jb-image-input/react`](https://github.com/javadbat/jb-image-input/tree/main/react) if you want to use this component in react.
 
-- see [All JB Design system Component List](https://javadbat.github.io/design-system/
+- see [All JB Design system Component List](https://javadbat.github.io/design-system/)
 
 - use [Contribution Guide](https://github.com/javadbat/design-system/blob/main/docs/contribution-guide.md) if you want to contribute in this component.
