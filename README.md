@@ -54,6 +54,13 @@ imageInput.validation.list = [
 const result = imageInput.validation.checkValidation(true);
 ```
 
+for required:
+
+```html
+<jb-image-input required />
+<!-- required field with custom error -->
+<jb-image-input required="please select image" />
+```
 ## multi image selector
 
 by default jb-image-input don't support multi image upload but in set of hack you can implement a system that user can select and upload multiple image

@@ -17,6 +17,19 @@ export const Normal: Story = {
   }
 };
 
+export const Required: Story = {
+  args: {
+    message: "extra message",
+    required: true,
+  }
+};
+export const RequiredWithMessage: Story = {
+  args: {
+    message: "extra message",
+    required: "you must fill this field to continue",
+  }
+};
+
 export const ActionTest: Story = {
   render: (args) => <JBImageInputActionTest {...args}></JBImageInputActionTest>
 };

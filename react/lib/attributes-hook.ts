@@ -12,7 +12,7 @@ export type JBImageInputAttributes<TValue> = {
   file?: File,
   acceptTypes?: string,
   maxFileSize?: number,
-  required?: boolean,
+  required?: boolean | string,
   label?: string,
   message?: string,
 
@@ -92,12 +92,12 @@ export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInput
   }, [props.message]);
 
   useEffect(() => {
-    if (props.required) {
-      element?.current?.setAttribute('required', 'true');
-    } else {
-      element?.current?.removeAttribute('required');
+    if (typeof props.required === "string") {
+      element?.current?.setAttribute('required', props.required);
+    }
+    if (typeof props.required === "boolean") {
+      props.required?element?.current?.setAttribute('required', ''):element?.current?.removeAttribute('required');
     }
   }, [props.required]);
-  
 
 }

@@ -472,6 +472,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #onDeleteButtonClicked(e: MouseEvent) {
     e.stopPropagation();
     this.#setValue(null);
+    this.validation.checkValiditySync({showError: true});
     this.#dispatchOnChangeEvent();
   }
   #onDownloadButtonClicked(e: MouseEvent) {
