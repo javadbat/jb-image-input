@@ -1,5 +1,5 @@
 import { useEvent } from "jb-core/react";
-import { RefObject } from "react";
+import type { RefObject } from "react";
 import type { JBImageInputEventType, JBImageInputWebComponent } from 'jb-image-input';
 
 export type EventProps<TValue> = {
@@ -18,7 +18,7 @@ export type EventProps<TValue> = {
   onImageSelected?: (e: JBImageInputEventType<CustomEvent, TValue>) => void,
   onMaxSizeExceed?: (e: JBImageInputEventType<Event, TValue>) => void,
 }
-export function useEvents<TValue>(element: RefObject<JBImageInputWebComponent>, props: EventProps<TValue>) {
+export function useEvents<TValue>(element: RefObject<JBImageInputWebComponent<TValue>>, props: EventProps<TValue>) {
   useEvent(element, 'load', props.onLoad, true);
   useEvent(element, 'init', props.onInit, true);
   useEvent(element, "change", props.onChange);
