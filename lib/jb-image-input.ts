@@ -145,10 +145,12 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #initWebComponent() {
     const shadowRoot = this.attachShadow({
       mode: "open",
-      delegatesFocus: true
+      delegatesFocus: true,
+       clonable:true,
+       serializable:true,
     });
     registerDefaultVariables();
-    const html = `<style>${CSS} ${VariablesCSS}</style>` + "\n" + renderHTML();
+    const html = `<style>${CSS} ${VariablesCSS}</style>\n${renderHTML()}`;
     const element = document.createElement("template");
     element.innerHTML = html;
     shadowRoot.appendChild(element.content.cloneNode(true));
