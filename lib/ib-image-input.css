@@ -143,52 +143,6 @@
             align-items: center;
             gap: 1rem;
             flex-wrap: wrap;
-            .delete-button {
-                background-color: transparent;
-                color: var(--delete-button-color);
-                border-radius: var(--button-border-radius);
-                width: 2.5rem;
-                height: 2.5rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                &:hover {
-                    background-color: var(--delete-button-bg-color);
-                }
-
-                #DeleteIcon {
-                    object-fit: contain;
-                    stroke-width: 1.5;
-                    stroke: var(--delete-icon-color);
-                    width: 80%;
-                    height: 80%;
-                }
-            }
-
-            .download-button {
-                background-color: transparent;
-                color: var(--download-button-color);
-                border-radius: var(--button-border-radius);
-                stroke: var(--download-button-color);
-                width: 2.5rem;
-                height: 2.5rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                &:hover {
-                    background-color: var(--download-button--bg-color-hover);
-                    stroke: var(--download-button-color-hover);
-                }
-
-                #DownloadIcon {
-                    object-fit: contain;
-                    stroke-width: 1.5;
-                    width: 80%;
-                    height: 80%;
-                }
-            }
 
             .reselect-button {
                 background-color: transparent;
@@ -215,18 +169,21 @@
         /**/
         justify-content: center;
         align-items: center;
-        .error-content{
+
+        .error-content {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap:1rem;
-            .error-icon{
-                fill:var(--error-overlay-icon-color);
+            gap: 1rem;
+
+            .error-icon {
+                fill: var(--error-overlay-icon-color);
                 width: 4rem;
                 height: 4rem;
             }
-            .error-message{
-                color:var(--error-overlay-color);
+
+            .error-message {
+                color: var(--error-overlay-color);
                 outline: var(--error-overlay-outline);
                 font-size: 1.3rem;
             }
