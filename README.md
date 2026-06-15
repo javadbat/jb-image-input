@@ -26,8 +26,7 @@ image input web component let user upload image and see what is uploaded.
 
 ## using with JS frameworks
 
-to use this component in **react** see [`jb-image-input/react`](https://github.com/javadbat/jb-image-input/tree/main/react);
-
+- [<img src="https://img.shields.io/badge/React.js-jb--image--input%2Freact-000.svg?logo=react&logoColor=%2361DAFB" height="30" />](https://github.com/javadbat/jb-image-input/tree/main/react)
 
 ## usage
 
