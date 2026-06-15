@@ -29,8 +29,8 @@ export type JBImageInputConfig = {
     [key:string]:any
 }
 export type ValidationValue<TValue> = {
-    file:File,
-    value:TValue
+    file:File | null,
+    value:TValue | null
 }
 
 export type JBImageInputEventType<TEvent,TValue> = EventTypeWithTarget<TEvent,JBImageInputWebComponent<TValue>>;

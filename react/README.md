@@ -5,204 +5,173 @@
 [![NPM Version](https://img.shields.io/npm/v/jb-image-input-react)](https://www.npmjs.com/package/jb-image-input-react)
 ![GitHub Created At](https://img.shields.io/github/created-at/javadbat/jb-image-input)
 
-image input react component let user upload image and see what is uploaded
-this package use jb-image-input underneath so you can 
+React wrapper for `jb-image-input`. It registers the underlying web component and exposes React props/events for image selection, preview, validation, and custom upload/download bridge flows.
 
-- ability multiple image upload 
+## Demo
 
-- can connect to your custom REST service bridge (you can have your own way of uploading or downloading image event with JWT token)
+- [Storybook](https://javadbat.github.io/design-system/?path=/docs/components-form-elements-jbimageinput)
+- [CodeSandbox preview](https://3f63dj.csb.app/samples/jb-image-input)
+- [CodeSandbox editor](https://codesandbox.io/p/sandbox/jb-design-system-3f63dj?file=%2Fsrc%2Fsamples%2FJBImageInput.tsx)
 
-- show loading
+## Installation
 
-- can be used in both instant upload or keep image and upload image on form submit
-
-- customizable format
-
-Demo: [codeSandbox preview](https://3f63dj.csb.app/samples/jb-image-input) for just see the demo and [codeSandbox editor](https://codesandbox.io/p/sandbox/jb-design-system-3f63dj?file=%2Fsrc%2Fsamples%2FJBImageInput.tsx) if you want to see and play with code
-
-## instruction
-
-### Usage
 ```sh
 npm i jb-image-input
 ```
 
-```JSX
-import {JBImageInput} from 'jb-image-input/react';
-...
+```jsx
+import { JBImageInput } from 'jb-image-input/react';
 
-<JBImageInput></JBImageInput>
+<JBImageInput label="Profile image" />;
 ```
 
+## When to use
 
-### check validation
+Use `JBImageInput` when a React view needs the JB Design System image picker, image preview, validation UI, and optional custom upload/download bridge.
 
-jb-image-input use [jb-validation](https://github.com/javadbat/jb-validation) inside to handle validation. so for more information you can read [jb-validation](https://github.com/javadbat/jb-validation) documentation.
-by set `required` and `maxFileSize` you can easily have these 2 validation but for more advanced validation functions you can provide your own validation function list
+Use `jb-file-input` for non-image files.
+
+## Props
+
+| prop | type | description |
+| --- | --- | --- |
+| `value` | `TValue` | Stored and submitted component value. If it is not a `File`, `bridge.downloader` must resolve the preview image. Use `File`, `string`, `FormData`, or `null` when this value must be submitted by a native form. |
+| `file` | `File` | Injects a selected file by calling `selectImageByFile(file)`. |
+| `bridge` | `JBImageInputBridge<TValue>` | Upload/download bridge. |
+| `config` | `JBImageInputConfig` | Developer-defined object passed to bridge functions. |
+| `acceptTypes` | `string` | Comma-separated MIME types for the hidden file input. |
+| `maxFileSize` | `number` | Maximum accepted file size in bytes. |
+| `validationList` | `ValidationItem<ValidationValue<TValue>>[]` | Custom validation rules from `jb-validation`. |
+| `multiple` | `boolean` | Lets the hidden file input accept multiple files. The component still previews/uploads the first file. |
+| `name` | `string` | Sets the `name` attribute. |
+| `label` | `string` | Placeholder title and accessible aria label. |
+| `message` | `string` | Helper text shown in the placeholder message area. |
+| `required` | `boolean \| string` | Enables required validation. A string value is used as the required error message. |
+| `uploadType` | `string` | Forwarded as `upload-type`; kept for compatibility. Current web-component logic always uploads through `bridge.uploader` after a valid file selection. |
+
+## Events
+
+| prop | event | description |
+| --- | --- | --- |
+| `onChange` | `change` | Fired when a file is selected, upload resolves, or the selected image is deleted. |
+| `onImageSelected` | `imageSelected` | Fired with `event.detail.files` after the native file input changes. |
+| `onMaxSizeExceed` | `maxSizeExceed` | Fired with `event.detail.file` when a selected file is larger than `maxFileSize`. |
+| `onLoad` | `load` | Wired by the wrapper for compatibility with lazy-loaded custom elements. |
+| `onInit` | `init` | Wired by the wrapper for compatibility with lazy-loaded custom elements. |
+
+## Value and bridge
+
+`value` is the value your app stores and submits through the form-associated web component. `file` is the selected local `File`.
+
+For native form submission, keep `value` compatible with `ElementInternals.setFormValue()`: `File`, `string`, `FormData`, or `null`.
+
+```tsx
+import { JBImageInput, type JBImageInputBridge } from 'jb-image-input/react';
+
+const bridge: JBImageInputBridge<string> = {
+  uploader(file, config) {
+    const body = new FormData();
+    body.append('file', file);
+
+    return fetch(config.uploadUrl as string, {
+      method: 'POST',
+      body,
+    }).then((response) => response.text());
+  },
+  downloader(value) {
+    return fetch(value)
+      .then((response) => response.blob())
+      .then((blob) => new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      }));
+  },
+};
+
+<JBImageInput<string>
+  bridge={bridge}
+  config={{ uploadUrl: '/api/images' }}
+  onChange={(event) => console.log(event.target.value)}
+/>;
+```
+
+## Validation
 
 ```jsx
 const validationList = [
-        {
-            validator: ({file})=>{return file.size < 500 * 1024},
-            message: 'your file size must be above 500KB'
-        },
-    ];
-    <JBImageInput ref={imageRef} validationList={validationList}/>
-//check and show validations by simple calling the function (pass false if you don't want to show error and just want to check silently)
-const result = imageRef.current.validation.checkValidation(true);
+  {
+    validator: ({ file }) => !file || file.size < 500 * 1024,
+    message: 'Image must be smaller than 500KB',
+  },
+];
 
+<JBImageInput required="Please select an image" validationList={validationList} />;
 ```
 
-### multi image selector
+Use a ref when you need imperative validation:
 
-by default jb-image-input don't support multi image upload but in set of hack you can implement a system that user can select and upload multiple image
-we have 4 step to help you implement multi image input
+```tsx
+const imageRef = useRef(null);
 
-1- set `multiple` attribute to dom to let user select multiple image
+<JBImageInput ref={imageRef} required />;
+
+const isValid = imageRef.current.reportValidity();
+```
+
+## Multi image selector
+
+Use `multiple` with `onImageSelected`, then render additional `JBImageInput` components and pass each extra file through `file` or `ref.current.selectImageByFile(file)`.
 
 ```jsx
-<JBImageInput multiple="true"/>
+<JBImageInput
+  multiple
+  onImageSelected={(event) => {
+    const files = Array.from(event.detail.files);
+    console.log(files);
+  }}
+/>
 ```
 
-2- `imageSelected` event is fired on user select image and in `event.detail.files`you can get all files that user selected
-3- render new `<JBImageInput>` component for each selected file.
-4- inject the files you get in step 2 into your component by a `ref.current.selectImageByFile` function
-
-
-remember first file is uploaded by original image input and you don't need to inject it to another input and thats why we start from index 1
-
-### image accept type
-
-tell web-component what image mimetype are acceptable
+## Custom placeholder
 
 ```jsx
- <JBImageInput acceptTypes="image/jpeg,image/jpg,image/png,image/svg+xml"/>
-```
-### set bridge for upload and download image
-
-`jb-image-input` do not upload and download image automatically. it just handle ui states.
-you must provide 2 function `uploader` and `downloader` to component like this:
-
-```jsx
-<JBImageInput bridge={{
-            uploader: function (file,config,uploadProgressCallbackFunction) { /*put your functionality here*/},
-            downloader: function (value, config) { /*put your download functionality here*/}
-}}/>
-```
-
-you can create a class and pass class instance or create a simple object and pass it to component, depend on your need.
-both uploader and downloader must return `Promise` and resolve it on task completed
-
-bridge example for typescript:
-
-```typescript
-import { JBImageInputBridge, JBImageInputConfig } from "jb-image-input/react";
-type ImageData = {
-    alt:string | null,
-    url:string
-}
-export const imageBridge:JBImageInputBridge<ImageData> = {
-    downloader(data, config) {
-        const url = data.url;
-        return new Promise((resolve, reject) => {
-            axios.get(url, {responseType: "blob" }).then((response) => {
-                var reader = new window.FileReader();
-                reader.readAsDataURL(response.data);
-                reader.onload = function () {
-                    var imageDataUrl = reader.result;
-                    //return image in base64 format
-                    resolve(imageDataUrl as string);
-                };
-            }).catch((err) => {
-                console.error(err);
-                reject();
-            });
-        });
-    },
-    uploader(file, config, onProgressCallback) {
-        return new Promise((resolve, reject) => { 
-            var bodyFormData = new FormData();
-                bodyFormData.append('file', file);
-                //if you need to send multiple data with image
-                bodyFormData.append('another-field', config.customField)
-            axios.post(config.uploadUrl as string,bodyFormData,{headers: { "Content-Type": "multipart/form-data" }}).then((res)=>{
-                resolve(res.data);
-            }).catch((err)=>{
-                reject();
-            })
-         })
-       
-    },
-}
-```
-
-
-### set config
-
-config is not something that our component use, it just the config you need in your bridge so you can set it however you want based on your need. we just keep it in component and send it to your uploader and downloader function so you can structure it your self. we just make a default structure as following object
-
-```javascript
-this.config = {
-            uploadUrl: '',
-            downloadUrl: '',
-            // developer can add every config he want to have on bridge functions
-        };
-```
-
-### custom placeholder
-if you want to show your custom content when uploader is empty and ready to receive image in first place ypo can put your own content by using custom slot.
-to make that happen you just have to put your div and content in `JBImageInput` tag like below example:
-
-```JSX
-<JBImageInput>
-    <div slot="placeholder">
-            <div>custom placeholder</div>
-    </div>
+<JBImageInput label="Profile image">
+  <div slot="placeholder">Select profile image</div>
 </JBImageInput>
 ```
-you can place any element you need based on you design in `<div slot="placeholder">` you can use anything other than div too for example `<h1 slot="placeholder">` but you must set attribute `slot="placeholder"` in it.
 
-### max File Size
+## Custom style
 
-you can set max for user file size so user cant upload file larger than your limit. to do so just set `maxFileSize` like following example:
+The React component uses the same CSS variables as the web component.
 
-```JSX
-//set max file size to 2MB
-<JBImageInput maxFileSize={2*1024*1024} />
+```css
+.avatar-input {
+  --jb-image-input-width: 160px;
+  --jb-image-input-height: 160px;
+  --jb-image-input-border-radius: 50%;
+}
 ```
-
-when user select file bigger than that image input will ignore file and dispatch(fire) the `maxSizeExceed` event
 
 ```jsx
-//set max file size to 2MB
-<JBImageInput maxSizeExceed={(e)=>{
-alert(`your file is ${e.detail.file.size} size and it's bigger than 2MB`);
-}} />
+<JBImageInput className="avatar-input" />
 ```
-
-### set custom style
-
-in some cases in your project you need to change default style of web-component for example you need zero margin or different border-radius and etc.    
-if you want to set a custom style to this web-component all you need is to set CSS variable in parent scope of web-component.    
-
-| CSS variable name                     | description                                                                                   |
-| -------------                         | -------------                                                                                 |
-| --jb-image-input-width                | web-component width default is `100%`                                                         |
-| --jb-image-input-height               | web-component height default is `100%`                                                        |
-| --jb-image-input-bg-color             | web-component background-color default is `#f7f6f6`                                           |
-| --jb-image-input-border-radius        | web-component border radius default is `24px`                                                 |
-| --jb-image-input-placeholder-p-color  | web-component placeholder icon primary color                                                  |
-| --jb-image-input-placeholder-bg-color | web-component placeholder background-color default is transparent                             |
-| --jb-image-input-placeholder-sec-color| placeholder secondary color                                                                   |
-
 
 ## Shared Documentation
 
-For web-component behavior, events, slots, and CSS variables, see [`jb-image-input`](https://github.com/javadbat/jb-image-input).
+For web-component behavior, events, slots, CSS variables, and the full API, see [`jb-image-input`](https://github.com/javadbat/jb-image-input).
 
 ## Related Docs
-- see [jb-image-input](https://github.com/javadbat/jb-image-input) if you want to use this component as a web-component.
 
-- see [All JB Design system Component List](https://javadbat.github.io/design-system/) for more components.
+- See [All JB Design System Component List](https://javadbat.github.io/design-system/) for more components.
+- Use [Contribution Guide](https://github.com/javadbat/design-system/blob/main/docs/contribution-guide.md) if you want to contribute to this component.
 
-- use [Contribution Guide](https://github.com/javadbat/design-system/blob/main/docs/contribution-guide.md) if you want to contribute in this component.
+## AI agent notes
+
+- Import `JBImageInput` from `jb-image-input/react`; the wrapper imports and registers the underlying `jb-image-input` web component.
+- Use `value` for stored/submitted image data and `file` when injecting a local `File`.
+- Use `bridge.uploader` to transform a selected `File` into the stored value, and `bridge.downloader` to transform a stored value back into a preview image data URL.
+- Keep submitted values compatible with `ElementInternals.setFormValue()`: `File`, `string`, `FormData`, or `null`.
+- Use `onImageSelected` for multi-image flows; the component itself previews/uploads the first selected file.
+- Use `required`, `maxFileSize`, and `validationList` for validation.

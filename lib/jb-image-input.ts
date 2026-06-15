@@ -1,8 +1,8 @@
-import { ShowValidationErrorParameters, ValidationHelper, type ValidationItem, type ValidationResult, type WithValidation } from "jb-validation";
+import { type ShowValidationErrorParameters, ValidationHelper, type ValidationItem, type ValidationResult, type WithValidation } from "jb-validation";
 import type { JBFormInputStandards } from 'jb-form';
 import CSS from "./ib-image-input.css";
 import VariablesCSS from "./variables.css";
-import {
+import type {
   JBImageInputBridge,
   JBImageInputConfig,
   JBImagesImageInputElements,
@@ -14,7 +14,7 @@ import { renderHTML } from "./render";
 import { dictionary } from "./i18n";
 import { i18n } from "jb-core/i18n";
 export * from './types.js';
-export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue<TValue>>, JBFormInputStandards<TValue> {
+export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue<TValue | null>>, JBFormInputStandards<TValue | null> {
   static get formAssociated() {
     return true;
   }
@@ -22,10 +22,12 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   get value() {
     return this.#value;
   }
-  set value(value) {
+  set value(value: TValue | null) {
     this.#setValue(value);
   }
-
+  get form (){
+    return this.#internals?.form??null;
+  }
   #isAutoValidationDisabled = false;
   get isAutoValidationDisabled(): boolean {
     return this.#isAutoValidationDisabled;
@@ -37,7 +39,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #virtualInputFile!: HTMLInputElement;
   #elements!: JBImagesImageInputElements;
   get selectedImageType() {
-    return this.#file.type;
+    return this.#file?.type;
   }
   get status() {
     //it is read only variable
@@ -83,7 +85,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     if (value == null) {
       this.#maxFileSize = null;
     } else {
-      if (!isNaN(value) && typeof value == "number") {
+      if (!Number.isNaN(value) && typeof value == "number") {
         this.#maxFileSize = value;
       }
     }
@@ -96,9 +98,9 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#disabled = value;
     if (value) {
       //TODO: remove as any when typescript support
-      (this.#internals as any).states?.add("disabled");
+      this.#internals?.states?.add("disabled");
     } else {
-      (this.#internals as any).states?.delete("disabled");
+      this.#internals?.states?.delete("disabled");
     }
   }
   #required = false;
@@ -110,13 +112,13 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     return this.#required;
   }
   #internals?: ElementInternals;
-  #validation = new ValidationHelper<ValidationValue<TValue>>({
+  #validation = new ValidationHelper<ValidationValue<TValue | null>>({
     showValidationError: this.showValidationError.bind(this),
     clearValidationError: this.clearValidationError.bind(this),
     getValue: () => ({ file: this.#file, value: this.#value }),
     getValidations: this.#getInsideValidation.bind(this),
     setValidationResult: this.#setValidationResult.bind(this),
-    getValueString: () => this.fileName
+    getValueString: () => this.fileName??""
   });
   get validation() {
     return this.#validation;
@@ -139,8 +141,8 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#initProp();
     this.#registerEventListener();
   }
-  get fileName(): string {
-    return this.#file.name;
+  get fileName(): string|null {
+    return this.#file?.name??null;
   }
   #initWebComponent() {
     const shadowRoot = this.attachShadow({
@@ -166,7 +168,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
         downloadButton: shadowRoot.querySelector(".image-overlay .download-button")!
       },
       errorOverlay: {
-        container: shadowRoot.querySelector(".error-overlay"),
+        container: shadowRoot.querySelector(".error-overlay")!,
         message: shadowRoot.querySelector('.error-overlay .error-message')!
       }
     };
@@ -235,17 +237,17 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   static get observedAttributes() {
     return ["required", "label", "multiple", "message"];
   }
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+  attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
     // do something when an attribute has changed
     this.#onAttributeChange(name, newValue);
   }
   #onAttributeChange(name: string, value: string) {
     switch (name) {
       case "required":
-        this.required = (value || value === '') && value !== 'false';
+        this.required = (!!value || value === '') && value !== 'false';
         break;
       case "label":
-        this.#internals.ariaLabel = value;
+        if(this.#internals)this.#internals.ariaLabel = value;
         if (this.#elements.placeHolderTitle) {
           this.#elements.placeHolderTitle.innerHTML = value;
         }
@@ -255,7 +257,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
         break;
       case "message":
         this.#elements.placeHolderMessageBox.innerHTML = value;
-        this.#internals.ariaDescription = value;
+        if(this.#internals)this.#internals.ariaDescription = value;
         break;
     }
   }
@@ -275,7 +277,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
       this.#dispatchOnImagesSelected(files);
       const file = files[0];
       //reset virtual input value so it can reselect image
-      this.#virtualInputFile.value = null;
+      this.#virtualInputFile.value = "";
       this.selectImageByFile(file);
     }
   }
@@ -304,11 +306,11 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     const event = new CustomEvent("maxSizeExceed", { detail: { file }, cancelable: false });
     this.dispatchEvent(event);
   }
-  static ExtractBase64ImageFromFile(file: File) {
+  static ExtractBase64ImageFromFile(file: File):Promise<string>{
     return new Promise((resolved, rejected) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const mainImageSource = e.target?.result;
+        const mainImageSource = e.target?.result as string;
         if (mainImageSource) {
           resolved(mainImageSource);
         } else {
@@ -390,14 +392,14 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     }, 2000);
   }
   #getInsideValidation() {
-    const ValidationList: ValidationItem<ValidationValue<TValue>>[] = [];
+    const ValidationList: ValidationItem<ValidationValue<TValue | null>>[] = [];
     if (this.required) {
-      const message = this.getAttribute("required").length > 0 ? this.getAttribute("required") : dictionary.get(i18n, "requiredMessage");
+      const message = (this.getAttribute("required")??"").length > 0 ? this.getAttribute("required") : dictionary.get(i18n, "requiredMessage");
       ValidationList.push({
         validator: ({ file, value }) => {
           return file !== null || value != null;
         },
-        message: message,
+        message: message??"",
         stateType: "valueMissing",
       });
     }
@@ -407,7 +409,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
           if (file == null) {
             return true;
           }
-          if (file.size >= this.#maxFileSize) {
+          if (file.size >= this.#maxFileSize!) {
             const sizeFormatter = new Intl.NumberFormat(i18n.locale, {
               style: 'unit',
               unit: 'byte',
@@ -415,7 +417,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
               unitDisplay: "narrow",
             })
 
-            return dictionary.get(i18n, "maxSizeExceed")(sizeFormatter.format(this.#maxFileSize), sizeFormatter.format(file.size))
+            return dictionary.get(i18n, "maxSizeExceed")(sizeFormatter.format(this.#maxFileSize!), sizeFormatter.format(file.size))
           }
           return true;
         },
@@ -455,21 +457,21 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
    */
   #setValidationResult(result: ValidationResult<ValidationValue<TValue>>) {
     if (result.isAllValid) {
-      this.#internals.setValidity({}, '');
+      this.#internals?.setValidity({}, '');
     } else {
       const states: ValidityStateFlags = {};
       let message = "";
       result.validationList.forEach((res) => {
         if (!res.isValid) {
           if (res.validation.stateType) { states[res.validation.stateType] = true; }
-          if (message == '') { message = res.message; }
+          if (message == '') { message = res.message??""; }
         }
       });
-      this.#internals.setValidity(states, message);
+      this.#internals?.setValidity(states, message);
     }
   }
   get validationMessage() {
-    return this.#internals.validationMessage;
+    return this.#internals?.validationMessage??"";
   }
   #onDeleteButtonClicked(e: MouseEvent) {
     e.stopPropagation();
@@ -479,15 +481,16 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   }
   #onDownloadButtonClicked(e: MouseEvent) {
     e.stopPropagation();
-    const base64String = this.#elements.image.getAttribute('src');
-    const imageType = base64String.match(/[^:/]\w+(?=;|,)/)[0];
+    const base64String = this.#elements.image.getAttribute('src')??"";
+    const imageType = base64String.match(/[^:/]\w+(?=;|,)/)?.[0]??"";
     const a = document.createElement("a");
     a.href = base64String;
-    a.download = "Image." + imageType;
+    a.download = `Image.${imageType}`;
     a.click();
   }
-  #setValue(value: TValue) {
+  #setValue(value: TValue | null) {
     this.#value = value;
+    if(value instanceof File || value === null || typeof value == "string" || value instanceof FormData){this.#internals?.setFormValue(value as File | string | FormData | null);}
     if (value != null) {
       if (value instanceof File) {
         this.#file = value;

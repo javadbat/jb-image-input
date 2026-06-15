@@ -1,0 +1,385 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "README.md",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "lib/jb-image-input.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Form-associated image picker web component with preview UI, validation, custom upload/download bridge support, placeholder and overlay slots, and CSS customization.",
+          "name": "JBImageInputWebComponent",
+          "tagName": "jb-image-input",
+          "customElement": true,
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "attributes": [
+            {
+              "name": "name",
+              "description": "Form field name returned by the name property.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "label",
+              "description": "Placeholder title text and accessible aria label.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "message",
+              "description": "Helper text shown in the placeholder message area and exposed as aria description.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "required",
+              "description": "Enables required validation. A string value is used as the required validation message.",
+              "type": {
+                "text": "boolean | string"
+              }
+            },
+            {
+              "name": "multiple",
+              "description": "When set to true, the hidden native file input accepts multiple files and imageSelected exposes the full FileList. The component still previews and uploads the first selected file.",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "value",
+              "description": "Canonical component value and native form value. When an uploader is used, this becomes the value resolved by bridge.uploader. Use File, string, FormData, or null when this value must be submitted by a native form. Setting a File previews that file; setting another value calls bridge.downloader to resolve a preview image.",
+              "type": {
+                "text": "TValue | null"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "file",
+              "description": "Currently selected local File, or null when empty.",
+              "type": {
+                "text": "File | null"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "imageBase64Value",
+              "description": "Base64/data URL preview image after a local file is read or bridge.downloader resolves.",
+              "type": {
+                "text": "string | null"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "acceptTypes",
+              "description": "Comma-separated MIME types assigned to the hidden native file input accept property.",
+              "type": {
+                "text": "string"
+              },
+              "default": "image/jpeg,image/jpg,image/png,image/svg+xml"
+            },
+            {
+              "kind": "field",
+              "name": "maxFileSize",
+              "description": "Maximum accepted file size in bytes. Oversized files fail validation and dispatch maxSizeExceed.",
+              "type": {
+                "text": "number | null"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "bridge",
+              "description": "Upload/download bridge. uploader(file, config, onProgressCallback) returns the stored/submitted value; downloader(value, config) returns a preview image data URL.",
+              "type": {
+                "text": "JBImageInputBridge<TValue>"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "config",
+              "description": "Developer-defined configuration object passed to bridge.uploader and bridge.downloader.",
+              "type": {
+                "text": "JBImageInputConfig"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "multiple",
+              "description": "Controls whether the hidden native file input has the multiple attribute.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "description": "Enables required validation.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "description": "Sets the disabled custom state. Current implementation does not block opening the file selector by itself.",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "status",
+              "description": "Read-only visual state: empty, uploading, uploaded, or downloaded.",
+              "type": {
+                "text": "'empty' | 'uploading' | 'uploaded' | 'downloaded' | null"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "description": "Associated form from ElementInternals.",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "selectedImageType",
+              "description": "MIME type of the currently selected local file, or undefined before a file is selected.",
+              "type": {
+                "text": "string | undefined"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "validation",
+              "description": "jb-validation helper. Set validation.list for custom validation rules that receive { file, value }.",
+              "type": {
+                "text": "ValidationHelper<ValidationValue<TValue>>"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "description": "Current native validation message from ElementInternals.",
+              "type": {
+                "text": "string"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "initialValue",
+              "description": "Baseline value used by isDirty.",
+              "type": {
+                "text": "TValue | null"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "isDirty",
+              "description": "True when current value differs from initialValue.",
+              "type": {
+                "text": "boolean"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "description": "Current name attribute value.",
+              "type": {
+                "text": "string"
+              },
+              "readonly": true
+            }
+          ],
+          "methods": [
+            {
+              "name": "openImageSelector",
+              "description": "Opens the hidden native file picker."
+            },
+            {
+              "name": "selectImageByFile",
+              "description": "Injects a File as if the user selected it, validates it, previews it, and starts bridge.uploader when valid.",
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "checkValidity",
+              "description": "Runs validation without showing the error message and dispatches invalid when invalid.",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "name": "reportValidity",
+              "description": "Runs validation, shows the first error message, and dispatches invalid when invalid.",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              }
+            },
+            {
+              "name": "ExtractBase64ImageFromFile",
+              "description": "Static helper that reads a File and resolves its data URL.",
+              "privacy": "public",
+              "static": true,
+              "parameters": [
+                {
+                  "name": "file",
+                  "type": {
+                    "text": "File"
+                  }
+                }
+              ],
+              "return": {
+                "type": {
+                  "text": "Promise<string>"
+                }
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "change",
+              "description": "Dispatched when a file is selected, upload resolves, or the selected image is deleted."
+            },
+            {
+              "name": "imageSelected",
+              "description": "Dispatched after the hidden native file input changes. event.detail.files contains the selected FileList."
+            },
+            {
+              "name": "maxSizeExceed",
+              "description": "Dispatched when the selected file is larger than maxFileSize. event.detail.file contains the oversized File."
+            },
+            {
+              "name": "invalid",
+              "description": "Dispatched when checkValidity or reportValidity finds an invalid value."
+            }
+          ],
+          "slots": [
+            {
+              "name": "placeholder",
+              "description": "Custom content shown while the component status is empty."
+            },
+            {
+              "name": "overlay",
+              "description": "Replaces the full image overlay shown over the preview image."
+            },
+            {
+              "name": "overlay-content",
+              "description": "Replaces the default overlay controls while keeping the default overlay container."
+            }
+          ],
+          "cssParts": [
+            {
+              "name": "message",
+              "description": "The helper or validation message element inside the default placeholder."
+            }
+          ],
+          "cssStates": [
+            {
+              "name": "disabled",
+              "description": "Applied when the disabled property is true."
+            }
+          ],
+          "cssProperties": [
+            {
+              "name": "--jb-image-input-width",
+              "description": "Host width."
+            },
+            {
+              "name": "--jb-image-input-height",
+              "description": "Host height."
+            },
+            {
+              "name": "--jb-image-input-bg-color",
+              "description": "Component background color."
+            },
+            {
+              "name": "--jb-image-input-border-radius",
+              "description": "Component border radius."
+            },
+            {
+              "name": "--jb-image-input-placeholder-p-color",
+              "description": "Default placeholder neutral/icon color."
+            },
+            {
+              "name": "--jb-image-input-placeholder-bg-color",
+              "description": "Placeholder background color."
+            },
+            {
+              "name": "--jb-image-input-placeholder-sec-color",
+              "description": "Default placeholder primary accent color."
+            },
+            {
+              "name": "--jb-image-input-button-border-radius",
+              "description": "Default overlay button border radius."
+            },
+            {
+              "name": "--jb-image-input-message-box-display",
+              "description": "Message box display value."
+            },
+            {
+              "name": "--jb-image-input-message-color",
+              "description": "Helper message color."
+            },
+            {
+              "name": "--jb-image-input-message-error-color",
+              "description": "Validation message color."
+            },
+            {
+              "name": "--jb-image-input-message-font-size",
+              "description": "Message font size."
+            },
+            {
+              "name": "--jb-image-input-placeholder-title-color",
+              "description": "Placeholder title color."
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "JBImageInputWebComponent",
+          "declaration": {
+            "name": "JBImageInputWebComponent",
+            "module": "lib/jb-image-input.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "jb-image-input",
+          "declaration": {
+            "name": "JBImageInputWebComponent",
+            "module": "lib/jb-image-input.ts"
+          }
+        }
+      ]
+    }
+  ]
+}
