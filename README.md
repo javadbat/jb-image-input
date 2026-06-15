@@ -1,5 +1,10 @@
 # jb-image-input
 
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/jb-image-input)
+[![GitHub license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://raw.githubusercontent.com/javadbat/jb-image-input/main/LICENSE)
+[![NPM Version](https://img.shields.io/npm/v/jb-image-input)](https://www.npmjs.com/package/jb-image-input)
+![GitHub Created At](https://img.shields.io/github/created-at/javadbat/jb-image-input)
+
 image input web component let user upload image and see what is uploaded.
 
 - Ability multiple image upload.
