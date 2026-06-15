@@ -24,12 +24,10 @@ image input web component let user upload image and see what is uploaded.
 - [Storybook](https://javadbat.github.io/design-system/?path=/docs/components-form-elements-jbimageinput)
 - [CodePen](https://codepen.io/javadbat/pen/XWpoEYY)
 
-## using with JS frameworks
-
+## Using With JS Frameworks
 - [<img src="https://img.shields.io/badge/React.js-jb--image--input%2Freact-000.svg?logo=react&logoColor=%2361DAFB" height="30" />](https://github.com/javadbat/jb-image-input/tree/main/react)
 
-## usage
-
+## Usage
 ```sh
 npm i jb-image-input
 ```
@@ -54,7 +52,7 @@ imageInput.validation.list = [
             message: 'your file size must be above 500KB'
         },
     ];
-//check and show validations by simple calling the function (pass false if you dont want to show error and just want to check silently)
+//check and show validations by simple calling the function (pass false if you don't want to show error and just want to check silently)
 const result = imageInput.validation.checkValidation(true);
 ```
 
@@ -128,7 +126,7 @@ both uploader and downloader must return `Promise` and resolve it on task comple
 
 ## set config
 
-config is not something that our component use, it just the config you need in your bridge so you can set it however you want base on your need. we just keep it in component and send it to your uploader and downloader function so you can structure it your self. we just make a default structure as following object
+config is not something that our component use, it just the config you need in your bridge so you can set it however you want based on your need. we just keep it in component and send it to your uploader and downloader function so you can structure it your self. we just make a default structure as following object
 
 ```javascript
 this.config = {
@@ -150,7 +148,7 @@ to make that happen you just have to put your div and content in `jb-image-input
 </jb-image-input>
 ```
 
-you can place any element you need base on you design in `<div slot="placeholder">` you can use anything other than div too for example `<h1 slot="placeholder">` but you must set attribute `slot="placeholder"` in it.
+you can place any element you need based on you design in `<div slot="placeholder">` you can use anything other than div too for example `<h1 slot="placeholder">` but you must set attribute `slot="placeholder"` in it.
 
 ## max File Size
 
@@ -173,9 +171,9 @@ document.querySelector('jb-image-input').addEventListener('maxSizeExceed',(e)=>{
 ## set custom style
 
 in some cases in your project you need to change default style of web-component for example you need zero margin or different border-radius and etc.    
-if you want to set a custom style to this web-component all you need is to set css variable in parent scope of web-component 
+if you want to set a custom style to this web-component all you need is to set CSS variable in parent scope of web-component 
 
-| css variable name                     | description                                                                                   |
+| CSS variable name                     | description                                                                                   |
 | -------------                         | -------------                                                                                 |
 | --jb-image-input-width                | web-component width default is `100%`                                                         |
 | --jb-image-input-height               | web-component height default is `100%`                                                        |
@@ -184,9 +182,14 @@ if you want to set a custom style to this web-component all you need is to set c
 | --jb-image-input-placeholder-p-color  | web-component placeholder icon primary color                                                  |
 | --jb-image-input-placeholder-bg-color | web-component placeholder background-color default is transparent                             |
 | --jb-image-input-placeholder-sec-color| placeholder secondary color                                                                   |
+| --jb-image-input-button-border-radius | Customize button border radius. |
+| --jb-image-input-message-box-display | Customize message box display. |
+| --jb-image-input-message-color | Customize message color. |
+| --jb-image-input-message-error-color | Customize message error color. |
+| --jb-image-input-message-font-size | Customize message font size. |
+| --jb-image-input-placeholder-title-color | Customize placeholder title color. |
 
-## Other Related Docs:
-
+## Related Docs
 - see [`jb-image-input/react`](https://github.com/javadbat/jb-image-input/tree/main/react) if you want to use this component in react.
 
 - see [All JB Design system Component List](https://javadbat.github.io/design-system/)

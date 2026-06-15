@@ -18,12 +18,11 @@ this package use jb-image-input underneath so you can
 
 - customizable format
 
-Demo :  Demo: [codeSandbox preview](https://3f63dj.csb.app/samples/jb-image-input) for just see the demo and [codeSandbox editor](https://codesandbox.io/p/sandbox/jb-design-system-3f63dj?file=%2Fsrc%2Fsamples%2FJBImageInput.tsx) if you want to see and play with code
+Demo: [codeSandbox preview](https://3f63dj.csb.app/samples/jb-image-input) for just see the demo and [codeSandbox editor](https://codesandbox.io/p/sandbox/jb-design-system-3f63dj?file=%2Fsrc%2Fsamples%2FJBImageInput.tsx) if you want to see and play with code
 
 ## instruction
 
-### usage
-
+### Usage
 ```sh
 npm i jb-image-input
 ```
@@ -49,7 +48,7 @@ const validationList = [
         },
     ];
     <JBImageInput ref={imageRef} validationList={validationList}/>
-//check and show validations by simple calling the function (pass false if you dont want to show error and just want to check silently)
+//check and show validations by simple calling the function (pass false if you don't want to show error and just want to check silently)
 const result = imageRef.current.validation.checkValidation(true);
 
 ```
@@ -140,7 +139,7 @@ export const imageBridge:JBImageInputBridge<ImageData> = {
 
 ### set config
 
-config is not something that our component use, it just the config you need in your bridge so you can set it however you want base on your need. we just keep it in component and send it to your uploader and downloader function so you can structure it your self. we just make a default structure as following object
+config is not something that our component use, it just the config you need in your bridge so you can set it however you want based on your need. we just keep it in component and send it to your uploader and downloader function so you can structure it your self. we just make a default structure as following object
 
 ```javascript
 this.config = {
@@ -161,7 +160,7 @@ to make that happen you just have to put your div and content in `JBImageInput` 
     </div>
 </JBImageInput>
 ```
-you can place any element you need base on you design in `<div slot="placeholder">` you can use anything other than div too for example `<h1 slot="placeholder">` but you must set attribute `slot="placeholder"` in it.
+you can place any element you need based on you design in `<div slot="placeholder">` you can use anything other than div too for example `<h1 slot="placeholder">` but you must set attribute `slot="placeholder"` in it.
 
 ### max File Size
 
@@ -184,9 +183,9 @@ alert(`your file is ${e.detail.file.size} size and it's bigger than 2MB`);
 ### set custom style
 
 in some cases in your project you need to change default style of web-component for example you need zero margin or different border-radius and etc.    
-if you want to set a custom style to this web-component all you need is to set css variable in parent scope of web-component.    
+if you want to set a custom style to this web-component all you need is to set CSS variable in parent scope of web-component.    
 
-| css variable name                     | description                                                                                   |
+| CSS variable name                     | description                                                                                   |
 | -------------                         | -------------                                                                                 |
 | --jb-image-input-width                | web-component width default is `100%`                                                         |
 | --jb-image-input-height               | web-component height default is `100%`                                                        |
@@ -196,8 +195,12 @@ if you want to set a custom style to this web-component all you need is to set c
 | --jb-image-input-placeholder-bg-color | web-component placeholder background-color default is transparent                             |
 | --jb-image-input-placeholder-sec-color| placeholder secondary color                                                                   |
 
-## Other Related Docs:
 
+## Shared Documentation
+
+For web-component behavior, events, slots, and CSS variables, see [`jb-image-input`](https://github.com/javadbat/jb-image-input).
+
+## Related Docs
 - see [jb-image-input](https://github.com/javadbat/jb-image-input) if you want to use this component as a web-component.
 
 - see [All JB Design system Component List](https://javadbat.github.io/design-system/) for more components.
