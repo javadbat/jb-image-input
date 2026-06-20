@@ -1,0 +1,18 @@
+import {Meta, Title, Story, Controls, Stories, Source} from '@storybook/blocks';
+import * as ImageInputStories from './JBImageInput.stories';
+
+<Meta of={ImageInputStories}/>
+
+<Title>JB Image Input</Title>
+
+Image input component with preview, validation, custom placeholder, and upload/download actions.
+
+<Story of={ImageInputStories.ActionTest}/>
+<Controls of={ImageInputStories.ActionTest}/>
+<Source of={ImageInputStories.ActionTest}/>
+
+## Basic usage
+<Story of={ImageInputStories.Normal}/>
+
+## Other samples & variants
+<Stories/>
