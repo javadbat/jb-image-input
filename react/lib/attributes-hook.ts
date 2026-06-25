@@ -1,11 +1,11 @@
-import { JBImageInputWebComponent, type JBImageInputBridge, type JBImageInputConfig, type ValidationValue } from "jb-image-input";
+import { type JBImageInputWebComponent, type JBImageInputBridge, type JBImageInputConfig, type ValidationValue } from "jb-image-input";
 import { type ValidationItem } from "jb-validation";
-import { RefObject, useEffect } from "react";
+import { type RefObject, useEffect } from "react";
 
 export type JBImageInputAttributes<TValue> = {
-  validationList?: ValidationItem<ValidationValue<TValue>>[],
+  validationList?: ValidationItem<ValidationValue<TValue | null>>[],
   config?: JBImageInputConfig,
-  value?: TValue,
+  value?: TValue | null,
   bridge?: JBImageInputBridge<TValue>,
   multiple?: boolean,
   name?: string,
@@ -17,7 +17,7 @@ export type JBImageInputAttributes<TValue> = {
   message?: string,
 
 }
-export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInputWebComponent<TValue>>, props: JBImageInputAttributes<TValue>) {
+export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInputWebComponent<TValue> | null>, props: JBImageInputAttributes<TValue>) {
   useEffect(() => {
     if (props.config && element.current) {
       element.current.config = props.config;

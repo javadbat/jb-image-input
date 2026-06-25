@@ -26,11 +26,7 @@ declare module "react" {
 
 export function JBImageInput<TValue> (props: Props<TValue>, ref) {
   const element = useRef<JBImageInputWebComponent<TValue>>(null);
-  useImperativeHandle(
-    ref,
-    () => (element ? element.current : undefined),
-    [element],
-  );
+  useImperativeHandle(ref, () => element.current ?? undefined, [element]);
   const {acceptTypes,bridge,config,file,label,maxFileSize,message,multiple,name,required,validationList,value,onChange,onImageSelected,onInit,onLoad,onMaxSizeExceed,uploadType,...otherProps} = props;
   useJBImageInputAttribute(element, {acceptTypes,bridge,config,file,label,maxFileSize,message,multiple,name,required,validationList,value});
   useEvents(element, {onChange,onImageSelected,onInit,onLoad,onMaxSizeExceed});
@@ -43,7 +39,7 @@ export function JBImageInput<TValue> (props: Props<TValue>, ref) {
 };
 type ImageInputProps<TValue> = EventProps<TValue> & JBImageInputAttributes<TValue> & {
   uploadType?: string,
-  ref?: RefObject<JBImageInputWebComponent<TValue>>
+  ref?: RefObject<JBImageInputWebComponent<TValue> | null>
 }
 export type Props<TValue> =  ImageInputProps<TValue> & JBElementStandardProps<JBImageInputWebComponent, keyof ImageInputProps<TValue>>
 
