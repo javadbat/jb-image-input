@@ -1,14 +1,14 @@
 import React from 'react';
-import { JBImageInput, Props } from 'jb-image-input/react';
+import { JBImageInput } from 'jb-image-input/react';
 import JBImageInputActionTest from './JBImageInputActionTest.jsx';
 import type { Meta, StoryObj } from '@storybook/react';
 
-const meta: Meta<Props<any>> = {
+const meta = {
   title: "Components/form elements/JBImageInput",
   component: JBImageInput,
-};
+} satisfies Meta<typeof JBImageInput>;
 export default meta;
-type Story = StoryObj<typeof JBImageInput>;
+type Story = StoryObj<typeof meta>;
 
 export const Normal: Story = {
   args: {
