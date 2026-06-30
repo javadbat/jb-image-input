@@ -1,4 +1,3 @@
-import React from 'react';
 import { JBImageInput } from 'jb-image-input/react';
 import JBImageInputActionTest from './JBImageInputActionTest.jsx';
 import type { Meta, StoryObj } from '@storybook/react';
