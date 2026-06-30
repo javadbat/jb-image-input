@@ -5,24 +5,9 @@ import type { JBImageInputWebComponent, JBImageInputConfig, JBImageInputBridge }
 import { type EventProps, useEvents } from './events-hook.js';
 import { useJBImageInputAttribute, type JBImageInputAttributes } from './attributes-hook.js';
 import type { JBElementStandardProps } from 'jb-core/react';
+import './module-declaration.js';
 
 export type { JBImageInputConfig, JBImageInputBridge };
-
-declare module "react" {
-  namespace JSX {
-    interface IntrinsicElements {
-      'jb-image-input': JBImageInputType<any>;
-    }
-    interface JBImageInputType<TValue> extends React.DetailedHTMLProps<React.HTMLAttributes<JBImageInputWebComponent<TValue>>, JBImageInputWebComponent<TValue>> {
-      class?: string,
-      label?: string,
-      message?: string,
-      name?: string,
-      required?: string | boolean,
-      // ref:React.RefObject<JBDateInputWebComponent>,
-    }
-  }
-}
 
 export function JBImageInput<TValue>(props: Props<TValue>) {
   const element = useRef<JBImageInputWebComponent<TValue> | null>(null);
