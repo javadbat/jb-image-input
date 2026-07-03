@@ -46,8 +46,8 @@
 
             .icon-wrapper {
                 svg {
-                    width: 64px;
-                    height: 64px;
+                    width: 4rem;
+                    height: 4rem;
                     fill: var(--placeholder-neutral-color);
 
                     .cls-1 {
@@ -63,7 +63,7 @@
 
             .message-box {
                 font-size: var(--jb-image-input-message-font-size, 0.7rem);
-                padding: 2px 8px;
+                padding: 2px 0.5rem;
                 color: var(--message-color);
                 display: var(--jb-image-input-message-box-display, block);
 
@@ -133,7 +133,7 @@
             width: 100%;
             height: 100%;
             background-color: var(--overlay-bg-color);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(0.5rem);
             z-index: 1;
             overflow: hidden;
             border-radius: var(--border-radius);
@@ -162,7 +162,7 @@
         width: 100%;
         height: 100%;
         background-color: var(--error-overlay-bg-color);
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(0.5rem);
         z-index: 1;
         overflow: hidden;
         border-radius: var(--border-radius);

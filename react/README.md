@@ -148,8 +148,8 @@ The React component uses the same CSS variables as the web component.
 
 ```css
 .avatar-input {
-  --jb-image-input-width: 160px;
-  --jb-image-input-height: 160px;
+  --jb-image-input-width: 10rem;
+  --jb-image-input-height: 10rem;
   --jb-image-input-border-radius: 50%;
 }
 ```
