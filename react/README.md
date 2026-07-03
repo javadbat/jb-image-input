@@ -158,6 +158,20 @@ The React component uses the same CSS variables as the web component.
 <JBImageInput className="avatar-input" />
 ```
 
+## CSS parts and states
+
+The React wrapper exposes the same CSS parts, states, and slot names as the web component. Use JSX children with `slot="placeholder"` or other documented slot names for custom placeholder, upload, and overlay content.
+
+```css
+.avatar-input::part(image) {
+  object-fit: cover;
+}
+```
+
+## Accessibility notes
+
+Set `label` so the image picker has a clear accessible name. Custom placeholder or overlay content should preserve a visible action label such as "Select image" or "Delete image".
+
 ## Shared Documentation
 
 For web-component behavior, events, slots, CSS variables, and the full API, see [`jb-image-input`](https://github.com/javadbat/jb-image-input).
