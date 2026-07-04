@@ -1,0 +1,28 @@
+.carbon-image-input {
+    display: block;
+    width: 100%;
+    height: 8rem;
+    border: 1px solid #525252;
+    --jb-image-input-width: 100%;
+    --jb-image-input-height: 8rem;
+    --jb-image-input-bg-color: #262626;
+    --jb-image-input-border-radius: 0;
+    --jb-image-input-placeholder-bg-color: #161616;
+    --jb-image-input-placeholder-neutral-color: #8d8d8d;
+    --jb-image-input-placeholder-primary-color: #0f62fe;
+    --jb-image-input-placeholder-title-color: #f4f4f4;
+    --jb-image-input-message-color: #c6c6c6;
+    --jb-image-input-message-color-error: #fa4d56;
+    --jb-image-input-message-font-size: 0.75rem;
+    --jb-image-input-overlay-bg-color: oklch(0% 0 0 / 0.68);
+    --jb-image-input-error-overlay-bg-color: oklch(45% 0.2 28 / 0.72);
+}
+
+.carbon-image-input::part(message) {
+    text-transform: uppercase;
+    letter-spacing: 0;
+}
+
+.carbon-image-input:state(disabled) {
+    opacity: 0.58;
+}

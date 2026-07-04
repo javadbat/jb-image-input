@@ -1,0 +1,27 @@
+.cupertino-image-input {
+    display: block;
+    width: 100%;
+    height: 8rem;
+    box-shadow: inset 0 0 0 1px oklch(90% 0.01 250 / 0.8);
+    --jb-image-input-width: 100%;
+    --jb-image-input-height: 8rem;
+    --jb-image-input-bg-color: oklch(99% 0.01 250 / 0.92);
+    --jb-image-input-border-radius: 1.25rem;
+    --jb-image-input-placeholder-bg-color: oklch(99% 0.01 250 / 0.72);
+    --jb-image-input-placeholder-neutral-color: #8e8e93;
+    --jb-image-input-placeholder-primary-color: #007aff;
+    --jb-image-input-placeholder-title-color: #1d1d1f;
+    --jb-image-input-message-color: #3a3a3c;
+    --jb-image-input-message-color-error: #ff3b30;
+    --jb-image-input-message-font-size: 0.75rem;
+    --jb-image-input-overlay-bg-color: oklch(98% 0.01 250 / 0.78);
+    --jb-image-input-error-overlay-bg-color: oklch(67% 0.2 25 / 0.72);
+}
+
+.cupertino-image-input::part(message) {
+    font-weight: 500;
+}
+
+.cupertino-image-input:state(disabled) {
+    opacity: 0.5;
+}

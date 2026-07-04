@@ -255,23 +255,7 @@ jb-image-input:state(disabled) {
 
 Set CSS variables in the parent scope of the component.
 
-| CSS variable name | description |
-| --- | --- |
-| `--jb-image-input-width` | Host width. |
-| `--jb-image-input-height` | Host height. |
-| `--jb-image-input-bg-color` | Component background color. |
-| `--jb-image-input-border-radius` | Component border radius. |
-| `--jb-image-input-placeholder-neutral-color` | Default placeholder neutral/icon color. |
-| `--jb-image-input-placeholder-bg-color` | Placeholder background color. |
-| `--jb-image-input-placeholder-primary-color` | Default placeholder primary accent color. |
-| `--jb-image-input-button-border-radius` | Default overlay button border radius. |
-| `--jb-image-input-message-box-display` | Message box display value. |
-| `--jb-image-input-message-color` | Helper message color. |
-| `--jb-image-input-message-color-error` | Validation message color. |
-| `--jb-image-input-message-font-size` | Message font size. |
-| `--jb-image-input-overlay-bg-color` | Image overlay background color. |
-| `--jb-image-input-error-overlay-bg-color` | Error overlay background color. |
-| `--jb-image-input-placeholder-title-color` | Placeholder title color. |
+For complete styling guidance, live examples, official parts and states, and the full CSS variable reference, see [Styling](https://javadbat.github.io/design-system/?path=/docs/components-form-elements-jbimageinput-styling).
 
 ```css
 jb-image-input.avatar-input {

@@ -356,6 +356,14 @@
               "description": "Message font size."
             },
             {
+              "name": "--jb-image-input-overlay-bg-color",
+              "description": "Image overlay background color."
+            },
+            {
+              "name": "--jb-image-input-error-overlay-bg-color",
+              "description": "Error overlay background color."
+            },
+            {
               "name": "--jb-image-input-placeholder-title-color",
               "description": "Placeholder title color."
             }

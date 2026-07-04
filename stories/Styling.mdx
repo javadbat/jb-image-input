@@ -1,0 +1,320 @@
+import { Meta, Source, Story, Title } from '@storybook/addon-docs/blocks';
+import * as StyleStories from './Styles.stories';
+import antDesignThemeCss from '../../../docs/styles/ant-design.css?raw';
+import auroraThemeCss from '../../../docs/styles/aurora.css?raw';
+import bootstrapThemeCss from '../../../docs/styles/bootstrap.css?raw';
+import candyThemeCss from '../../../docs/styles/candy.css?raw';
+import carbonThemeCss from '../../../docs/styles/carbon.css?raw';
+import cupertinoThemeCss from '../../../docs/styles/cupertino.css?raw';
+import fluentThemeCss from '../../../docs/styles/fluent.css?raw';
+import forestThemeCss from '../../../docs/styles/forest.css?raw';
+import materialThemeCss from '../../../docs/styles/material.css?raw';
+import porcelainThemeCss from '../../../docs/styles/porcelain.css?raw';
+import sunsetThemeCss from '../../../docs/styles/sunset.css?raw';
+import terminalThemeCss from '../../../docs/styles/terminal.css?raw';
+import antDesignImageInputCss from './styles/style-ant-design.css?raw';
+import auroraImageInputCss from './styles/style-aurora.css?raw';
+import bootstrapImageInputCss from './styles/style-bootstrap.css?raw';
+import candyImageInputCss from './styles/style-candy.css?raw';
+import carbonImageInputCss from './styles/style-carbon.css?raw';
+import cupertinoImageInputCss from './styles/style-cupertino.css?raw';
+import fluentImageInputCss from './styles/style-fluent.css?raw';
+import forestImageInputCss from './styles/style-forest.css?raw';
+import materialImageInputCss from './styles/style-material.css?raw';
+import porcelainImageInputCss from './styles/style-porcelain.css?raw';
+import sunsetImageInputCss from './styles/style-sunset.css?raw';
+import terminalImageInputCss from './styles/style-terminal.css?raw';
+
+<Meta title="Components/form elements/JBImageInput/Styling" />
+
+<Title>Styling</Title>
+
+`JBImageInput` styling is theme-driven. Use common design tokens for product-level consistency, component variables for the image input API, and CSS parts only for official exposed surfaces.
+
+## Live Gallery
+
+<Story of={StyleStories.Gallery} />
+
+<Source of={StyleStories.Gallery} />
+
+## Common Design Tokens
+
+Use the core theme docs as the source of truth for shared design-system variables:
+
+- [Theme Colors](../../jb-core/theme/stories/colors.mdx) explains the general color palette variables, default colors, customization approaches, and color generation helpers.
+- [Theme Sizes](../../jb-core/theme/stories/sizes.mdx) explains shared size and radius variables.
+
+Image input recipes should use those common tokens where possible, then map them into `--jb-image-input-*` variables only where the image input needs a component-specific value.
+
+## Styling Model
+
+Use three layers when styling image input examples:
+
+- Common design tokens are documented in [Theme Colors](../../jb-core/theme/stories/colors.mdx) and [Theme Sizes](../../jb-core/theme/stories/sizes.mdx).
+- Reusable example theme packs live in [`docs/styles`](https://github.com/javadbat/design-system/tree/main/docs/styles) and can be shared across components.
+- Component recipe files live in [`modules/jb-image-input/stories/styles`](https://github.com/javadbat/design-system/tree/main/modules/jb-image-input/stories/styles).
+- Public component variables use the `--jb-image-input-*` prefix and are the stable styling API.
+
+Each example uses one shared example theme pack from [`docs/styles`](https://github.com/javadbat/design-system/tree/main/docs/styles) and one image-input-specific recipe from [`modules/jb-image-input/stories/styles`](https://github.com/javadbat/design-system/tree/main/modules/jb-image-input/stories/styles). The style story applies both classes directly to `JBImageInput`.
+
+## Recommended Customization Path
+
+1. Use `--jb-image-input-*` variables first for size, placeholder colors, message text, radius, and overlay colors.
+2. Use host styles for layout context such as border, shadow, and page placement.
+3. Use common theme variables from [Theme Colors](../../jb-core/theme/stories/colors.mdx) and [Theme Sizes](../../jb-core/theme/stories/sizes.mdx) when the style should align with the design system.
+4. Put reusable theme-pack values in [`docs/styles`](https://github.com/javadbat/design-system/tree/main/docs/styles) only when they should be shared by multiple component demos.
+5. Use `::part(...)` only for official exposed parts such as `::part(message)`.
+6. Add a new component variable only when a needed internal surface cannot be customized with the current public variables or official parts.
+
+## Parts And States
+
+<table>
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Element</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>message</code></td>
+      <td>Helper or validation message inside the default placeholder</td>
+      <td>Use for helper text typography and validation message emphasis.</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Custom State</th>
+      <th>Meaning</th>
+      <th>Example Selector</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>disabled</code></td>
+      <td>Applied when the image input is disabled.</td>
+      <td><code>jb-image-input:state(disabled)</code></td>
+    </tr>
+  </tbody>
+</table>
+
+## CSS Variables
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Category</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><code>--jb-image-input-bg-color</code></td><td>Theme/Color</td><td>Component background color.</td></tr>
+    <tr><td><code>--jb-image-input-placeholder-bg-color</code></td><td>Theme/Color</td><td>Placeholder background color.</td></tr>
+    <tr><td><code>--jb-image-input-placeholder-neutral-color</code></td><td>Theme/Color</td><td>Default placeholder neutral/icon color.</td></tr>
+    <tr><td><code>--jb-image-input-placeholder-primary-color</code></td><td>Theme/Color</td><td>Default placeholder primary accent color.</td></tr>
+    <tr><td><code>--jb-image-input-placeholder-title-color</code></td><td>Theme/Color</td><td>Placeholder title color.</td></tr>
+    <tr><td><code>--jb-image-input-message-color</code></td><td>Theme/Color</td><td>Helper message color.</td></tr>
+    <tr><td><code>--jb-image-input-message-color-error</code></td><td>Theme/Color</td><td>Validation message color.</td></tr>
+    <tr><td><code>--jb-image-input-overlay-bg-color</code></td><td>Theme/Color</td><td>Image overlay background color.</td></tr>
+    <tr><td><code>--jb-image-input-error-overlay-bg-color</code></td><td>Theme/Color</td><td>Error overlay background color.</td></tr>
+    <tr><td><code>--jb-image-input-width</code></td><td>Size</td><td>Host width.</td></tr>
+    <tr><td><code>--jb-image-input-height</code></td><td>Size</td><td>Host height.</td></tr>
+    <tr><td><code>--jb-image-input-border-radius</code></td><td>Size</td><td>Component and overlay border radius.</td></tr>
+    <tr><td><code>--jb-image-input-button-border-radius</code></td><td>Size</td><td>Default overlay button border radius variable.</td></tr>
+    <tr><td><code>--jb-image-input-message-font-size</code></td><td>Size</td><td>Helper and validation message font size.</td></tr>
+    <tr><td><code>--jb-image-input-message-box-display</code></td><td>Other</td><td>Message box display value.</td></tr>
+  </tbody>
+</table>
+
+## Style Recipes
+
+### Carbon
+
+<Story of={StyleStories.Carbon} />
+
+<Source of={StyleStories.Carbon} />
+
+Shared style:
+
+<Source code={carbonThemeCss} language="css" />
+
+Image input style:
+
+<Source code={carbonImageInputCss} language="css" />
+
+### Aurora
+
+<Story of={StyleStories.Aurora} />
+
+<Source of={StyleStories.Aurora} />
+
+Shared style:
+
+<Source code={auroraThemeCss} language="css" />
+
+Image input style:
+
+<Source code={auroraImageInputCss} language="css" />
+
+### Forest
+
+<Story of={StyleStories.Forest} />
+
+<Source of={StyleStories.Forest} />
+
+Shared style:
+
+<Source code={forestThemeCss} language="css" />
+
+Image input style:
+
+<Source code={forestImageInputCss} language="css" />
+
+### Sunset
+
+<Story of={StyleStories.Sunset} />
+
+<Source of={StyleStories.Sunset} />
+
+Shared style:
+
+<Source code={sunsetThemeCss} language="css" />
+
+Image input style:
+
+<Source code={sunsetImageInputCss} language="css" />
+
+### Porcelain
+
+<Story of={StyleStories.Porcelain} />
+
+<Source of={StyleStories.Porcelain} />
+
+Shared style:
+
+<Source code={porcelainThemeCss} language="css" />
+
+Image input style:
+
+<Source code={porcelainImageInputCss} language="css" />
+
+### Candy
+
+<Story of={StyleStories.Candy} />
+
+<Source of={StyleStories.Candy} />
+
+Shared style:
+
+<Source code={candyThemeCss} language="css" />
+
+Image input style:
+
+<Source code={candyImageInputCss} language="css" />
+
+### Terminal
+
+<Story of={StyleStories.Terminal} />
+
+<Source of={StyleStories.Terminal} />
+
+Shared style:
+
+<Source code={terminalThemeCss} language="css" />
+
+Image input style:
+
+<Source code={terminalImageInputCss} language="css" />
+
+### Material
+
+<Story of={StyleStories.Material} />
+
+<Source of={StyleStories.Material} />
+
+Shared style:
+
+<Source code={materialThemeCss} language="css" />
+
+Image input style:
+
+<Source code={materialImageInputCss} language="css" />
+
+### Fluent
+
+<Story of={StyleStories.Fluent} />
+
+<Source of={StyleStories.Fluent} />
+
+Shared style:
+
+<Source code={fluentThemeCss} language="css" />
+
+Image input style:
+
+<Source code={fluentImageInputCss} language="css" />
+
+### Bootstrap
+
+<Story of={StyleStories.Bootstrap} />
+
+<Source of={StyleStories.Bootstrap} />
+
+Shared style:
+
+<Source code={bootstrapThemeCss} language="css" />
+
+Image input style:
+
+<Source code={bootstrapImageInputCss} language="css" />
+
+### Cupertino
+
+<Story of={StyleStories.Cupertino} />
+
+<Source of={StyleStories.Cupertino} />
+
+Shared style:
+
+<Source code={cupertinoThemeCss} language="css" />
+
+Image input style:
+
+<Source code={cupertinoImageInputCss} language="css" />
+
+### Ant Design
+
+<Story of={StyleStories.AntDesign} />
+
+<Source of={StyleStories.AntDesign} />
+
+Shared style:
+
+<Source code={antDesignThemeCss} language="css" />
+
+Image input style:
+
+<Source code={antDesignImageInputCss} language="css" />
+
+## Theme File Pattern
+
+Use [Theme Colors](../../jb-core/theme/stories/colors.mdx) and [Theme Sizes](../../jb-core/theme/stories/sizes.mdx) as the common design-token guides. Theme-pack files should keep reusable demo variables in [`docs/styles`](https://github.com/javadbat/design-system/tree/main/docs/styles), then each component should keep its own style CSS in its story [`styles`](https://github.com/javadbat/design-system/tree/main/modules/jb-image-input/stories/styles) folder.
+
+```css
+/* https://github.com/javadbat/design-system/blob/main/docs/styles/carbon.css */
+.theme-name-style {
+  /* shared design-system variables */
+}
+
+/* https://github.com/javadbat/design-system/blob/main/modules/jb-image-input/stories/styles/style-carbon.css */
+.theme-name-image-input {
+  /* image-input-specific variables and official parts */
+}
+```
+
+This keeps common theme tokens reusable and lets each component page show only the CSS it needs.

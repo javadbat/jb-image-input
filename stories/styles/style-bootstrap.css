@@ -1,0 +1,27 @@
+.bootstrap-image-input {
+    display: block;
+    width: 100%;
+    height: 8rem;
+    border: 1px solid #dee2e6;
+    --jb-image-input-width: 100%;
+    --jb-image-input-height: 8rem;
+    --jb-image-input-bg-color: #ffffff;
+    --jb-image-input-border-radius: 0.5rem;
+    --jb-image-input-placeholder-bg-color: #f8f9fa;
+    --jb-image-input-placeholder-neutral-color: #6c757d;
+    --jb-image-input-placeholder-primary-color: #0d6efd;
+    --jb-image-input-placeholder-title-color: #212529;
+    --jb-image-input-message-color: #495057;
+    --jb-image-input-message-color-error: #dc3545;
+    --jb-image-input-message-font-size: 0.75rem;
+    --jb-image-input-overlay-bg-color: oklch(20% 0.02 255 / 0.72);
+    --jb-image-input-error-overlay-bg-color: oklch(52% 0.2 25 / 0.72);
+}
+
+.bootstrap-image-input::part(message) {
+    font-weight: 500;
+}
+
+.bootstrap-image-input:state(disabled) {
+    opacity: 0.65;
+}
