@@ -1,6 +1,6 @@
 :host {
-    width: var(--jb-image-input-width, 100%);
-    height: var(--jb-image-input-height, 100%);
+    width: var(--width);
+    height: var(--height);
 }
 
 .jb-image-input-web-component {
@@ -32,7 +32,7 @@
         display: none;
         cursor: pointer;
 
-        background-color: var(--jb-image-input-placeholder-bg-color, transparent);
+        background-color: var(--placeholder-bg-color);
 
         .default-placeholder {
             width: 100%;
@@ -62,10 +62,10 @@
             }
 
             .message-box {
-                font-size: var(--jb-image-input-message-font-size, 0.7rem);
+                font-size: var(--message-font-size);
                 padding: 2px 0.5rem;
                 color: var(--message-color);
-                display: var(--jb-image-input-message-box-display, block);
+                display: var(--message-box-display);
 
                 &:empty {
                     padding: 0;

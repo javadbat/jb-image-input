@@ -1,8 +1,13 @@
 :host{
+  /* Size */
+  --width: var(--jb-image-input-width, 100%);
+  --height: var(--jb-image-input-height, 100%);
   --border-radius: var(--jb-image-input-border-radius, var(--jb-radius-xl));
   --button-border-radius: var(--jb-image-input-button-border-radius, var(--jb-radius));
-  /*colors*/
+  --message-font-size: var(--jb-image-input-message-font-size, 0.7rem);
+  /* Theme/Color */
   --bg-color:var(--jb-image-input-bg-color, var(--jb-neutral-10));
+  --placeholder-bg-color: var(--jb-image-input-placeholder-bg-color, transparent);
   --placeholder-neutral-color: var(--jb-image-input-placeholder-p-color, var(--jb-neutral));
   --placeholder-primary-color: var(--jb-image-input-placeholder-sec-color, var(--jb-primary));
   --placeholder-title-color:var(--jb-image-input-placeholder-title-color, var(--jb-neutral));
@@ -20,4 +25,6 @@
   --error-overlay-color:var(--jb-white);
   --error-overlay-icon-color:var(--jb-white);
   --error-overlay-outline:var(--jb-black);
+  /* Other */
+  --message-box-display: var(--jb-image-input-message-box-display, block);
 }
