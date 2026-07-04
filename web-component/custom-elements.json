@@ -324,7 +324,7 @@
               "description": "Component border radius."
             },
             {
-              "name": "--jb-image-input-placeholder-p-color",
+              "name": "--jb-image-input-placeholder-neutral-color",
               "description": "Default placeholder neutral/icon color."
             },
             {
@@ -332,7 +332,7 @@
               "description": "Placeholder background color."
             },
             {
-              "name": "--jb-image-input-placeholder-sec-color",
+              "name": "--jb-image-input-placeholder-primary-color",
               "description": "Default placeholder primary accent color."
             },
             {
@@ -348,7 +348,7 @@
               "description": "Helper message color."
             },
             {
-              "name": "--jb-image-input-message-error-color",
+              "name": "--jb-image-input-message-color-error",
               "description": "Validation message color."
             },
             {

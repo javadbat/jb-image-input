@@ -261,13 +261,13 @@ Set CSS variables in the parent scope of the component.
 | `--jb-image-input-height` | Host height. |
 | `--jb-image-input-bg-color` | Component background color. |
 | `--jb-image-input-border-radius` | Component border radius. |
-| `--jb-image-input-placeholder-p-color` | Default placeholder neutral/icon color. |
+| `--jb-image-input-placeholder-neutral-color` | Default placeholder neutral/icon color. |
 | `--jb-image-input-placeholder-bg-color` | Placeholder background color. |
-| `--jb-image-input-placeholder-sec-color` | Default placeholder primary accent color. |
+| `--jb-image-input-placeholder-primary-color` | Default placeholder primary accent color. |
 | `--jb-image-input-button-border-radius` | Default overlay button border radius. |
 | `--jb-image-input-message-box-display` | Message box display value. |
 | `--jb-image-input-message-color` | Helper message color. |
-| `--jb-image-input-message-error-color` | Validation message color. |
+| `--jb-image-input-message-color-error` | Validation message color. |
 | `--jb-image-input-message-font-size` | Message font size. |
 | `--jb-image-input-placeholder-title-color` | Placeholder title color. |
 

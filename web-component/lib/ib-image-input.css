@@ -72,7 +72,7 @@
                 }
 
                 &.error {
-                    color: var(--message-error-color);
+                    color: var(--message-color-error);
                 }
             }
         }
