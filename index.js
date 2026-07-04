@@ -1,2 +1,2 @@
-import './dist/jb-image-input.js';
-export * from './dist/jb-image-input.js';
+import './web-component/dist/jb-image-input.js';
+export * from './web-component/dist/jb-image-input.js';

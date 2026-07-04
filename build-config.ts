@@ -3,8 +3,9 @@ import type { ReactComponentBuildConfig, WebComponentBuildConfig } from "../../t
 export const webComponentList: WebComponentBuildConfig[] = [
   {
     name: "jb-image-input",
-    path: "./lib/jb-image-input.ts",
-    outputPath: "./dist/jb-image-input.js",
+    path: "./web-component/lib/jb-image-input.ts",
+    outputPath: "./web-component/dist/jb-image-input.js",
+    tsConfigPath: "./web-component/tsconfig.json",
     umdName: "JBDateImageInput",
     external: ["jb-validation","jb-core","jb-core/i18n", "jb-core/theme", "jb-button"],
     globals: {
