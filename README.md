@@ -269,6 +269,8 @@ Set CSS variables in the parent scope of the component.
 | `--jb-image-input-message-color` | Helper message color. |
 | `--jb-image-input-message-color-error` | Validation message color. |
 | `--jb-image-input-message-font-size` | Message font size. |
+| `--jb-image-input-overlay-bg-color` | Image overlay background color. |
+| `--jb-image-input-error-overlay-bg-color` | Error overlay background color. |
 | `--jb-image-input-placeholder-title-color` | Placeholder title color. |
 
 ```css
