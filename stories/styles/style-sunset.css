@@ -1,27 +1,30 @@
-.sunset-image-input {
-    display: block;
-    width: 100%;
-    height: 8rem;
-    box-shadow: 0 1rem 2.25rem oklch(25% 0.1 330 / 0.24);
+jb-image-input.sunset-style {
+
     --jb-image-input-width: 100%;
-    --jb-image-input-height: 8rem;
-    --jb-image-input-bg-color: #8a3f56;
+    --jb-image-input-bg-color: var(--jb-surface);
     --jb-image-input-border-radius: 1.6rem;
-    --jb-image-input-placeholder-bg-color: #412553;
-    --jb-image-input-placeholder-neutral-color: #ffe8da;
-    --jb-image-input-placeholder-primary-color: #ffd166;
-    --jb-image-input-placeholder-title-color: #fff7ef;
-    --jb-image-input-message-color: #ffe8da;
-    --jb-image-input-message-color-error: #ffb26b;
+    --jb-image-input-placeholder-bg-color: var(--jb-background);
+    --jb-image-input-placeholder-neutral-color: var(--jb-text-secondary);
+    --jb-image-input-placeholder-primary-color: var(--jb-focus-color);
+    --jb-image-input-placeholder-title-color: var(--jb-text-primary);
+    --jb-image-input-message-color: var(--jb-text-secondary);
+    --jb-image-input-message-color-error: var(--jb-primary-hover);
     --jb-image-input-message-font-size: 0.78rem;
     --jb-image-input-overlay-bg-color: oklch(30% 0.09 20 / 0.72);
     --jb-image-input-error-overlay-bg-color: oklch(50% 0.16 28 / 0.72);
 }
 
-.sunset-image-input::part(message) {
+jb-image-input.sunset-style {
+    display: block;
+    width: 100%;
+    height: 11rem;
+    box-shadow: 0 1rem 2.25rem oklch(25% 0.1 330 / 0.24);
+}
+
+jb-image-input.sunset-style::part(message) {
     text-shadow: 0 0.4rem 1rem oklch(0% 0 0 / 0.2);
 }
 
-.sunset-image-input:state(disabled) {
+jb-image-input.sunset-style:state(disabled) {
     opacity: 0.6;
 }

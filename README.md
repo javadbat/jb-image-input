@@ -53,6 +53,7 @@ import 'jb-image-input';
 | `message` | `string` | `""` | Helper text shown in the placeholder message area and exposed as aria description. |
 | `required` | `boolean \| string` | `false` | Enables required validation. A string value is used as the required error message. See [required validation](#required-validation). |
 | `multiple` | `boolean` | `false` | Lets the hidden native file input accept multiple files. The component still previews/uploads the first file. See [multi image selector](#multi-image-selector). |
+| `disabled` | `boolean` | `false` | Disables file selection and overlay actions. |
 
 ### Properties
 
@@ -67,7 +68,7 @@ import 'jb-image-input';
 | `config` | `JBImageInputConfig` | no | Developer-defined object passed to bridge functions. |
 | `multiple` | `boolean` | no | Controls the hidden native file input `multiple` attribute. |
 | `required` | `boolean` | no | Enables required validation. |
-| `disabled` | `boolean` | no | Sets the `disabled` custom state. Current implementation does not block opening the file selector by itself. |
+| `disabled` | `boolean` | no | Disables file selection and overlay actions, and sets disabled accessibility/custom state. |
 | `status` | `'empty' \| 'uploading' \| 'uploaded' \| 'downloaded' \| null` | yes | Current visual state. |
 | `form` | `HTMLFormElement \| null` | yes | Associated form from `ElementInternals`. |
 | `selectedImageType` | `string \| undefined` | yes | MIME type of the selected file, or `undefined` before a file is selected. |
@@ -80,7 +81,7 @@ import 'jb-image-input';
 
 | name | returns | description |
 | --- | --- | --- |
-| `openImageSelector()` | `void` | Opens the hidden native file picker. |
+| `openImageSelector()` | `void` | Opens the hidden native file picker unless the component is disabled. |
 | `selectImageByFile(file)` | `Promise<void>` | Injects a `File` as if the user selected it, validates it, previews it, and starts `bridge.uploader` when valid. |
 | `checkValidity()` | `boolean` | Runs validation without showing the error message. Dispatches `invalid` when invalid. |
 | `reportValidity()` | `boolean` | Runs validation and shows the first error message. Dispatches `invalid` when invalid. |

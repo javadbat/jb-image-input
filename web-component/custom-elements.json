@@ -50,6 +50,13 @@
               "type": {
                 "text": "boolean"
               }
+            },
+            {
+              "name": "disabled",
+              "description": "Disables file selection and overlay actions, and sets disabled accessibility/custom state.",
+              "type": {
+                "text": "boolean"
+              }
             }
           ],
           "members": [
@@ -130,7 +137,7 @@
             {
               "kind": "field",
               "name": "disabled",
-              "description": "Sets the disabled custom state. Current implementation does not block opening the file selector by itself.",
+              "description": "Disables file selection and overlay actions, and sets disabled accessibility/custom state.",
               "type": {
                 "text": "boolean"
               }

@@ -96,11 +96,20 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   }
   set disabled(value: boolean) {
     this.#disabled = value;
+    if (this.#virtualInputFile) {
+      this.#virtualInputFile.disabled = value;
+    }
+    if (this.#elements) {
+      this.#elements.overlay.deleteButton.toggleAttribute("disabled", value);
+      this.#elements.overlay.downloadButton.toggleAttribute("disabled", value);
+    }
     if (value) {
       //TODO: remove as any when typescript support
       this.#internals?.states?.add("disabled");
+      if (this.#internals) this.#internals.ariaDisabled = "true";
     } else {
       this.#internals?.states?.delete("disabled");
+      if (this.#internals) this.#internals.ariaDisabled = "false";
     }
   }
   #required = false;
@@ -223,6 +232,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#virtualInputFile = document.createElement("input");
     this.#virtualInputFile.type = "file";
     this.#virtualInputFile.accept = this.acceptTypes;
+    this.#virtualInputFile.disabled = this.disabled;
     this.#virtualInputFile.addEventListener("change", (e) =>
       this.#onImageSelected(e)
     );
@@ -231,11 +241,16 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
    * @public 
    * @description will open image selector
    */
-  openImageSelector() {
+  openImageSelector(event?: Event) {
+    if (this.disabled) {
+      event?.preventDefault();
+      event?.stopPropagation();
+      return;
+    }
     this.#virtualInputFile.click();
   }
   static get observedAttributes() {
-    return ["required", "label", "multiple", "message"];
+    return ["required", "label", "multiple", "message", "disabled"];
   }
   attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
     // do something when an attribute has changed
@@ -259,6 +274,9 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
         this.#elements.placeHolderMessageBox.innerHTML = value;
         if(this.#internals)this.#internals.ariaDescription = value;
         break;
+      case "disabled":
+        this.disabled = (!!value || value === '') && value !== 'false';
+        break;
     }
   }
   #dispatchOnImagesSelected(files: FileList) {
@@ -270,6 +288,10 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.dispatchEvent(event);
   }
   #onImageSelected(e: Event) {
+    if (this.disabled) {
+      this.#virtualInputFile.value = "";
+      return;
+    }
     const files = (e.target as HTMLInputElement).files;
     if (files && files?.length > 0) {
       //if user select file and not click on cancel
@@ -473,14 +495,23 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   get validationMessage() {
     return this.#internals?.validationMessage??"";
   }
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
   #onDeleteButtonClicked(e: MouseEvent) {
     e.stopPropagation();
+    if (this.disabled) {
+      return;
+    }
     this.#setValue(null);
     this.validation.checkValiditySync({showError: true});
     this.#dispatchOnChangeEvent();
   }
   #onDownloadButtonClicked(e: MouseEvent) {
     e.stopPropagation();
+    if (this.disabled) {
+      return;
+    }
     const base64String = this.#elements.image.getAttribute('src')??"";
     const imageType = base64String.match(/[^:/]\w+(?=;|,)/)?.[0]??"";
     const a = document.createElement("a");
