@@ -136,6 +136,11 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     return this.getAttribute('name') || '';
   }
   initialValue: TValue | null = null;
+  formResetCallback() {
+    this.value = this.initialValue;
+    this.#validation.reset();
+    this.#internals?.setValidity({}, '');
+  }
   get isDirty(): boolean {
     return this.#value !== this.initialValue;
   }
@@ -399,11 +404,15 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
       this.#elements.placeHolderMessageBox.innerHTML = message;
       this.#elements.placeHolderMessageBox.classList.add("error");
     }
+    this.#internals?.states?.add("invalid");
+    if (this.#internals) this.#internals.ariaInvalid = "true";
   }
   clearValidationError() {
     this.#elements.webComponent.classList.remove("--has-error");
     this.#elements.placeHolderMessageBox.innerHTML = this.getAttribute("message") || "";
     this.#elements.placeHolderMessageBox.classList.remove("error");
+    this.#internals?.states?.delete("invalid");
+    if (this.#internals) this.#internals.ariaInvalid = "false";
   }
   #showOverlayError(message: string) {
     this.#elements.errorOverlay.message.innerHTML = message;

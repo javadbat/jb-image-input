@@ -4,11 +4,13 @@
 
 ### Added
 
+- Added the standard `formResetCallback()` to restore `initialValue` and clear validation state.
 - Added a Storybook styling guide with reusable style recipes for Carbon, Aurora, Forest, Sunset, Porcelain, Candy, Terminal, Material, Fluent, Bootstrap, Cupertino, and Ant Design examples.
 - Added existing overlay background variables to the custom elements manifest so tooling can discover the full public styling API.
 
 ### Changed
 
+- Standardized `invalid` custom-state and `ariaInvalid` updates in validation display and cleanup callbacks.
 - Added the React `initialValue` prop and forwarded `value` and `initialValue` directly as React 19 custom-element properties.
 - Breaking: renamed `--jb-image-input-message-error-color` to `--jb-image-input-message-color-error`.
 - Breaking: renamed `--jb-image-input-placeholder-p-color` to `--jb-image-input-placeholder-neutral-color`.
