@@ -5,7 +5,6 @@ import { type RefObject, useEffect } from "react";
 export type JBImageInputAttributes<TValue> = {
   validationList?: ValidationItem<ValidationValue<TValue | null>>[],
   config?: JBImageInputConfig,
-  value?: TValue | null,
   bridge?: JBImageInputBridge<TValue>,
   multiple?: boolean,
   name?: string,
@@ -42,12 +41,6 @@ export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInput
       element.current?.removeAttribute('multiple');
     }
   }, [props.multiple]);
-
-  useEffect(() => {
-    if (props.value !== undefined && element.current) {
-      element.current.value = props.value;
-    }
-  }, [props.value]);
 
   useEffect(() => {
     if (props.file) {
