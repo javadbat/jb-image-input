@@ -6,6 +6,9 @@ export type JBImageInputDictionary = {
   reselectImage:string,
   uploading:string,
   preparing:string,
+  selectedImage:string,
+  downloadImage:string,
+  deleteImage:string,
 }
 
 /**
@@ -27,6 +30,9 @@ export const dictionary = new JBDictionary<JBImageInputDictionary>({
     reselectImage:'انتخاب مجدد تصویر',
     preparing:'در حال آماده سازی',
     uploading:'در حال آپلود',
+    selectedImage:'تصویر انتخاب‌شده',
+    downloadImage:'دانلود تصویر',
+    deleteImage:'حذف تصویر',
   },
   "en":{
     requiredMessage:"You must select a image",
@@ -34,6 +40,9 @@ export const dictionary = new JBDictionary<JBImageInputDictionary>({
     chooseImage:"Choose Image",
     reselectImage: 'Reselect Image',
     preparing:'Preparing Image For Display',
-    uploading:'Uploading'
+    uploading:'Uploading',
+    selectedImage:'Selected image',
+    downloadImage:'Download image',
+    deleteImage:'Delete image'
   }
 });

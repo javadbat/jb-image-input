@@ -150,8 +150,10 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     if (typeof this.attachInternals == "function") {
       //some browser dont support attachInternals
       this.#internals = this.attachInternals();
+      this.#internals.role = "group";
     }
     this.#initWebComponent();
+    if (this.#internals) this.#internals.ariaLabel = dictionary.get(i18n, "chooseImage");
     this.#initProp();
     this.#registerEventListener();
   }
@@ -255,7 +257,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#virtualInputFile.click();
   }
   static get observedAttributes() {
-    return ["required", "label", "multiple", "message", "disabled"];
+    return ["required", "label", "multiple", "message", "disabled", "image-alt"];
   }
   attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
     // do something when an attribute has changed
@@ -281,6 +283,9 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
         break;
       case "disabled":
         this.disabled = (!!value || value === '') && value !== 'false';
+        break;
+      case "image-alt":
+        this.#elements.image.alt = value;
         break;
     }
   }
@@ -394,6 +399,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #setStatus(status: ViewStatus) {
     this.#elements.webComponent.setAttribute("status", status);
     this.#status = status;
+    if (this.#internals) this.#internals.ariaBusy = status === "uploading" ? "true" : "false";
   }
   showValidationError(error: ShowValidationErrorParameters | string) {
     const message = typeof error == "string" ? error : error.message;
@@ -406,6 +412,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     }
     this.#internals?.states?.add("invalid");
     if (this.#internals) this.#internals.ariaInvalid = "true";
+    if (this.#internals) this.#internals.ariaDescription = message;
   }
   clearValidationError() {
     this.#elements.webComponent.classList.remove("--has-error");
