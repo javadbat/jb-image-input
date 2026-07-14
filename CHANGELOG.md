@@ -10,6 +10,7 @@
 
 ### Changed
 
+- Image selection, preview, and reselection actions now use native buttons with keyboard focus styles, and disabled state is forwarded to every image action.
 - Standardized `invalid` custom-state and `ariaInvalid` updates in validation display and cleanup callbacks.
 - Added the React `initialValue` prop and forwarded `value` and `initialValue` directly as React 19 custom-element properties.
 - Breaking: renamed `--jb-image-input-message-error-color` to `--jb-image-input-message-color-error`.

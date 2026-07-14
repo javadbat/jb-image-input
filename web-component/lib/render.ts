@@ -4,10 +4,10 @@ import 'jb-button';
 export function renderHTML(): string {
   return /* html */ `
   <div class="jb-image-input-web-component">
-  <div class="placeholder-wrapper" role="button" aria-label="${dictionary.get(i18n, "chooseImage")}">
+  <button class="placeholder-wrapper" type="button" aria-label="${dictionary.get(i18n, "chooseImage")}">
     <slot name="placeholder">
-      <div class="default-placeholder">
-        <div class="icon-wrapper" aria-hidden="true">
+      <span class="default-placeholder">
+        <span class="icon-wrapper" aria-hidden="true">
           <svg viewBox="0 0 59.19 47.06" aria-hidden="true">
             <g id="Layer_2" data-name="Layer 2">
               <g id="Layer_1-2" data-name="Layer 1">
@@ -20,14 +20,14 @@ export function renderHTML(): string {
               </g>
             </g>
           </svg>
-        </div>
-        <div class="placeholder-title">${dictionary.get(i18n, "chooseImage")}</div>
-        <div class="message-box" part="message" role="status" aria-live="polite" aria-atomic="true"></div>
-      </div>
+        </span>
+        <span class="placeholder-title">${dictionary.get(i18n, "chooseImage")}</span>
+        <span class="message-box" part="message" role="status" aria-live="polite" aria-atomic="true"></span>
+      </span>
       
     </slot>
 
-  </div>
+  </button>
   <div class="upload-loading-wrapper" role="status" aria-live="polite">
     <span>${dictionary.get(i18n, "uploading")}</span>
   </div>
@@ -35,7 +35,9 @@ export function renderHTML(): string {
     <span>${dictionary.get(i18n, "preparing")}</span>
   </div>
   <div class="image-wrapper" role="group" aria-label="${dictionary.get(i18n, "selectedImage")}">
-    <img src="" alt="" role="button" aria-label="${dictionary.get(i18n, "reselectImage")}">
+    <button class="image-preview-button" type="button" aria-label="${dictionary.get(i18n, "reselectImage")}">
+      <img src="" alt="">
+    </button>
     ${renderOverlay()}
   </div>
   <div class="error-overlay" role="alert" aria-live="assertive" aria-atomic="true">
@@ -57,7 +59,7 @@ function renderOverlay() {
     <slot name= "overlay">
       <div class="image-overlay">
         <slot name="overlay-content">
-          <div class="reselect-button" role="button">${dictionary.get(i18n, "reselectImage")}</div>
+          <button class="reselect-button" type="button">${dictionary.get(i18n, "reselectImage")}</button>
           <jb-button class="download-button" color="light" variant="ghost" aria-label="${dictionary.get(i18n, "downloadImage")}">
             <svg id="DownloadIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path id="S1" d="M15.0382 12.5084L12.1222 15.4364L9.20621 12.5084"  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

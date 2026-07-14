@@ -2,14 +2,16 @@ import type {EventTypeWithTarget} from 'jb-core';
 import type { JBImageInputWebComponent } from './jb-image-input';
 export type JBImagesImageInputElements = {
     webComponent:HTMLDivElement;
-    placeHolderWrapper:HTMLDivElement;
-    placeHolderTitle:HTMLDivElement;
-    placeHolderMessageBox: HTMLDivElement;
+    placeHolderWrapper:HTMLButtonElement;
+    placeHolderTitle:HTMLSpanElement;
+    placeHolderMessageBox: HTMLSpanElement;
+    previewButton:HTMLButtonElement;
     image:HTMLImageElement;
     overlay:{
         container:HTMLDivElement,
-        deleteButton:HTMLDivElement,
-        downloadButton:HTMLDivElement
+        reselectButton:HTMLButtonElement,
+        deleteButton:HTMLElement,
+        downloadButton:HTMLElement
     }
     errorOverlay:{
         container:HTMLDivElement,

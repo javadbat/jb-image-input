@@ -20,6 +20,20 @@
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
+
+    :where(.placeholder-wrapper, .image-preview-button, .reselect-button) {
+        all: unset;
+        box-sizing: border-box;
+    }
+
+    :where(.placeholder-wrapper, .image-preview-button, .reselect-button):disabled {
+        cursor: default;
+    }
+
+    :where(.placeholder-wrapper, .image-preview-button, .reselect-button):focus-visible {
+        outline: 2px solid var(--jb-image-input-focus-ring-color, Highlight);
+        outline-offset: 2px;
+    }
     /* &.--has-error {
          border: solid 1px #ff1229;
          border-bottom: solid 3px #ff1229;
@@ -125,7 +139,15 @@
         height: 100%;
         object-fit: contain;
 
-        &:hover .image-overlay {
+        .image-preview-button {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        &:hover .image-overlay,
+        &:focus-within .image-overlay {
             opacity: 1;
         }
 
@@ -151,6 +173,7 @@
             flex-wrap: wrap;
 
             .reselect-button {
+                cursor: pointer;
                 background-color: transparent;
                 border-radius: 1rem;
                 padding: 0.25rem 0.5rem;

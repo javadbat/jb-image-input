@@ -102,6 +102,9 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     if (this.#elements) {
       this.#elements.overlay.deleteButton.toggleAttribute("disabled", value);
       this.#elements.overlay.downloadButton.toggleAttribute("disabled", value);
+      this.#elements.overlay.reselectButton.disabled = value;
+      this.#elements.placeHolderWrapper.disabled = value;
+      this.#elements.previewButton.disabled = value;
     }
     if (value) {
       //TODO: remove as any when typescript support
@@ -178,8 +181,10 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
       placeHolderTitle: shadowRoot.querySelector(".placeholder-title")!,
       placeHolderMessageBox: shadowRoot.querySelector(".message-box")!,
       image: shadowRoot.querySelector(".image-wrapper img")!,
+      previewButton: shadowRoot.querySelector(".image-preview-button")!,
       overlay: {
         container: shadowRoot.querySelector(".image-overlay")!,
+        reselectButton: shadowRoot.querySelector(".image-overlay .reselect-button")!,
         deleteButton: shadowRoot.querySelector(".image-overlay .delete-button")!,
         downloadButton: shadowRoot.querySelector(".image-overlay .download-button")!
       },
@@ -230,8 +235,8 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   }
   #registerEventListener() {
     this.#elements.placeHolderWrapper.addEventListener("click", this.openImageSelector.bind(this));
-    this.#elements.image.addEventListener("click", this.openImageSelector.bind(this));
-    this.#elements.overlay.container.addEventListener("click", this.openImageSelector.bind(this));
+    this.#elements.previewButton.addEventListener("click", this.openImageSelector.bind(this));
+    this.#elements.overlay.reselectButton.addEventListener("click", this.openImageSelector.bind(this));
     this.#elements.overlay.deleteButton.addEventListener("click", this.#onDeleteButtonClicked.bind(this));
     this.#elements.overlay.downloadButton.addEventListener("click", this.#onDownloadButtonClicked.bind(this));
   }
