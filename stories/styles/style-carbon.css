@@ -3,7 +3,7 @@ jb-image-input.carbon-style {
     --jb-image-input-width: 100%;
     --jb-image-input-bg-color: var(--jb-surface);
     --jb-image-input-border-radius: 0;
-    --jb-image-input-placeholder-bg-color: var(--jb-background);
+    --jb-image-input-placeholder-bg-color: var(--jb-surface);
     --jb-image-input-placeholder-neutral-color: #8d8d8d;
     --jb-image-input-placeholder-primary-color: var(--jb-primary);
     --jb-image-input-placeholder-title-color: var(--jb-text-primary);
@@ -21,9 +21,14 @@ jb-image-input.carbon-style {
     border: 1px solid var(--jb-border-color);
 }
 
+jb-image-input.carbon-style:not(:state(disabled)):hover {
+    --jb-image-input-bg-color: var(--jb-surface-hover);
+    --jb-image-input-placeholder-bg-color: var(--jb-surface-hover);
+}
+
 jb-image-input.carbon-style::part(message) {
-    text-transform: uppercase;
-    letter-spacing: 0;
+    text-transform: none;
+    letter-spacing: 0.01em;
 }
 
 jb-image-input.carbon-style:state(disabled) {

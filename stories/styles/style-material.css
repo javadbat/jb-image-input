@@ -24,6 +24,11 @@ jb-image-input.material-style {
     box-shadow: none;
 }
 
+jb-image-input.material-style:not(:state(disabled)):hover {
+    --jb-image-input-bg-color: var(--jb-primary-container);
+    --jb-image-input-placeholder-bg-color: var(--jb-primary-container);
+}
+
 jb-image-input.material-style::part(message) {
     font-weight: 500;
 }

@@ -21,6 +21,11 @@ jb-image-input.forest-style {
     box-shadow: 0 0.75rem 2rem oklch(10% 0.04 150 / 0.22);
 }
 
+jb-image-input.forest-style:not(:state(disabled)):hover {
+    --jb-image-input-bg-color: #2b4638;
+    --jb-image-input-placeholder-bg-color: #2b4638;
+}
+
 jb-image-input.forest-style::part(message) {
     color: var(--jb-success);
 }

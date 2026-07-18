@@ -21,6 +21,11 @@ jb-image-input.terminal-style {
     border: 1px solid var(--jb-border-color);
 }
 
+jb-image-input.terminal-style:not(:state(disabled)):hover {
+    --jb-image-input-bg-color: var(--jb-surface-hover);
+    --jb-image-input-placeholder-bg-color: var(--jb-surface-hover);
+}
+
 jb-image-input.terminal-style::part(message) {
     font-family: Consolas, "Courier New", monospace;
 }

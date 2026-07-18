@@ -21,6 +21,11 @@ jb-image-input.cupertino-style {
     box-shadow: inset 0 0 0 1px var(--jb-border-color);
 }
 
+jb-image-input.cupertino-style:not(:state(disabled)):hover {
+    --jb-image-input-bg-color: var(--jb-text-contrast);
+    --jb-image-input-placeholder-bg-color: var(--jb-text-contrast);
+}
+
 jb-image-input.cupertino-style::part(message) {
     font-weight: 500;
 }

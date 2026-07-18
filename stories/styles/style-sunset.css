@@ -21,6 +21,11 @@ jb-image-input.sunset-style {
     box-shadow: 0 1rem 2.25rem oklch(25% 0.1 330 / 0.24);
 }
 
+jb-image-input.sunset-style:not(:state(disabled)):hover {
+    --jb-image-input-bg-color: #9a4c62;
+    --jb-image-input-placeholder-bg-color: #9a4c62;
+}
+
 jb-image-input.sunset-style::part(message) {
     text-shadow: 0 0.4rem 1rem oklch(0% 0 0 / 0.2);
 }

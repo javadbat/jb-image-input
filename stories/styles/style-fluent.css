@@ -2,8 +2,8 @@ jb-image-input.fluent-style {
 
     --jb-image-input-width: 100%;
     --jb-image-input-bg-color: var(--jb-surface);
-    --jb-image-input-border-radius: 0.5rem;
-    --jb-image-input-placeholder-bg-color: var(--jb-background);
+    --jb-image-input-border-radius: 0.25rem;
+    --jb-image-input-placeholder-bg-color: var(--jb-surface);
     --jb-image-input-placeholder-neutral-color: #605e5c;
     --jb-image-input-placeholder-primary-color: var(--jb-focus-color);
     --jb-image-input-placeholder-title-color: var(--jb-text-primary);
@@ -19,7 +19,12 @@ jb-image-input.fluent-style {
     width: 100%;
     height: 11rem;
     border: 1px solid var(--jb-border-color);
-    box-shadow: 0 0.25rem 0.75rem oklch(0% 0 0 / 0.08);
+    box-shadow: 0 0.125rem 0.5rem oklch(0% 0 0 / 0.08);
+}
+
+jb-image-input.fluent-style:not(:state(disabled)):hover {
+    --jb-image-input-bg-color: var(--jb-surface-hover);
+    --jb-image-input-placeholder-bg-color: var(--jb-surface-hover);
 }
 
 jb-image-input.fluent-style::part(message) {
