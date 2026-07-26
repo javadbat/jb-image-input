@@ -34,6 +34,6 @@
 		"url": "git@github.com:javadbat/jb-image-input.git"
   },
   "dependencies": {
-    "jb-image-input":">=3.1.2"
+    "jb-image-input":"^3.1.2"
   }
 }
