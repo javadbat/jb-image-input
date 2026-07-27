@@ -3,6 +3,8 @@ import { type ValidationItem } from "jb-validation";
 import { type RefObject, useEffect } from "react";
 
 export type JBImageInputAttributes<TValue> = {
+  value?: TValue | null,
+  initialValue?: TValue | null,
   validationList?: ValidationItem<ValidationValue<TValue | null>>[],
   config?: JBImageInputConfig,
   bridge?: JBImageInputBridge<TValue>,
@@ -28,6 +30,19 @@ export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInput
       element.current.bridge = props.bridge;
     }
   }, [props.bridge]);
+
+  useEffect(() => {
+    if (element.current && props.initialValue !== undefined) {
+      element.current.initialValue = props.initialValue;
+    }
+  }, [props.initialValue, element]);
+
+  useEffect(() => {
+    if (element.current && props.value !== undefined) {
+      element.current.value = props.value;
+    }
+  }, [props.value, element]);
+
   useEffect(() => {
     if (props.validationList && element.current) {
       element.current.validation.list = props.validationList;

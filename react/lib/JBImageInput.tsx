@@ -16,19 +16,17 @@ export function JBImageInput<TValue>(props: Props<TValue>) {
     () => (element.current ?? undefined),
     [element]);
     
-  useJBImageInputAttribute(element, { acceptTypes, bridge, config, file, label, maxFileSize, message, multiple, name, required, validationList });
+  useJBImageInputAttribute(element, { acceptTypes, bridge, config, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value });
   useEvents(element, { onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed });
 
   return (
-    <jb-image-input ref={element} value={value ?? null} initialValue={initialValue ?? null} upload-type={uploadType || 'AUTO'} {...otherProps}>
+    <jb-image-input ref={element} upload-type={uploadType || 'AUTO'} {...otherProps}>
       {props.children}
     </jb-image-input>
   );
 };
 type ImageInputProps<TValue> = EventProps<TValue> & JBImageInputAttributes<TValue> & {
   uploadType?: string,
-  value?: TValue | null,
-  initialValue?: TValue | null,
   ref?: ForwardedRef<JBImageInputWebComponent<TValue> | null | undefined>
 }
 export type Props<TValue> = ImageInputProps<TValue> & JBElementStandardProps<JBImageInputWebComponent, keyof ImageInputProps<TValue>>

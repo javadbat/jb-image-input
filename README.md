@@ -76,7 +76,7 @@ import 'jb-image-input';
 | `selectedImageType` | `string \| undefined` | yes | MIME type of the selected file, or `undefined` before a file is selected. |
 | `validation` | `ValidationHelper<ValidationValue<TValue>>` | yes | Validation helper from `jb-validation`; set `validation.list` for custom rules. |
 | `validationMessage` | `string` | yes | Current native validation message from `ElementInternals`. |
-| `initialValue` | `TValue \| null` | no | Baseline value used by `isDirty`. |
+| `initialValue` | `TValue \| null` | no | Default and reset value. It initializes `value` until the live value is explicitly set. |
 | `isDirty` | `boolean` | yes | `true` when current `value` differs from `initialValue`. |
 
 ### Methods

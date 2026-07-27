@@ -23,6 +23,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     return this.#value;
   }
   set value(value: TValue | null) {
+    this.#isDirty = true;
     this.#setValue(value);
   }
   get form (){
@@ -69,6 +70,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
 
   #maxFileSize: number | null = null;
   #value: TValue | null = null;
+  #isDirty = false;
   #file: File | null = null;
   #uploadProgressPercent: number | null = null;
   get file() {
@@ -138,9 +140,22 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   get name() {
     return this.getAttribute('name') || '';
   }
-  initialValue: TValue | null = null;
+  #initialValue: TValue | null = null;
+  /**
+   * Default and reset value. It initializes `value` until the live value is explicitly set.
+   */
+  get initialValue(): TValue | null {
+    return this.#initialValue;
+  }
+  set initialValue(value: TValue | null) {
+    this.#initialValue = value ?? null;
+    if (!this.#isDirty) {
+      this.#setValue(this.#initialValue);
+    }
+  }
   formResetCallback() {
-    this.value = this.initialValue;
+    this.#isDirty = false;
+    this.#setValue(this.initialValue);
     this.#validation.reset();
     this.#internals?.setValidity({}, '');
   }
@@ -330,6 +345,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
       this.#dispatchMaxSizeExceedEvent(file);
     }
     if (validationRes.isAllValid) {
+      this.#isDirty = true;
       this.#setImageToSelectedFile(file);
       this.#uploadImage(file);
     }
@@ -524,7 +540,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     if (this.disabled) {
       return;
     }
-    this.#setValue(null);
+    this.value = null;
     this.validation.checkValiditySync({showError: true});
     this.#dispatchOnChangeEvent();
   }
