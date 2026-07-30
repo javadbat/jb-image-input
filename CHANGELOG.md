@@ -1,10 +1,14 @@
 # Changelog
 
-## Unreleased
+## [3.10.1] 2026-07-30
 
 ### Added
 
 - Added Storybook interaction coverage for initial-value initialization, live-value precedence, explicit `null`, and native form reset.
+
+### Fixed
+
+- fix name assignment property
 
 ### Changed
 

@@ -26,8 +26,8 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#isDirty = true;
     this.#setValue(value);
   }
-  get form (){
-    return this.#internals?.form??null;
+  get form() {
+    return this.#internals?.form ?? null;
   }
   #isAutoValidationDisabled = false;
   get isAutoValidationDisabled(): boolean {
@@ -132,13 +132,20 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     getValue: () => ({ file: this.#file, value: this.#value }),
     getValidations: this.#getInsideValidation.bind(this),
     setValidationResult: this.#setValidationResult.bind(this),
-    getValueString: () => this.fileName??""
+    getValueString: () => this.fileName ?? ""
   });
   get validation() {
     return this.#validation;
   }
   get name() {
     return this.getAttribute('name') || '';
+  }
+  set name(value: string) {
+    if (value) {
+      this.setAttribute('name', value);
+    } else {
+      this.removeAttribute('name');
+    }
   }
   #initialValue: TValue | null = null;
   /**
@@ -175,15 +182,15 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     this.#initProp();
     this.#registerEventListener();
   }
-  get fileName(): string|null {
-    return this.#file?.name??null;
+  get fileName(): string | null {
+    return this.#file?.name ?? null;
   }
   #initWebComponent() {
     const shadowRoot = this.attachShadow({
       mode: "open",
       delegatesFocus: true,
-       clonable:true,
-       serializable:true,
+      clonable: true,
+      serializable: true,
     });
     registerDefaultVariables();
     const html = `<style>${CSS} ${VariablesCSS}</style>\n${renderHTML()}`;
@@ -289,7 +296,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
         this.required = (!!value || value === '') && value !== 'false';
         break;
       case "label":
-        if(this.#internals)this.#internals.ariaLabel = value;
+        if (this.#internals) this.#internals.ariaLabel = value;
         if (this.#elements.placeHolderTitle) {
           this.#elements.placeHolderTitle.innerHTML = value;
         }
@@ -299,7 +306,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
         break;
       case "message":
         this.#elements.placeHolderMessageBox.innerHTML = value;
-        if(this.#internals)this.#internals.ariaDescription = value;
+        if (this.#internals) this.#internals.ariaDescription = value;
         break;
       case "disabled":
         this.disabled = (!!value || value === '') && value !== 'false';
@@ -359,7 +366,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     const event = new CustomEvent("maxSizeExceed", { detail: { file }, cancelable: false });
     this.dispatchEvent(event);
   }
-  static ExtractBase64ImageFromFile(file: File):Promise<string>{
+  static ExtractBase64ImageFromFile(file: File): Promise<string> {
     return new Promise((resolved, rejected) => {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -453,12 +460,12 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #getInsideValidation() {
     const ValidationList: ValidationItem<ValidationValue<TValue | null>>[] = [];
     if (this.required) {
-      const message = (this.getAttribute("required")??"").length > 0 ? this.getAttribute("required") : dictionary.get(i18n, "requiredMessage");
+      const message = (this.getAttribute("required") ?? "").length > 0 ? this.getAttribute("required") : dictionary.get(i18n, "requiredMessage");
       ValidationList.push({
         validator: ({ file, value }) => {
           return file !== null || value != null;
         },
-        message: message??"",
+        message: message ?? "",
         stateType: "valueMissing",
       });
     }
@@ -523,14 +530,14 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
       result.validationList.forEach((res) => {
         if (!res.isValid) {
           if (res.validation.stateType) { states[res.validation.stateType] = true; }
-          if (message == '') { message = res.message??""; }
+          if (message == '') { message = res.message ?? ""; }
         }
       });
       this.#internals?.setValidity(states, message);
     }
   }
   get validationMessage() {
-    return this.#internals?.validationMessage??"";
+    return this.#internals?.validationMessage ?? "";
   }
   formDisabledCallback(disabled: boolean) {
     this.disabled = disabled;
@@ -541,7 +548,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
       return;
     }
     this.value = null;
-    this.validation.checkValiditySync({showError: true});
+    this.validation.checkValiditySync({ showError: true });
     this.#dispatchOnChangeEvent();
   }
   #onDownloadButtonClicked(e: MouseEvent) {
@@ -549,8 +556,8 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     if (this.disabled) {
       return;
     }
-    const base64String = this.#elements.image.getAttribute('src')??"";
-    const imageType = base64String.match(/[^:/]\w+(?=;|,)/)?.[0]??"";
+    const base64String = this.#elements.image.getAttribute('src') ?? "";
+    const imageType = base64String.match(/[^:/]\w+(?=;|,)/)?.[0] ?? "";
     const a = document.createElement("a");
     a.href = base64String;
     a.download = `Image.${imageType}`;
@@ -558,7 +565,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   }
   #setValue(value: TValue | null) {
     this.#value = value;
-    if(value instanceof File || value === null || typeof value == "string" || value instanceof FormData){this.#internals?.setFormValue(value as File | string | FormData | null);}
+    if (value instanceof File || value === null || typeof value == "string" || value instanceof FormData) { this.#internals?.setFormValue(value as File | string | FormData | null); }
     if (value != null) {
       if (value instanceof File) {
         this.#file = value;
