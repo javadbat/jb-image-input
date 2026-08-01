@@ -13,6 +13,7 @@ import { registerDefaultVariables } from 'jb-core/theme';
 import { renderHTML } from "./render";
 import { dictionary } from "./i18n";
 import { i18n } from "jb-core/i18n";
+import { parseBooleanAttribute } from "jb-core";
 export * from './types.js';
 export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue<TValue | null>>, JBFormInputStandards<TValue | null> {
   static get formAssociated() {
@@ -293,7 +294,7 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
   #onAttributeChange(name: string, value: string) {
     switch (name) {
       case "required":
-        this.required = (!!value || value === '') && value !== 'false';
+        this.required = parseBooleanAttribute(value);
         break;
       case "label":
         if (this.#internals) this.#internals.ariaLabel = value;
@@ -302,14 +303,14 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
         }
         break;
       case "multiple":
-        this.multiple = value === "true";
+        this.multiple = parseBooleanAttribute(value);
         break;
       case "message":
         this.#elements.placeHolderMessageBox.innerHTML = value;
         if (this.#internals) this.#internals.ariaDescription = value;
         break;
       case "disabled":
-        this.disabled = (!!value || value === '') && value !== 'false';
+        this.disabled = parseBooleanAttribute(value);
         break;
       case "image-alt":
         this.#elements.image.alt = value;
