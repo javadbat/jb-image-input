@@ -4,7 +4,7 @@ import { JBButton } from 'jb-button/react';
 import { JBImageInput } from 'jb-image-input/react';
 import JBImageInputActionTest from './JBImageInputActionTest.jsx';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, waitFor } from 'storybook/test';
+import { expect, fn, userEvent, waitFor } from 'storybook/test';
 
 const meta = {
   title: "Components/form elements/JBImageInput",
@@ -18,6 +18,66 @@ export const Normal: Story = {
     acceptTypes: "image/jpeg,image/jpg,image/png,image/svg+xml",
     message: "extra message"
   }
+};
+
+const bridgePreview = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Q5NzcyMiIvPjwvc3ZnPg==';
+
+export const BridgeAndValue: Story = {
+  render: () => (
+    <JBImageInput<string>
+      label="Profile image"
+      message="Upload a profile image"
+      value="profile-42"
+      config={{ uploadUrl: '/api/images' }}
+      bridge={{
+        uploader: async file => `uploaded:${file.name}`,
+        downloader: async () => bridgePreview,
+      }}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const imageInput = canvasElement.querySelector<JBImageInputWebComponent<string>>('jb-image-input');
+    expect(imageInput).toBeTruthy();
+
+    await waitFor(() => {
+      expect(imageInput?.value).toBe('profile-42');
+      expect(imageInput?.status).toBe('downloaded');
+      expect(imageInput?.imageBase64Value).toBe(bridgePreview);
+    });
+
+    await imageInput!.selectImageByFile(createSvgFile('uploaded.svg', 'green'));
+
+    await waitFor(() => {
+      expect(imageInput?.value).toBe('uploaded:uploaded.svg');
+      expect(imageInput?.file?.name).toBe('uploaded.svg');
+      expect(imageInput?.status).toBe('downloaded');
+    });
+  },
+};
+
+export const MaxFileSize: Story = {
+  render: () => <JBImageInput label="Small image only" maxFileSize={8} />,
+  play: async ({ canvasElement }) => {
+    const imageInput = canvasElement.querySelector<JBImageInputWebComponent>('jb-image-input');
+    const onMaxSizeExceed = fn();
+    imageInput?.addEventListener('maxSizeExceed', onMaxSizeExceed);
+
+    await imageInput?.selectImageByFile(new File(['this file is too large'], 'large.svg', { type: 'image/svg+xml' }));
+
+    expect(onMaxSizeExceed).toHaveBeenCalledOnce();
+    expect(imageInput?.file).toBeNull();
+    expect(imageInput?.value).toBeNull();
+  },
+};
+
+export const MultipleSelection: Story = {
+  render: () => <JBImageInput label="Gallery images" multiple acceptTypes="image/png,image/jpeg" />,
+  play: async ({ canvasElement }) => {
+    const imageInput = canvasElement.querySelector<JBImageInputWebComponent>('jb-image-input');
+
+    expect(imageInput?.multiple).toBe(true);
+    expect(imageInput?.acceptTypes).toBe('image/png,image/jpeg');
+  },
 };
 
 const createSvgFile = (name: string, color: string) => new File(

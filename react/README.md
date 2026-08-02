@@ -9,7 +9,8 @@ React wrapper for `jb-image-input`. It registers the underlying web component an
 
 ## Demo
 
-- [Storybook](https://javadbat.github.io/design-system/?path=/docs/components-form-elements-jbimageinput)
+- [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--overview)
+- [Bridge and value demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value)
 - [CodeSandbox preview](https://3f63dj.csb.app/samples/jb-image-input)
 - [CodeSandbox editor](https://codesandbox.io/p/sandbox/jb-design-system-3f63dj?file=%2Fsrc%2Fsamples%2FJBImageInput.tsx)
 
@@ -27,7 +28,7 @@ import { JBImageInput } from 'jb-image-input/react';
 
 ## When to use
 
-Use `JBImageInput` when a React view needs the JB Design System image picker, image preview, validation UI, and optional custom upload/download bridge.
+Use `JBImageInput` when a React view needs the JB Design System image picker, image preview, validation UI, and optional custom upload/download bridge. Start with the [normal React usage demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal).
 
 Use `jb-file-input` for non-image files.
 
@@ -35,33 +36,33 @@ Use `jb-file-input` for non-image files.
 
 | prop | type | description |
 | --- | --- | --- |
-| `value` | `TValue` | Stored and submitted component value. If it is not a `File`, `bridge.downloader` must resolve the preview image. Use `File`, `string`, `FormData`, or `null` when this value must be submitted by a native form. |
-| `file` | `File` | Injects a selected file by calling `selectImageByFile(file)`. |
-| `bridge` | `JBImageInputBridge<TValue>` | Upload/download bridge. |
-| `config` | `JBImageInputConfig` | Developer-defined object passed to bridge functions. |
-| `acceptTypes` | `string` | Comma-separated MIME types for the hidden file input. |
-| `maxFileSize` | `number` | Maximum accepted file size in bytes. |
-| `validationList` | `ValidationItem<ValidationValue<TValue>>[]` | Custom validation rules from `jb-validation`. |
-| `multiple` | `boolean` | Lets the hidden file input accept multiple files. The component still previews/uploads the first file. |
-| `name` | `string` | Sets the `name` attribute. |
-| `label` | `string` | Placeholder title and accessible aria label. |
-| `message` | `string` | Helper text shown in the placeholder message area. |
-| `required` | `boolean \| string` | Enables required validation. A string value is used as the required error message. |
-| `uploadType` | `string` | Forwarded as `upload-type`; kept for compatibility. Current web-component logic always uploads through `bridge.uploader` after a valid file selection. |
+| `value` | `TValue` | Stored and submitted component value. If it is not a `File`, `bridge.downloader` must resolve the preview image. Use `File`, `string`, `FormData`, or `null` when this value must be submitted by a native form. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
+| `file` | `File` | Injects a selected file by calling `selectImageByFile(file)`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--initial-value) |
+| `bridge` | `JBImageInputBridge<TValue>` | Upload/download bridge. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
+| `config` | `JBImageInputConfig` | Developer-defined object passed to bridge functions. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
+| `acceptTypes` | `string` | Comma-separated MIME types for the hidden file input. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
+| `maxFileSize` | `number` | Maximum accepted file size in bytes. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--max-file-size) |
+| `validationList` | `ValidationItem<ValidationValue<TValue>>[]` | Custom validation rules from `jb-validation`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message) |
+| `multiple` | `boolean` | Lets the hidden file input accept multiple files. The component still previews/uploads the first file. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
+| `name` | `string` | Sets the `name` attribute. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
+| `label` | `string` | Placeholder title and accessible aria label. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
+| `message` | `string` | Helper text shown in the placeholder message area. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
+| `required` | `boolean \| string` | Enables required validation. A string value is used as the required error message. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message) |
+| `uploadType` | `string` | Forwarded as `upload-type`; kept for compatibility. Current web-component logic always uploads through `bridge.uploader` after a valid file selection. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
 
 ## Events
 
 | prop | event | description |
 | --- | --- | --- |
-| `onChange` | `change` | Fired when a file is selected, upload resolves, or the selected image is deleted. |
-| `onImageSelected` | `imageSelected` | Fired with `event.detail.files` after the native file input changes. |
-| `onMaxSizeExceed` | `maxSizeExceed` | Fired with `event.detail.file` when a selected file is larger than `maxFileSize`. |
-| `onLoad` | `load` | Wired by the wrapper for compatibility with lazy-loaded custom elements. |
-| `onInit` | `init` | Wired by the wrapper for compatibility with lazy-loaded custom elements. |
+| `onChange` | `change` | Fired when a file is selected, upload resolves, or the selected image is deleted. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
+| `onImageSelected` | `imageSelected` | Fired with `event.detail.files` after the native file input changes. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
+| `onMaxSizeExceed` | `maxSizeExceed` | Fired with `event.detail.file` when a selected file is larger than `maxFileSize`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--max-file-size) |
+| `onLoad` | `load` | Wired by the wrapper for compatibility with lazy-loaded custom elements. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
+| `onInit` | `init` | Wired by the wrapper for compatibility with lazy-loaded custom elements. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
 
 ## Value and bridge
 
-`value` is the value your app stores and submits through the form-associated web component. `file` is the selected local `File`.
+`value` is the value your app stores and submits through the form-associated web component. `file` is the selected local `File`. The [bridge and value demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) shows a string value transformed by upload and download functions.
 
 For native form submission, keep `value` compatible with `ElementInternals.setFormValue()`: `File`, `string`, `FormData`, or `null`.
 
@@ -99,6 +100,8 @@ const bridge: JBImageInputBridge<string> = {
 
 ## Validation
 
+Use the [required validation demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message) for required and custom validation messages, and the [max-size demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--max-file-size) for file-size rejection.
+
 ```jsx
 const validationList = [
   {
@@ -110,7 +113,7 @@ const validationList = [
 <JBImageInput required="Please select an image" validationList={validationList} />;
 ```
 
-Use a ref when you need imperative validation:
+Use a ref when you need imperative validation; the [initial value demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--initial-value) also demonstrates imperative reset behavior:
 
 ```tsx
 const imageRef = useRef(null);
@@ -122,7 +125,7 @@ const isValid = imageRef.current.reportValidity();
 
 ## Multi image selector
 
-Use `multiple` with `onImageSelected`, then render additional `JBImageInput` components and pass each extra file through `file` or `ref.current.selectImageByFile(file)`.
+Use `multiple` with `onImageSelected`, then render additional `JBImageInput` components and pass each extra file through `file` or `ref.current.selectImageByFile(file)`. See the [multiple selection demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection).
 
 ```jsx
 <JBImageInput
@@ -136,6 +139,8 @@ Use `multiple` with `onImageSelected`, then render additional `JBImageInput` com
 
 ## Custom placeholder
 
+Use the [custom placeholder demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--with-place-holder) to preview slot content.
+
 ```jsx
 <JBImageInput label="Profile image">
   <div slot="placeholder">Select profile image</div>
@@ -144,7 +149,7 @@ Use `multiple` with `onImageSelected`, then render additional `JBImageInput` com
 
 ## Custom style
 
-The React component uses the same CSS variables as the web component.
+The React component uses the same CSS variables as the web component. See the [style gallery](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-style--gallery) and shared [styling documentation](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-styling--docs).
 
 ```css
 .avatar-input {
@@ -160,7 +165,7 @@ The React component uses the same CSS variables as the web component.
 
 ## CSS parts and states
 
-The React wrapper exposes the same CSS parts, states, and slot names as the web component. Use JSX children with `slot="placeholder"` or other documented slot names for custom placeholder, upload, and overlay content.
+The React wrapper exposes the same CSS parts, states, and slot names as the web component. Use JSX children with `slot="placeholder"` or other documented slot names for custom placeholder, upload, and overlay content. See the shared [CSS parts and states guidance](../README.md#css-parts-and-states).
 
 ```css
 .avatar-input::part(image) {
@@ -170,11 +175,11 @@ The React wrapper exposes the same CSS parts, states, and slot names as the web 
 
 ## Accessibility notes
 
-Set `label` so the image picker has a clear accessible name. Custom placeholder or overlay content should preserve a visible action label such as "Select image" or "Delete image".
+Set `label` so the image picker has a clear accessible name. Custom placeholder or overlay content should preserve a visible action label such as "Select image" or "Delete image"; the [normal demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) shows the labeled baseline.
 
 ## Shared Documentation
 
-For web-component behavior, events, slots, CSS variables, and the full API, see [`jb-image-input`](https://github.com/javadbat/jb-image-input).
+For web-component behavior, events, slots, CSS variables, and the full API, see the [`jb-image-input` README](../README.md) or its [component documentation](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-readme--docs).
 
 ## Related Docs
 
