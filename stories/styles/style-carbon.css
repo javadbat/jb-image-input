@@ -1,13 +1,13 @@
 jb-image-input.carbon-style {
 
     --jb-image-input-width: 100%;
-    --jb-image-input-bg-color: var(--jb-surface);
+    --jb-image-input-bg-color: var(--jb-surface-primary);
     --jb-image-input-border-radius: 0;
-    --jb-image-input-placeholder-bg-color: var(--jb-surface);
+    --jb-image-input-placeholder-bg-color: var(--jb-surface-primary);
     --jb-image-input-placeholder-neutral-color: #8d8d8d;
     --jb-image-input-placeholder-primary-color: var(--jb-primary);
-    --jb-image-input-placeholder-title-color: var(--jb-text-primary);
-    --jb-image-input-message-color: var(--jb-text-secondary);
+    --jb-image-input-placeholder-title-color: var(--jb-content-primary);
+    --jb-image-input-message-color: var(--jb-content-secondary);
     --jb-image-input-message-color-error: #fa4d56;
     --jb-image-input-message-font-size: 0.75rem;
     --jb-image-input-overlay-bg-color: oklch(0% 0 0 / 0.68);

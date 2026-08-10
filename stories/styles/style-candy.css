@@ -1,13 +1,13 @@
 jb-image-input.candy-style {
 
     --jb-image-input-width: 100%;
-    --jb-image-input-bg-color: var(--jb-background);
+    --jb-image-input-bg-color: var(--jb-surface-secondary);
     --jb-image-input-border-radius: 1.5rem;
-    --jb-image-input-placeholder-bg-color: var(--jb-surface);
-    --jb-image-input-placeholder-neutral-color: var(--jb-text-secondary);
+    --jb-image-input-placeholder-bg-color: var(--jb-surface-primary);
+    --jb-image-input-placeholder-neutral-color: var(--jb-content-secondary);
     --jb-image-input-placeholder-primary-color: var(--jb-focus-color);
-    --jb-image-input-placeholder-title-color: var(--jb-text-primary);
-    --jb-image-input-message-color: var(--jb-text-secondary);
+    --jb-image-input-placeholder-title-color: var(--jb-content-primary);
+    --jb-image-input-message-color: var(--jb-content-secondary);
     --jb-image-input-message-color-error: #fb7185;
     --jb-image-input-message-font-size: 0.78rem;
     --jb-image-input-overlay-bg-color: oklch(72% 0.13 345 / 0.62);

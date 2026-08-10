@@ -5,10 +5,10 @@ jb-image-input.material-style {
     --jb-image-input-border-radius: var(--jb-radius-lg);
     --jb-image-input-button-border-radius: 999px;
     --jb-image-input-placeholder-bg-color: var(--jb-surface-container-low);
-    --jb-image-input-placeholder-neutral-color: var(--jb-text-secondary);
+    --jb-image-input-placeholder-neutral-color: var(--jb-content-secondary);
     --jb-image-input-placeholder-primary-color: var(--jb-focus-color);
-    --jb-image-input-placeholder-title-color: var(--jb-text-primary);
-    --jb-image-input-message-color: var(--jb-text-secondary);
+    --jb-image-input-placeholder-title-color: var(--jb-content-primary);
+    --jb-image-input-message-color: var(--jb-content-secondary);
     --jb-image-input-message-color-error: var(--jb-error);
     --jb-image-input-message-font-size: 0.75rem;
     --jb-image-input-overlay-bg-color: rgb(255 255 255 / 0.92);

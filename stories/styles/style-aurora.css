@@ -1,13 +1,13 @@
 jb-image-input.aurora-style {
 
     --jb-image-input-width: 100%;
-    --jb-image-input-bg-color: var(--jb-surface);
+    --jb-image-input-bg-color: var(--jb-surface-primary);
     --jb-image-input-border-radius: 1.25rem;
     --jb-image-input-placeholder-bg-color: #14263c;
-    --jb-image-input-placeholder-neutral-color: var(--jb-text-secondary);
+    --jb-image-input-placeholder-neutral-color: var(--jb-content-secondary);
     --jb-image-input-placeholder-primary-color: var(--jb-focus-color);
-    --jb-image-input-placeholder-title-color: var(--jb-text-primary);
-    --jb-image-input-message-color: var(--jb-text-secondary);
+    --jb-image-input-placeholder-title-color: var(--jb-content-primary);
+    --jb-image-input-message-color: var(--jb-content-secondary);
     --jb-image-input-message-color-error: #ff8fb8;
     --jb-image-input-message-font-size: 0.78rem;
     --jb-image-input-overlay-bg-color: oklch(12% 0.04 250 / 0.72);
