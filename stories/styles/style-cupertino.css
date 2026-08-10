@@ -22,8 +22,8 @@ jb-image-input.cupertino-style {
 }
 
 jb-image-input.cupertino-style:not(:state(disabled)):hover {
-    --jb-image-input-bg-color: var(--jb-text-contrast);
-    --jb-image-input-placeholder-bg-color: var(--jb-text-contrast);
+    --jb-image-input-bg-color: var(--jb-text-inverse);
+    --jb-image-input-placeholder-bg-color: var(--jb-text-inverse);
 }
 
 jb-image-input.cupertino-style::part(message) {
