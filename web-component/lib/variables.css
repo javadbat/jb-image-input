@@ -6,24 +6,24 @@
   --button-border-radius: var(--jb-image-input-button-border-radius, var(--jb-radius));
   --message-font-size: var(--jb-image-input-message-font-size, 0.7rem);
   /* Theme/Color */
-  --bg-color:var(--jb-image-input-bg-color, var(--jb-neutral-10));
+  --bg-color:var(--jb-image-input-bg-color, var(--jb-surface-secondary));
   --placeholder-bg-color: var(--jb-image-input-placeholder-bg-color, transparent);
   --placeholder-neutral-color: var(--jb-image-input-placeholder-neutral-color, var(--jb-neutral));
   --placeholder-primary-color: var(--jb-image-input-placeholder-primary-color, var(--jb-primary));
   --placeholder-title-color:var(--jb-image-input-placeholder-title-color, var(--jb-neutral));
-  --message-color:var(--jb-image-input-message-color, var(--jb-text-secondary));
+  --message-color:var(--jb-image-input-message-color, var(--jb-content-secondary));
   --message-color-error:var(--jb-image-input-message-color-error, var(--jb-red));
   --overlay-bg-color: var(--jb-image-input-overlay-bg-color, oklch(from var(--jb-neutral) l c h / calc(alpha - 0.5)));
   --delete-button-color:var(--jb-red);
-  --delete-button-bg-color:var(--jb-white);
+  --delete-button-bg-color:var(--jb-surface-primary);
   --delete-icon-color:var(--jb-red);
-  --download-button-color:var(--jb-white);
-  --download-button-bg-color-hover:var(--jb-white);
+  --download-button-color:var(--jb-content-inverse);
+  --download-button-bg-color-hover:var(--jb-surface-primary);
   --download-button-color-hover:var(--jb-neutral);
-  --reselect-button-color:var(--jb-white);
+  --reselect-button-color:var(--jb-content-inverse);
   --error-overlay-bg-color: var(--jb-image-input-error-overlay-bg-color, oklch(from var(--jb-red) l c h / calc(alpha - 0.5)));
-  --error-overlay-color:var(--jb-white);
-  --error-overlay-icon-color:var(--jb-white);
+  --error-overlay-color:var(--jb-content-inverse);
+  --error-overlay-icon-color:var(--jb-content-inverse);
   --error-overlay-outline:var(--jb-black);
   /* Other */
   --message-box-display: var(--jb-image-input-message-box-display, block);
