@@ -93,7 +93,7 @@ export const InitialValue: Story = {
     const formRef = useRef<HTMLFormElement>(null);
     return (
       <form ref={formRef}>
-        <JBImageInput<File> {...args} />
+        <JBImageInput<File> label={args.label} initialValue={args.initialValue as File | null | undefined} />
         <JBButton type="button" onClick={() => formRef.current?.reset()}>Reset</JBButton>
       </form>
     );

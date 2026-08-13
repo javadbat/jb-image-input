@@ -13,6 +13,7 @@ export type JBImageInputAttributes<TValue> = {
   file?: File,
   acceptTypes?: string,
   maxFileSize?: number,
+  disabled?: boolean,
   required?: boolean | string,
   label?: string,
   message?: string,
@@ -98,6 +99,12 @@ export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInput
       element?.current?.removeAttribute('message');
     }
   }, [props.message]);
+
+  useEffect(() => {
+    if (element.current && props.disabled !== undefined) {
+      element.current.disabled = props.disabled;
+    }
+  }, [props.disabled]);
 
   useEffect(() => {
     if (typeof props.required === "string") {
