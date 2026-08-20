@@ -585,3 +585,9 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   }
 }
 defineWebComponent("jb-image-input", JBImageInputWebComponent);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "jb-image-input": JBImageInputWebComponent;
+  }
+}
