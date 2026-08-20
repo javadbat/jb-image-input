@@ -1,3 +1,4 @@
+import { defineWebComponent, JBBaseComponent, parseBooleanAttribute } from "jb-core";
 import { type ShowValidationErrorParameters, ValidationHelper, type ValidationItem, type ValidationResult, type WithValidation } from "jb-validation";
 import type { JBFormInputStandards } from 'jb-form';
 import CSS from "./ib-image-input.css";
@@ -13,9 +14,8 @@ import { registerDefaultVariables } from 'jb-core/theme';
 import { renderHTML } from "./render";
 import { dictionary } from "./i18n";
 import { i18n } from "jb-core/i18n";
-import { parseBooleanAttribute } from "jb-core";
 export * from './types.js';
-export class JBImageInputWebComponent<TValue = File> extends HTMLElement implements WithValidation<ValidationValue<TValue | null>>, JBFormInputStandards<TValue | null> {
+export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent implements WithValidation<ValidationValue<TValue | null>>, JBFormInputStandards<TValue | null> {
   static get formAssociated() {
     return true;
   }
@@ -584,7 +584,4 @@ export class JBImageInputWebComponent<TValue = File> extends HTMLElement impleme
     }
   }
 }
-const myElementNotExists = !customElements.get("jb-image-input");
-if (myElementNotExists) {
-  window.customElements.define("jb-image-input", JBImageInputWebComponent);
-}
+defineWebComponent("jb-image-input", JBImageInputWebComponent);
