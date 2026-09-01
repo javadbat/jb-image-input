@@ -1,11 +1,14 @@
 # Changelog
 
-## Unreleased
+## [4.0.0] - 2026-09-01
 
 ### Changed
 
-- Made custom-element module evaluation SSR-safe by extending `JBBaseComponent` where needed and registering elements through the shared `defineWebComponent()` helper; raised the minimum `jb-core` version to `0.35.0`.
+- Made custom-element module evaluation SSR-safe by extending `JBBaseComponent` where needed and registering elements through the shared `defineWebComponent()` helper; raised the minimum `jb-core` version to `0.35.0`.rf
 - Updated component color defaults to use the shared semantic content and surface tokens.
+- Breaking: removed the upload bridge. Image selection now keeps the selected `File` and dispatches `change`; applications control upload state with `uploading` and `uploadPercent`.
+- Replaced the downloader bridge with the direct `downloader` property. String URL values are fetched automatically after a cancelable `download-start` event unless a handler prevents it.
+- Replaced the inline delete SVG with `jb-icon-delete`, whose lid animation plays on hover.
 
 ## [3.10.1] 2026-07-30
 

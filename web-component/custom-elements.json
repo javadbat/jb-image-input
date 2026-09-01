@@ -8,7 +8,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "Form-associated image picker web component with preview UI, validation, custom upload/download bridge support, placeholder and overlay slots, and CSS customization.",
+          "description": "Form-associated image picker web component with preview UI, externally managed uploads, optional downloader, placeholder and overlay slots, and CSS customization.",
           "name": "JBImageInputWebComponent",
           "tagName": "jb-image-input",
           "customElement": true,
@@ -58,12 +58,17 @@
                 "text": "boolean"
               }
             }
+            ,{
+              "name": "uploading",
+              "description": "Shows externally managed upload loading state.",
+              "type": { "text": "boolean" }
+            }
           ],
           "members": [
             {
               "kind": "field",
               "name": "value",
-              "description": "Canonical component value and native form value. When an uploader is used, this becomes the value resolved by bridge.uploader. Use File, string, FormData, or null when this value must be submitted by a native form. Setting a File previews that file; setting another value calls bridge.downloader to resolve a preview image.",
+              "description": "Canonical component value and native form value. Selecting an image sets this to the File. Use File, string, FormData, or null when this value must be submitted by a native form. Setting another value calls downloader or automatically loads a string URL.",
               "type": {
                 "text": "TValue | null"
               }
@@ -80,7 +85,7 @@
             {
               "kind": "field",
               "name": "imageBase64Value",
-              "description": "Base64/data URL preview image after a local file is read or bridge.downloader resolves.",
+              "description": "Base64/data URL preview image after a local file is read or downloader resolves.",
               "type": {
                 "text": "string | null"
               }
@@ -104,16 +109,28 @@
             },
             {
               "kind": "field",
-              "name": "bridge",
-              "description": "Upload/download bridge. uploader(file, config, onProgressCallback) returns the stored/submitted value; downloader(value, config) returns a preview image data URL.",
+              "name": "downloader",
+              "description": "Optional function that converts a stored value into a preview image data URL.",
               "type": {
-                "text": "JBImageInputBridge<TValue>"
+                "text": "JBImageInputDownloader<TValue>"
               }
             },
             {
               "kind": "field",
+              "name": "uploadPercent",
+              "description": "Externally managed upload progress percentage.",
+              "type": { "text": "number | null" }
+            },
+            {
+              "kind": "field",
+              "name": "uploading",
+              "description": "Whether externally managed upload loading is shown.",
+              "type": { "text": "boolean" }
+            },
+            {
+              "kind": "field",
               "name": "config",
-              "description": "Developer-defined configuration object passed to bridge.uploader and bridge.downloader.",
+              "description": "Developer-defined configuration object passed to downloader.",
               "type": {
                 "text": "JBImageInputConfig"
               }
@@ -221,7 +238,7 @@
             },
             {
               "name": "selectImageByFile",
-              "description": "Injects a File as if the user selected it, validates it, previews it, and starts bridge.uploader when valid.",
+              "description": "Injects a File as if the user selected it, validates it, previews it, and dispatches change when valid.",
               "parameters": [
                 {
                   "name": "file",
@@ -272,7 +289,12 @@
           "events": [
             {
               "name": "change",
-              "description": "Dispatched when a file is selected, upload resolves, or the selected image is deleted."
+              "description": "Dispatched when a file is selected or the selected image is deleted."
+            },
+            {
+              "name": "download-start",
+              "description": "Cancelable event dispatched before a stored value is converted into a preview.",
+              "detail": { "text": "{ value: TValue }" }
             },
             {
               "name": "imageSelected",

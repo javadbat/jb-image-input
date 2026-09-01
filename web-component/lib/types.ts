@@ -21,10 +21,7 @@ export type JBImagesImageInputElements = {
 
 export type ViewStatus = "downloaded" | "empty" | "uploading" | "uploaded";
 
-export type JBImageInputBridge<TValue> = {
-    downloader: (downloaderInput:TValue, config:JBImageInputConfig) => Promise<string>;
-    uploader: (file:File , config:JBImageInputConfig, onProgressCallback?:(percent:number)=>void) => Promise<TValue>;
-}
+export type JBImageInputDownloader<TValue> = (downloaderInput: TValue, config: JBImageInputConfig) => Promise<string>;
 export type JBImageInputConfig = {
     uploadUrl?: string,
     downloadUrl?: string,

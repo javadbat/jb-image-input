@@ -17,6 +17,7 @@ export type EventProps<TValue> = {
   onChange?: (e: JBImageInputEventType<Event, TValue>) => void,
   onImageSelected?: (e: JBImageInputEventType<CustomEvent, TValue>) => void,
   onMaxSizeExceed?: (e: JBImageInputEventType<Event, TValue>) => void,
+  onDownloadStart?: (e: JBImageInputEventType<CustomEvent<{ value: TValue }>, TValue>) => void,
 }
 export function useEvents<TValue>(element: RefObject<JBImageInputWebComponent<TValue> | null>, props: EventProps<TValue>) {
   useEvent(element, 'load', props.onLoad, true);
@@ -24,5 +25,6 @@ export function useEvents<TValue>(element: RefObject<JBImageInputWebComponent<TV
   useEvent(element, "change", props.onChange);
   useEvent(element, "imageSelected", props.onImageSelected);
   useEvent(element, "maxSizeExceed", props.onMaxSizeExceed);
+  useEvent(element, "download-start", props.onDownloadStart);
 
 }

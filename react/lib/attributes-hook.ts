@@ -1,4 +1,4 @@
-import { type JBImageInputWebComponent, type JBImageInputBridge, type JBImageInputConfig, type ValidationValue } from "jb-image-input";
+import { type JBImageInputWebComponent, type JBImageInputDownloader, type JBImageInputConfig, type ValidationValue } from "jb-image-input";
 import { type ValidationItem } from "jb-validation";
 import { type RefObject, useEffect } from "react";
 
@@ -7,7 +7,7 @@ export type JBImageInputAttributes<TValue> = {
   initialValue?: TValue | null,
   validationList?: ValidationItem<ValidationValue<TValue | null>>[],
   config?: JBImageInputConfig,
-  bridge?: JBImageInputBridge<TValue>,
+  downloader?: JBImageInputDownloader<TValue>,
   multiple?: boolean,
   name?: string,
   file?: File,
@@ -17,6 +17,8 @@ export type JBImageInputAttributes<TValue> = {
   required?: boolean | string,
   label?: string,
   message?: string,
+  uploading?: boolean,
+  uploadPercent?: number | null,
 
 }
 export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInputWebComponent<TValue> | null>, props: JBImageInputAttributes<TValue>) {
@@ -27,10 +29,10 @@ export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInput
   }, [props.config]);
 
   useEffect(() => {
-    if (props.bridge && element.current) {
-      element.current.bridge = props.bridge;
+    if (props.downloader && element.current) {
+      element.current.downloader = props.downloader;
     }
-  }, [props.bridge]);
+  }, [props.downloader]);
 
   useEffect(() => {
     if (element.current && props.initialValue !== undefined) {
@@ -105,6 +107,18 @@ export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInput
       element.current.disabled = props.disabled;
     }
   }, [props.disabled]);
+
+  useEffect(() => {
+    if (element.current && props.uploading !== undefined) {
+      element.current.uploading = props.uploading;
+    }
+  }, [props.uploading]);
+
+  useEffect(() => {
+    if (element.current && props.uploadPercent !== undefined) {
+      element.current.uploadPercent = props.uploadPercent;
+    }
+  }, [props.uploadPercent]);
 
   useEffect(() => {
     if (typeof props.required === "string") {

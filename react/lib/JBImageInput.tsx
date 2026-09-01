@@ -1,23 +1,23 @@
 'use client';
 import React, { useRef, useImperativeHandle, type ForwardedRef } from 'react';
 import 'jb-image-input';
-import type { JBImageInputWebComponent, JBImageInputConfig, JBImageInputBridge } from 'jb-image-input';
+import type { JBImageInputWebComponent, JBImageInputConfig, JBImageInputDownloader } from 'jb-image-input';
 import { type EventProps, useEvents } from './events-hook.js';
 import { useJBImageInputAttribute, type JBImageInputAttributes } from './attributes-hook.js';
 import type { JBElementStandardProps } from 'jb-core/react';
 import './module-declaration.js';
 
-export type { JBImageInputConfig, JBImageInputBridge };
+export type { JBImageInputConfig, JBImageInputDownloader };
 
 export function JBImageInput<TValue>(props: Props<TValue>) {
   const element = useRef<JBImageInputWebComponent<TValue> | null>(null);
-  const { acceptTypes, ref, bridge, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value, onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed, uploadType, ...otherProps } = props;
+  const { acceptTypes, ref, downloader, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value, onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed, onDownloadStart, uploadType, uploading, uploadPercent, ...otherProps } = props;
   useImperativeHandle(ref,
     () => (element.current ?? undefined),
     [element]);
     
-  useJBImageInputAttribute(element, { acceptTypes, bridge, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value });
-  useEvents(element, { onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed });
+  useJBImageInputAttribute(element, { acceptTypes, downloader, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value, uploading, uploadPercent });
+  useEvents(element, { onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed, onDownloadStart });
 
   return (
     <jb-image-input ref={element} upload-type={uploadType || 'AUTO'} {...otherProps}>
@@ -27,6 +27,8 @@ export function JBImageInput<TValue>(props: Props<TValue>) {
 };
 type ImageInputProps<TValue> = EventProps<TValue> & JBImageInputAttributes<TValue> & {
   uploadType?: string,
+  uploading?: boolean,
+  uploadPercent?: number | null,
   ref?: ForwardedRef<JBImageInputWebComponent<TValue> | null | undefined>
 }
 export type Props<TValue> = ImageInputProps<TValue> & JBElementStandardProps<JBImageInputWebComponent, keyof ImageInputProps<TValue>>

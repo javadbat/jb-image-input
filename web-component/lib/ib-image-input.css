@@ -106,8 +106,32 @@
         }
     }
 
+    :host([uploading]) & {
+        .upload-loading-wrapper {
+            display: flex;
+        }
+    }
+
     .upload-loading-wrapper {
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background: var(--loading-bg, transparent);
         display: none;
+
+        .upload-bg {
+            position: absolute;
+            inset: 0;
+            background: var(--loading-bg, transparent);
+            clip-path: polygon(0 0, 0 100%, var(--upload-percent, 0%) 100%, var(--upload-percent, 0%) 0);
+            transition: clip-path 0.3s ease;
+        }
+
+        span {
+            position: relative;
+            z-index: 1;
+        }
     }
 
     &[status="uploaded"] {

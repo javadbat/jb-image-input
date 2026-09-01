@@ -28,11 +28,7 @@ export const BridgeAndValue: Story = {
       label="Profile image"
       message="Upload a profile image"
       value="profile-42"
-      config={{ uploadUrl: '/api/images' }}
-      bridge={{
-        uploader: async file => `uploaded:${file.name}`,
-        downloader: async () => bridgePreview,
-      }}
+      downloader={async () => bridgePreview}
     />
   ),
   play: async ({ canvasElement }) => {
@@ -45,10 +41,11 @@ export const BridgeAndValue: Story = {
       expect(imageInput?.imageBase64Value).toBe(bridgePreview);
     });
 
-    await imageInput!.selectImageByFile(createSvgFile('uploaded.svg', 'green'));
+    const selectedFile = createSvgFile('uploaded.svg', 'green');
+    await imageInput!.selectImageByFile(selectedFile);
 
     await waitFor(() => {
-      expect(imageInput?.value).toBe('uploaded:uploaded.svg');
+      expect(imageInput?.value).toBe(selectedFile);
       expect(imageInput?.file?.name).toBe('uploaded.svg');
       expect(imageInput?.status).toBe('downloaded');
     });

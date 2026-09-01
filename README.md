@@ -5,11 +5,8 @@
 [![NPM Version](https://img.shields.io/npm/v/jb-image-input)](https://www.npmjs.com/package/jb-image-input)
 ![GitHub Created At](https://img.shields.io/github/created-at/javadbat/jb-image-input)
 
-Image input web component that lets the user select an image, preview it, validate it, and connect selection to a custom upload/download bridge.
+Image input web component that lets the user select an image, preview it, and validate it.
 
-- Supports custom upload and download bridge functions.
-- Shows empty, uploading, uploaded, and downloaded UI states.
-- Can be used for instant upload or as a form-associated file picker that keeps the selected image until submit.
 - Supports custom placeholder and overlay slots.
 - Supports required and max file size validation through `jb-validation`.
 
@@ -55,20 +52,22 @@ import 'jb-image-input';
 | `label` | `string` | localized text | Placeholder title text and accessible aria label. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
 | `message` | `string` | `""` | Helper text shown in the placeholder message area and exposed as aria description. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
 | `required` | `boolean \| string` | `false` | Enables required validation. A string value is used as the required error message. See [required validation](#required-validation) and the [required message demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message). |
-| `multiple` | `boolean` | `false` | Lets the hidden native file input accept multiple files. The component still previews/uploads the first file. See [multi image selector](#multi-image-selector) and the [multiple selection demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection). |
+| `multiple` | `boolean` | `false` | Lets the hidden native file input accept multiple files. The component still previews the first file. See [multi image selector](#multi-image-selector) and the [multiple selection demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection). |
+| `uploading` | `boolean` | `false` | Shows externally controlled upload loading state. |
 | `disabled` | `boolean` | `false` | Disables file selection and overlay actions. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-style--gallery) |
 
 ### Properties
 
 | name | type | readonly | description |
 | --- | --- | --- | --- |
-| `value` | `TValue \| null` | no | Canonical value and form value. When `bridge.uploader` resolves, `value` becomes the resolved upload result. Use `File`, `string`, `FormData`, or `null` when this value must be submitted by a native form. Setting a `File` previews that file; setting another value calls `bridge.downloader` to resolve a preview image. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
+| `value` | `TValue \| null` | no | Canonical value and form value. Selecting an image sets this to the selected `File`. Setting another value calls the optional `downloader`, or automatically loads a string URL. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
 | `file` | `File \| null` | yes | Currently selected local file. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--initial-value) |
-| `imageBase64Value` | `string \| null` | no | Preview image data URL after the selected file is read or `bridge.downloader` resolves. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
+| `imageBase64Value` | `string \| null` | no | Preview image data URL after the selected file is read or `downloader` resolves. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
 | `acceptTypes` | `string` | no | Comma-separated MIME types assigned to the hidden native file input `accept` property. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
 | `maxFileSize` | `number \| null` | no | Maximum accepted file size in bytes. See [max file size](#max-file-size) and the [max-size demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--max-file-size). |
-| `bridge` | `JBImageInputBridge<TValue>` | no | Upload/download bridge. See [upload and download bridge](#upload-and-download-bridge) and the [bridge demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value). |
-| `config` | `JBImageInputConfig` | no | Developer-defined object passed to bridge functions. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
+| `downloader` | `JBImageInputDownloader<TValue>` | no | Optional function used to turn a stored value into a preview image. |
+| `uploadPercent` | `number \| null` | no | Visual upload progress percentage controlled by your upload flow. |
+| `config` | `JBImageInputConfig` | no | Developer-defined object passed to `downloader`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
 | `multiple` | `boolean` | no | Controls the hidden native file input `multiple` attribute. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
 | `required` | `boolean` | no | Enables required validation. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required) |
 | `disabled` | `boolean` | no | Disables file selection and overlay actions, and sets disabled accessibility/custom state. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-style--gallery) |
@@ -85,7 +84,7 @@ import 'jb-image-input';
 | name | returns | description |
 | --- | --- | --- |
 | `openImageSelector()` | `void` | Opens the hidden native file picker unless the component is disabled. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
-| `selectImageByFile(file)` | `Promise<void>` | Injects a `File` as if the user selected it, validates it, previews it, and starts `bridge.uploader` when valid. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
+| `selectImageByFile(file)` | `Promise<void>` | Injects a `File` as if the user selected it, validates it, previews it, and dispatches `change` when valid. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
 | `checkValidity()` | `boolean` | Runs validation without showing the error message. Dispatches `invalid` when invalid. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required) |
 | `reportValidity()` | `boolean` | Runs validation and shows the first error message. Dispatches `invalid` when invalid. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message) |
 | `JBImageInputWebComponent.ExtractBase64ImageFromFile(file)` | `Promise<string>` | Static helper that reads a `File` and resolves its data URL. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--initial-value) |
@@ -94,7 +93,8 @@ import 'jb-image-input';
 
 | event | detail | description |
 | --- | --- | --- |
-| `change` | none | Fired when a file is selected, upload resolves, or the selected image is deleted. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
+| `change` | none | Fired when a file is selected or the selected image is deleted. Uploading is handled by the application. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
+| `download-start` | `{ value: TValue }` | Cancelable event fired before a non-`File` value is converted to a preview. Prevent it when your application handles preview loading itself. |
 | `imageSelected` | `{ files: FileList }` | Fired after the hidden native file input changes. Use this for multi-image flows. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
 | `maxSizeExceed` | `{ file: File }` | Fired when the selected file is larger than `maxFileSize`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--max-file-size) |
 | `invalid` | none | Fired when `checkValidity()` or `reportValidity()` finds an invalid value. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message) |
@@ -103,34 +103,26 @@ import 'jb-image-input';
 
 `file` is the selected local `File`. The [initial value demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--initial-value) shows how the local file, current value, initial value, and dirty state relate.
 
-`value` is the value your app stores and the value passed to `ElementInternals.setFormValue()`. By default the uploader resolves the selected `File`, so `value` is also the `File`. If you provide a custom `bridge.uploader`, `value` becomes whatever that promise resolves.
+`value` is the value your app stores and the value passed to `ElementInternals.setFormValue()`. Selecting an image sets `value` to the selected `File`; upload the file in your `change` handler and assign any returned application value yourself.
 
-For native form submission, keep the resolved value compatible with `setFormValue`: `File`, `string`, `FormData`, or `null`. If your API returns an object, store a string id/URL for form submission or serialize the object before assigning it as `value`. The [bridge and value demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) demonstrates a string value with upload/download conversion.
+For native form submission, keep the value compatible with `setFormValue`: `File`, `string`, `FormData`, or `null`. If your API returns an object, store a string id/URL for form submission or serialize the object before assigning it as `value`.
 
 When you set `value` programmatically:
 
 - If `value` is a `File`, the component reads it and shows a preview.
-- If `value` is not a `File`, the component calls `bridge.downloader(value, config)` and expects a preview image data URL.
+- If `value` is not a `File`, the component dispatches `download-start`. If it is not canceled, it calls `downloader(value, config)` when configured, or fetches string URL values itself.
 
-## Upload and download bridge
+## Upload and download behavior
 
-`jb-image-input` does not own your API request. It handles UI state and calls your bridge. Use the [bridge and value demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) for a deterministic upload/download example.
+`jb-image-input` does not own your upload request. Listen for `change`, upload `event.target.value` yourself, and set `uploading`/`uploadPercent` while the request is in progress. The optional `downloader` handles stored values that need custom preview conversion.
+
+The default delete action uses `jb-icon-delete`; its lid animation plays while the delete control is hovered.
 
 ```js
 const imageInput = document.querySelector('jb-image-input');
 
-imageInput.bridge = {
-  uploader(file, config, onProgressCallback) {
-    const body = new FormData();
-    body.append('file', file);
-
-    return fetch(config.uploadUrl, {
-      method: 'POST',
-      body,
-    }).then((response) => response.text());
-  },
-  downloader(value, config) {
-    return fetch(value.url)
+imageInput.downloader = (value, config) => {
+    return fetch(value)
       .then((response) => response.blob())
       .then((blob) => new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -138,19 +130,13 @@ imageInput.bridge = {
         reader.onerror = reject;
         reader.readAsDataURL(blob);
       }));
-  },
-};
-
-imageInput.config = {
-  uploadUrl: '/api/images',
 };
 ```
 
-| bridge argument | description |
+| downloader argument | description |
 | --- | --- |
-| `file` | The `File` selected by the user. |
-| `config` | Developer-defined config object stored on the component and passed to the bridge. |
-| `onProgressCallback` | Optional callback for upload progress. |
+| `file` | The `File` value selected by the user. |
+| `config` | Developer-defined config object stored on the component and passed to `downloader`. |
 | `value` | Current component value passed to `downloader`; commonly an id or URL. |
 
 ## Validation
@@ -293,7 +279,7 @@ The [normal image input demo](https://javadbat.github.io/design-system/?path=/st
 
 - Import `jb-image-input` once before using `<jb-image-input>`.
 - Use `value` for the stored/submitted image value and `file` for the selected local `File`.
-- Provide `bridge.uploader` and `bridge.downloader` when the stored `value` is not a `File`.
+- Provide `downloader` when a stored value needs custom preview conversion.
 - Keep submitted values compatible with `ElementInternals.setFormValue()`: `File`, `string`, `FormData`, or `null`.
 - Use `imageSelected` when implementing multi-image selection; the component itself previews/uploads the first selected file.
 - Use `acceptTypes`, `maxFileSize`, `validation.list`, and `required` instead of custom file filtering logic when possible.
