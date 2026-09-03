@@ -26,7 +26,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   }
   set value(value: TValue | null) {
     this.#isDirty = true;
-    this.#setValue(value);
+    value === null ? this.#clearValue() : this.#setValue(value);
   }
   get form() {
     return this.#internals?.form ?? null;
@@ -59,12 +59,16 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
       this.#virtualInputFile.removeAttribute("multiple");
     }
   }
-  #acceptType = "image/jpeg,image/jpg,image/png,image/svg+xml";
-  get acceptTypes() {
-    return this.#acceptType;
+  #accept = "image/jpeg,image/jpg,image/png,image/svg+xml";
+  get accept() {
+    return this.#accept;
   }
-  set acceptTypes(value) {
-    this.#acceptType = value;
+  set accept(value: string) {
+    this.#setAccept(value);
+    if (this.getAttribute("accept") !== value) this.setAttribute("accept", value);
+  }
+  #setAccept(value: string) {
+    this.#accept = value;
     if (this.#virtualInputFile) {
       this.#virtualInputFile.accept = value;
     }
@@ -87,14 +91,17 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
       this.#elements.webComponent.style.setProperty("--upload-percent", `${this.#uploadPercent ?? 0}%`);
     }
   }
-  #uploading = false;
-  get uploading() {
-    return this.#uploading;
+  #isUploading = false;
+  get isUploading() {
+    return this.#isUploading;
   }
-  set uploading(value: boolean) {
-    this.#uploading = value;
-    this.toggleAttribute("uploading", value);
-    if (this.#internals) this.#internals.ariaBusy = value ? "true" : "false";
+  set isUploading(value: boolean) {
+    this.#isUploading = Boolean(value);
+    this.toggleAttribute("is-uploading", this.#isUploading);
+    if (this.#internals) this.#internals.ariaBusy = this.#isUploading ? "true" : "false";
+  }
+  get isLoading(): boolean {
+    return this.#isUploading || this.#status === "uploading";
   }
   get file() {
     return this.#file;
@@ -183,11 +190,14 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
       this.#setValue(this.#initialValue);
     }
   }
-  formResetCallback() {
+  reset() {
     this.#isDirty = false;
     this.#setValue(this.initialValue);
     this.#validation.reset();
     this.#internals?.setValidity({}, '');
+  }
+  formResetCallback() {
+    this.reset();
   }
   get isDirty(): boolean {
     return this.#value !== this.initialValue;
@@ -248,7 +258,6 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   };
   downloader?: JBImageInputDownloader<TValue>;
   #initProp() {
-    this.acceptTypes = "image/jpeg,image/jpg,image/png,image/svg+xml";
     this.#setStatus("empty");
     this.#createVirtualInputFile();
   }
@@ -256,8 +265,8 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     this.#elements.placeHolderWrapper.addEventListener("click", this.openImageSelector.bind(this));
     this.#elements.previewButton.addEventListener("click", this.openImageSelector.bind(this));
     this.#elements.overlay.container.addEventListener("click", this.openImageSelector.bind(this));
-    this.#elements.overlay.deleteButton.addEventListener("click", this.#onDeleteButtonClicked.bind(this));
-    this.#elements.overlay.downloadButton.addEventListener("click", this.#onDownloadButtonClicked.bind(this));
+    this.#elements.overlay.deleteButton.addEventListener("click", this.#onDeleteButtonClick.bind(this));
+    this.#elements.overlay.downloadButton.addEventListener("click", this.#onDownloadButtonClick.bind(this));
 
     const deleteIcon = this.#elements.overlay.deleteButton.querySelector("jb-icon-delete") as JBIconDeleteWebComponent | null;
     if (deleteIcon) {
@@ -268,7 +277,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   #createVirtualInputFile() {
     this.#virtualInputFile = document.createElement("input");
     this.#virtualInputFile.type = "file";
-    this.#virtualInputFile.accept = this.acceptTypes;
+    this.#virtualInputFile.accept = this.accept;
     this.#virtualInputFile.disabled = this.disabled;
     this.#virtualInputFile.addEventListener("change", (e) =>
       this.#onImageSelected(e)
@@ -291,7 +300,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     this.#virtualInputFile.click();
   }
   static get observedAttributes() {
-    return ["required", "label", "multiple", "message", "disabled", "image-alt", "uploading"];
+    return ["required", "label", "multiple", "message", "disabled", "image-alt", "is-uploading", "accept"];
   }
   attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
     // do something when an attribute has changed
@@ -321,13 +330,16 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
       case "image-alt":
         this.#elements.image.alt = value;
         break;
-      case "uploading":
-        this.uploading = parseBooleanAttribute(value);
+      case "is-uploading":
+        this.isUploading = parseBooleanAttribute(value);
+        break;
+      case "accept":
+        this.#setAccept(value ?? "");
         break;
     }
   }
   #dispatchOnImagesSelected(files: FileList) {
-    const event = new CustomEvent("imageSelected", {
+    const event = new CustomEvent("image-selected", {
       detail: {
         files: files,
       },
@@ -372,7 +384,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     this.#dispatchOnChangeEvent();
   }
   #dispatchMaxSizeExceedEvent(file: File) {
-    const event = new CustomEvent("maxSizeExceed", { detail: { file }, cancelable: false });
+    const event = new CustomEvent("max-size-exceed", { detail: { file }, cancelable: false });
     this.dispatchEvent(event);
   }
   static ExtractBase64ImageFromFile(file: File): Promise<string> {
@@ -402,7 +414,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   #setStatus(status: ViewStatus) {
     this.#elements.webComponent.setAttribute("status", status);
     this.#status = status;
-    if (this.#internals && !this.#uploading) this.#internals.ariaBusy = status === "uploading" ? "true" : "false";
+    if (this.#internals && !this.#isUploading) this.#internals.ariaBusy = this.isLoading ? "true" : "false";
   }
   showValidationError(error: ShowValidationErrorParameters | string) {
     const message = typeof error == "string" ? error : error.message;
@@ -514,10 +526,13 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   get validationMessage() {
     return this.#internals?.validationMessage ?? "";
   }
+  get validity() {
+    return this.#internals?.validity;
+  }
   formDisabledCallback(disabled: boolean) {
     this.disabled = disabled;
   }
-  #onDeleteButtonClicked(e: MouseEvent) {
+  #onDeleteButtonClick(e: MouseEvent) {
     e.stopPropagation();
     if (this.disabled) {
       return;
@@ -526,7 +541,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     this.validation.checkValiditySync({ showError: true });
     this.#dispatchOnChangeEvent();
   }
-  #onDownloadButtonClicked(e: MouseEvent) {
+  #onDownloadButtonClick(e: MouseEvent) {
     e.stopPropagation();
     if (this.disabled) {
       return;
@@ -539,35 +554,46 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     a.click();
   }
   #setValue(value: TValue | null) {
+    if (value === null) {
+      this.#clearValue();
+      return;
+    }
     this.#value = value;
-    if (value instanceof File || value === null || typeof value == "string" || value instanceof FormData) { this.#internals?.setFormValue(value as File | string | FormData | null); }
-    if (value != null) {
-      if (value instanceof File) {
-        this.#file = value;
-        JBImageInputWebComponent.ExtractBase64ImageFromFile(value).then(
-          this.#onSuccessImageDownload.bind(this)
-        );
-      } else {
-        const event = new CustomEvent("download-start", {
-          cancelable: true,
-          detail: { value },
-        });
-        this.dispatchEvent(event);
-        if (event.defaultPrevented) return;
-
-        this.#setStatus("uploaded");
-        const downloader = this.downloader ?? (
-          typeof value === "string" ? this.#downloadImageFromUrl.bind(this) : undefined
-        );
-        if (downloader) {
-          Promise.resolve(downloader(value, this.config))
-            .then(this.#onSuccessImageDownload.bind(this))
-            .catch(() => this.#setStatus("empty"));
-        }
-      }
+    this.#updateFormValue();
+    if (value instanceof File) {
+      this.#file = value;
+      JBImageInputWebComponent.ExtractBase64ImageFromFile(value).then(
+        this.#onSuccessImageDownload.bind(this)
+      );
     } else {
-      this.#file = null;
-      this.#setStatus("empty");
+      const event = new CustomEvent("download-start", {
+        cancelable: true,
+        detail: { value },
+      });
+      this.dispatchEvent(event);
+      if (event.defaultPrevented) return;
+
+      this.#setStatus("uploaded");
+      const downloader = this.downloader ?? (
+        typeof value === "string" ? this.#downloadImageFromUrl.bind(this) : undefined
+      );
+      if (downloader) {
+        Promise.resolve(downloader(value, this.config))
+          .then(this.#onSuccessImageDownload.bind(this))
+          .catch(() => this.#setStatus("empty"));
+      }
+    }
+  }
+  #clearValue() {
+    this.#value = null;
+    this.#file = null;
+    this.#updateFormValue();
+    this.#setStatus("empty");
+  }
+  #updateFormValue() {
+    const value = this.#value;
+    if (value instanceof File || value === null || typeof value == "string" || value instanceof FormData) {
+      this.#internals?.setFormValue(value as File | string | FormData | null);
     }
   }
 

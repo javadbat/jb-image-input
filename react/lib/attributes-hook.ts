@@ -11,13 +11,13 @@ export type JBImageInputAttributes<TValue> = {
   multiple?: boolean,
   name?: string,
   file?: File,
-  acceptTypes?: string,
+  accept?: string,
   maxFileSize?: number,
   disabled?: boolean,
   required?: boolean | string,
   label?: string,
   message?: string,
-  uploading?: boolean,
+  isUploading?: boolean,
   uploadPercent?: number | null,
 
 }
@@ -67,10 +67,10 @@ export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInput
   }, [props.file]);
 
   useEffect(() => {
-    if (props.acceptTypes && element.current) {
-      element.current.acceptTypes = props.acceptTypes;
+    if (props.accept !== undefined && element.current) {
+      element.current.accept = props.accept;
     }
-  }, [props.acceptTypes]);
+  }, [props.accept]);
 
   useEffect(() => {
     if (props.maxFileSize !== undefined && element.current) {
@@ -109,10 +109,10 @@ export function useJBImageInputAttribute<TValue>(element: RefObject<JBImageInput
   }, [props.disabled]);
 
   useEffect(() => {
-    if (element.current && props.uploading !== undefined) {
-      element.current.uploading = props.uploading;
+    if (element.current && props.isUploading !== undefined) {
+      element.current.isUploading = props.isUploading;
     }
-  }, [props.uploading]);
+  }, [props.isUploading]);
 
   useEffect(() => {
     if (element.current && props.uploadPercent !== undefined) {

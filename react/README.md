@@ -40,7 +40,7 @@ Use `jb-file-input` for non-image files.
 | `file` | `File` | Injects a selected file by calling `selectImageByFile(file)`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--initial-value) |
 | `downloader` | `JBImageInputDownloader<TValue>` | Optional function that converts a stored value to a preview image. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
 | `config` | `JBImageInputConfig` | Developer-defined object passed to `downloader`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
-| `acceptTypes` | `string` | Comma-separated MIME types for the hidden file input. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
+| `accept` | `string` | Native file accept string forwarded to the hidden file input. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
 | `maxFileSize` | `number` | Maximum accepted file size in bytes. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--max-file-size) |
 | `validationList` | `ValidationItem<ValidationValue<TValue>>[]` | Custom validation rules from `jb-validation`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message) |
 | `multiple` | `boolean` | Lets the hidden file input accept multiple files. The component still previews/uploads the first file. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
@@ -49,7 +49,7 @@ Use `jb-file-input` for non-image files.
 | `message` | `string` | Helper text shown in the placeholder message area. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
 | `required` | `boolean \| string` | Enables required validation. A string value is used as the required error message. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message) |
 | `uploadType` | `string` | Forwarded as `upload-type`; kept for compatibility. Uploading is managed by the application. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
-| `uploading` | `boolean` | Shows externally managed upload loading state. |
+| `isUploading` | `boolean` | Shows externally managed upload loading state. |
 | `uploadPercent` | `number \| null` | Sets the externally managed upload progress percentage. |
 
 ## Events
@@ -57,8 +57,8 @@ Use `jb-file-input` for non-image files.
 | prop | event | description |
 | --- | --- | --- |
 | `onChange` | `change` | Fired when a file is selected or the selected image is deleted. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
-| `onImageSelected` | `imageSelected` | Fired with `event.detail.files` after the native file input changes. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
-| `onMaxSizeExceed` | `maxSizeExceed` | Fired with `event.detail.file` when a selected file is larger than `maxFileSize`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--max-file-size) |
+| `onImageSelected` | `image-selected` | Fired with `event.detail.files` after the native file input changes. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
+| `onMaxSizeExceed` | `max-size-exceed` | Fired with `event.detail.file` when a selected file is larger than `maxFileSize`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--max-file-size) |
 | `onDownloadStart` | `download-start` | Fired before a stored value is converted into a preview; call `preventDefault()` to handle preview loading yourself. |
 | `onLoad` | `load` | Wired by the wrapper for compatibility with lazy-loaded custom elements. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
 | `onInit` | `init` | Wired by the wrapper for compatibility with lazy-loaded custom elements. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |

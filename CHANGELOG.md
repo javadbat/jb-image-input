@@ -1,12 +1,23 @@
 # Changelog
 
+## [4.1.0] - 2026-09-03
+
+### Changed
+
+- Standardized private DOM event handlers on the `#on<Target><Event>()` naming convention.
+- Standardized private empty-value and form synchronization helpers as `#clearValue()` and `#updateFormValue()`.
+- Breaking: renamed the `acceptTypes` web-component property and React prop to `accept` and added the matching `accept` HTML attribute.
+- Added the standard public `reset()` method; native form reset delegates to the same behavior.
+- Breaking: renamed public custom events to lowercase kebab-case: `image-selected` and `max-size-exceed`; old event names are removed.
+- Breaking: standardized the message error color token on `--jb-image-input-message-color-error`; the old variable name is removed.
+
 ## [4.0.0] - 2026-09-01
 
 ### Changed
 
 - Made custom-element module evaluation SSR-safe by extending `JBBaseComponent` where needed and registering elements through the shared `defineWebComponent()` helper; raised the minimum `jb-core` version to `0.35.0`.rf
 - Updated component color defaults to use the shared semantic content and surface tokens.
-- Breaking: removed the upload bridge. Image selection now keeps the selected `File` and dispatches `change`; applications control upload state with `uploading` and `uploadPercent`.
+- Breaking: renamed `uploading` to `isUploading` and the `uploading` attribute to `is-uploading`; `isLoading` now exposes the computed busy state.
 - Replaced the downloader bridge with the direct `downloader` property. String URL values are fetched automatically after a cancelable `download-start` event unless a handler prevents it.
 - Replaced the inline delete SVG with `jb-icon-delete`, whose lid animation plays on hover.
 

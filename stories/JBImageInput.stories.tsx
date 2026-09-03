@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Normal: Story = {
   args: {
-    acceptTypes: "image/jpeg,image/jpg,image/png,image/svg+xml",
+    accept: "image/jpeg,image/jpg,image/png,image/svg+xml",
     message: "extra message"
   }
 };
@@ -57,7 +57,7 @@ export const MaxFileSize: Story = {
   play: async ({ canvasElement }) => {
     const imageInput = canvasElement.querySelector<JBImageInputWebComponent>('jb-image-input');
     const onMaxSizeExceed = fn();
-    imageInput?.addEventListener('maxSizeExceed', onMaxSizeExceed);
+    imageInput?.addEventListener('max-size-exceed', onMaxSizeExceed);
 
     await imageInput?.selectImageByFile(new File(['this file is too large'], 'large.svg', { type: 'image/svg+xml' }));
 
@@ -68,12 +68,15 @@ export const MaxFileSize: Story = {
 };
 
 export const MultipleSelection: Story = {
-  render: () => <JBImageInput label="Gallery images" multiple acceptTypes="image/png,image/jpeg" />,
+  render: () => <JBImageInput label="Gallery images" multiple accept="image/png,image/jpeg" />,
   play: async ({ canvasElement }) => {
     const imageInput = canvasElement.querySelector<JBImageInputWebComponent>('jb-image-input');
+    const nativeInput = imageInput?.shadowRoot?.querySelector<HTMLInputElement>('input[type="file"]');
 
     expect(imageInput?.multiple).toBe(true);
-    expect(imageInput?.acceptTypes).toBe('image/png,image/jpeg');
+    expect(imageInput?.accept).toBe('image/png,image/jpeg');
+    expect(imageInput?.getAttribute('accept')).toBe('image/png,image/jpeg');
+    expect(nativeInput?.accept).toBe('image/png,image/jpeg');
   },
 };
 

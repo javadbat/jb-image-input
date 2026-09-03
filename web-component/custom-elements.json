@@ -46,9 +46,16 @@
             },
             {
               "name": "multiple",
-              "description": "When set to true, the hidden native file input accepts multiple files and imageSelected exposes the full FileList. The component still previews and uploads the first selected file.",
+              "description": "When set to true, the hidden native file input accepts multiple files and image-selected exposes the full FileList. The component still previews and uploads the first selected file.",
               "type": {
                 "text": "boolean"
+              }
+            },
+            {
+              "name": "accept",
+              "description": "Native file accept string forwarded to the hidden file input.",
+              "type": {
+                "text": "string"
               }
             },
             {
@@ -59,7 +66,7 @@
               }
             }
             ,{
-              "name": "uploading",
+              "name": "is-uploading",
               "description": "Shows externally managed upload loading state.",
               "type": { "text": "boolean" }
             }
@@ -92,8 +99,8 @@
             },
             {
               "kind": "field",
-              "name": "acceptTypes",
-              "description": "Comma-separated MIME types assigned to the hidden native file input accept property.",
+              "name": "accept",
+              "description": "Native file accept string forwarded to the hidden file input.",
               "type": {
                 "text": "string"
               },
@@ -102,7 +109,7 @@
             {
               "kind": "field",
               "name": "maxFileSize",
-              "description": "Maximum accepted file size in bytes. Oversized files fail validation and dispatch maxSizeExceed.",
+              "description": "Maximum accepted file size in bytes. Oversized files fail validation and dispatch max-size-exceed.",
               "type": {
                 "text": "number | null"
               }
@@ -123,9 +130,16 @@
             },
             {
               "kind": "field",
-              "name": "uploading",
+              "name": "isUploading",
               "description": "Whether externally managed upload loading is shown.",
               "type": { "text": "boolean" }
+            },
+            {
+              "kind": "field",
+              "name": "isLoading",
+              "description": "Computed aggregate loading state.",
+              "type": { "text": "boolean" },
+              "readonly": true
             },
             {
               "kind": "field",
@@ -233,6 +247,10 @@
           ],
           "methods": [
             {
+              "name": "reset",
+              "description": "Restores initialValue and clears displayed validation."
+            },
+            {
               "name": "openImageSelector",
               "description": "Opens the hidden native file picker."
             },
@@ -297,11 +315,11 @@
               "detail": { "text": "{ value: TValue }" }
             },
             {
-              "name": "imageSelected",
+              "name": "image-selected",
               "description": "Dispatched after the hidden native file input changes. event.detail.files contains the selected FileList."
             },
             {
-              "name": "maxSizeExceed",
+              "name": "max-size-exceed",
               "description": "Dispatched when the selected file is larger than maxFileSize. event.detail.file contains the oversized File."
             },
             {

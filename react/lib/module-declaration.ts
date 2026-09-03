@@ -10,6 +10,7 @@ declare module "react" {
       label?: string,
       message?: string,
       name?: string,
+      accept?: string,
       required?: string | boolean,
       value?: TValue | null,
       initialValue?: TValue | null,

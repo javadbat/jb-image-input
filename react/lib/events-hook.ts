@@ -23,8 +23,8 @@ export function useEvents<TValue>(element: RefObject<JBImageInputWebComponent<TV
   useEvent(element, 'load', props.onLoad, true);
   useEvent(element, 'init', props.onInit, true);
   useEvent(element, "change", props.onChange);
-  useEvent(element, "imageSelected", props.onImageSelected);
-  useEvent(element, "maxSizeExceed", props.onMaxSizeExceed);
+  useEvent(element, "image-selected", props.onImageSelected);
+  useEvent(element, "max-size-exceed", props.onMaxSizeExceed);
   useEvent(element, "download-start", props.onDownloadStart);
 
 }

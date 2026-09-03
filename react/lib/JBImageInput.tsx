@@ -11,12 +11,12 @@ export type { JBImageInputConfig, JBImageInputDownloader };
 
 export function JBImageInput<TValue>(props: Props<TValue>) {
   const element = useRef<JBImageInputWebComponent<TValue> | null>(null);
-  const { acceptTypes, ref, downloader, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value, onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed, onDownloadStart, uploadType, uploading, uploadPercent, ...otherProps } = props;
+  const { accept, ref, downloader, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value, onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed, onDownloadStart, uploadType, isUploading, uploadPercent, ...otherProps } = props;
   useImperativeHandle(ref,
     () => (element.current ?? undefined),
     [element]);
     
-  useJBImageInputAttribute(element, { acceptTypes, downloader, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value, uploading, uploadPercent });
+  useJBImageInputAttribute(element, { accept, downloader, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value, isUploading, uploadPercent });
   useEvents(element, { onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed, onDownloadStart });
 
   return (
@@ -27,7 +27,7 @@ export function JBImageInput<TValue>(props: Props<TValue>) {
 };
 type ImageInputProps<TValue> = EventProps<TValue> & JBImageInputAttributes<TValue> & {
   uploadType?: string,
-  uploading?: boolean,
+  isUploading?: boolean,
   uploadPercent?: number | null,
   ref?: ForwardedRef<JBImageInputWebComponent<TValue> | null | undefined>
 }
