@@ -70,7 +70,7 @@ function renderOverlay() {
             </svg>
           </jb-button>
           <jb-button class="delete-button" color="danger" variant="ghost" size="md" aria-label="${dictionary.get(i18n, "deleteImage")}" square>
-            <jb-icon-delete color="danger" size="md" aria-hidden="true"></jb-icon-delete>
+            <jb-icon-delete color="danger" size="md"></jb-icon-delete>
             <!--
                 <path id="BinBody" d="M19.325 9.4682C19.325 9.4682 18.782 16.2032 18.467 19.0402C18.317 20.3952 17.48 21.1892 16.109 21.2142C13.5 21.2612 10.888 21.2642 8.28003 21.2092C6.96103 21.1822 6.13803 20.3782 5.99103 19.0472C5.67403 16.1852 5.13403 9.4682 5.13403 9.4682" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 <path id="BinLine" d="M20.7082 6.23969H3.75024" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
