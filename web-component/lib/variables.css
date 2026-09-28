@@ -27,4 +27,6 @@
   --error-overlay-outline:var(--jb-black);
   /* Other */
   --message-box-display: var(--jb-image-input-message-box-display, block);
+  --box-shadow: var(--jb-image-input-box-shadow, var(--jb-control-shadow));
+  --box-corner-shape: var(--jb-corner-shape);
 }
