@@ -14,6 +14,8 @@
   --message-color:var(--jb-image-input-message-color, var(--jb-content-secondary));
   --message-color-error:var(--jb-image-input-message-color-error, var(--jb-red));
   --overlay-bg-color: var(--jb-image-input-overlay-bg-color, oklch(from var(--jb-neutral) l c h / calc(alpha - 0.5)));
+  --upload-loading-color: var(--jb-image-input-loading-color, var(--jb-neutral));
+  --loading-bg: var(--jb-image-input-loading-bg, linear-gradient(90deg, var(--jb-primary-l), var(--jb-secondary-l)));
   --delete-button-color:var(--jb-red);
   --delete-button-bg-color:var(--jb-surface-primary);
   --delete-icon-color:var(--jb-red);

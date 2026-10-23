@@ -1,13 +1,15 @@
 import { i18n } from "jb-core/i18n";
 import { dictionary } from "./i18n";
-import 'jb-button';
-import 'jb-icons/delete';
+import "jb-button";
+import "jb-icons/delete";
+import 'jb-loading';
+
 export function renderHTML(): string {
   return /* html */ `
   <div class="jb-image-input-web-component">
   <button class="placeholder-wrapper" type="button" aria-label="${dictionary.get(i18n, "chooseImage")}">
     <slot name="placeholder">
-      <span class="default-placeholder">
+      <span class="default-placeholder section-wrapper">
         <span class="icon-wrapper" aria-hidden="true">
           <svg viewBox="0 0 59.19 47.06" aria-hidden="true">
             <g id="Layer_2" data-name="Layer 2">
@@ -30,8 +32,16 @@ export function renderHTML(): string {
 
   </button>
   <div class="upload-loading-wrapper" role="status" aria-live="polite">
-    <div class="upload-bg"></div>
-    <span>${dictionary.get(i18n, "uploading")}</span>
+    <slot name="upload">
+      <div class="upload-wrapper">
+        <div class="upload-bg"></div>
+        <div class="loading-content section-wrapper">
+          <div class="icon-wrapper"><slot name="uploader-icon"><jb-loading class="loading-icon" part="loading upload-loading"/></slot></div>
+          <div class="uploading-title title" part="uploading-title">${dictionary.get(i18n, "uploading")}</div>
+        </div>
+        <div class="progress-top-level" part="progress-top-level"></div>
+      </div>
+    </slot>
   </div>
   <div class="download-loading-wrapper" role="status" aria-live="polite">
     <span>${dictionary.get(i18n, "preparing")}</span>
@@ -57,7 +67,7 @@ export function renderHTML(): string {
 `;
 }
 function renderOverlay() {
-  return /* html */`
+  return /* html */ `
     <slot name= "overlay">
       <div class="image-overlay">
         <slot name="overlay-content">
@@ -71,14 +81,9 @@ function renderOverlay() {
           </jb-button>
           <jb-button class="delete-button" color="danger" variant="ghost" size="md" aria-label="${dictionary.get(i18n, "deleteImage")}" square>
             <jb-icon-delete color="danger" size="md"></jb-icon-delete>
-            <!--
-                <path id="BinBody" d="M19.325 9.4682C19.325 9.4682 18.782 16.2032 18.467 19.0402C18.317 20.3952 17.48 21.1892 16.109 21.2142C13.5 21.2612 10.888 21.2642 8.28003 21.2092C6.96103 21.1822 6.13803 20.3782 5.99103 19.0472C5.67403 16.1852 5.13403 9.4682 5.13403 9.4682" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path id="BinLine" d="M20.7082 6.23969H3.75024" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path id="BinHead" d="M17.4406 6.23967C16.6556 6.23967 15.9796 5.68467 15.8256 4.91567L15.5826 3.69967C15.4326 3.13867 14.9246 2.75067 14.3456 2.75067H10.1126C9.53358 2.75067 9.02558 3.13867 8.87558 3.69967L8.63258 4.91567C8.47858 5.68467 7.80258 6.23967 7.01758 6.23967" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            -->
           </jb-button>
         </slot>
       </div>
     </slot>
-    `
+    `;
 }

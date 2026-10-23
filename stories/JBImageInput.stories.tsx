@@ -1,14 +1,17 @@
-import { useRef } from 'react';
-import type { JBImageInputWebComponent } from 'jb-image-input';
-import { JBButton } from 'jb-button/react';
-import { JBImageInput } from 'jb-image-input/react';
-import JBImageInputActionTest from './JBImageInputActionTest.jsx';
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, userEvent, waitFor } from 'storybook/test';
+import { useRef } from "react";
+import type { JBImageInputWebComponent } from "jb-image-input";
+import { JBButton } from "jb-button/react";
+import { JBImageInput } from "jb-image-input/react";
+import JBImageInputActionTest from "./JBImageInputActionTest.jsx";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, fn, userEvent, waitFor } from "storybook/test";
 
 const meta = {
   title: "Components/form elements/JBImageInput",
   component: JBImageInput,
+  args: {
+    style: { height: `10rem` },
+  },
 } satisfies Meta<typeof JBImageInput>;
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -16,38 +19,38 @@ type Story = StoryObj<typeof meta>;
 export const Normal: Story = {
   args: {
     accept: "image/jpeg,image/jpg,image/png,image/svg+xml",
-    message: "extra message"
-  }
+    message: "extra message",
+  },
 };
 
-const bridgePreview = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Q5NzcyMiIvPjwvc3ZnPg==';
+const bridgePreview =
+  "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2Q5NzcyMiIvPjwvc3ZnPg==";
 
+export const UploadingState: Story = {
+  args: {
+    isUploading: true,
+    uploadPercent: 50,
+  },
+};
 export const BridgeAndValue: Story = {
-  render: () => (
-    <JBImageInput<string>
-      label="Profile image"
-      message="Upload a profile image"
-      value="profile-42"
-      downloader={async () => bridgePreview}
-    />
-  ),
+  render: () => <JBImageInput<string> label="Profile image" message="Upload a profile image" value="profile-42" downloader={async () => bridgePreview} />,
   play: async ({ canvasElement }) => {
-    const imageInput = canvasElement.querySelector<JBImageInputWebComponent<string>>('jb-image-input');
+    const imageInput = canvasElement.querySelector<JBImageInputWebComponent<string>>("jb-image-input");
     expect(imageInput).toBeTruthy();
 
     await waitFor(() => {
-      expect(imageInput?.value).toBe('profile-42');
-      expect(imageInput?.status).toBe('downloaded');
+      expect(imageInput?.value).toBe("profile-42");
+      expect(imageInput?.status).toBe("downloaded");
       expect(imageInput?.imageBase64Value).toBe(bridgePreview);
     });
 
-    const selectedFile = createSvgFile('uploaded.svg', 'green');
+    const selectedFile = createSvgFile("uploaded.svg", "green");
     await imageInput!.selectImageByFile(selectedFile);
 
     await waitFor(() => {
       expect(imageInput?.value).toBe(selectedFile);
-      expect(imageInput?.file?.name).toBe('uploaded.svg');
-      expect(imageInput?.status).toBe('downloaded');
+      expect(imageInput?.file?.name).toBe("uploaded.svg");
+      expect(imageInput?.status).toBe("downloaded");
     });
   },
 };
@@ -55,11 +58,11 @@ export const BridgeAndValue: Story = {
 export const MaxFileSize: Story = {
   render: () => <JBImageInput label="Small image only" maxFileSize={8} />,
   play: async ({ canvasElement }) => {
-    const imageInput = canvasElement.querySelector<JBImageInputWebComponent>('jb-image-input');
+    const imageInput = canvasElement.querySelector<JBImageInputWebComponent>("jb-image-input");
     const onMaxSizeExceed = fn();
-    imageInput?.addEventListener('max-size-exceed', onMaxSizeExceed);
+    imageInput?.addEventListener("max-size-exceed", onMaxSizeExceed);
 
-    await imageInput?.selectImageByFile(new File(['this file is too large'], 'large.svg', { type: 'image/svg+xml' }));
+    await imageInput?.selectImageByFile(new File(["this file is too large"], "large.svg", { type: "image/svg+xml" }));
 
     expect(onMaxSizeExceed).toHaveBeenCalledOnce();
     expect(imageInput?.file).toBeNull();
@@ -70,73 +73,72 @@ export const MaxFileSize: Story = {
 export const MultipleSelection: Story = {
   render: () => <JBImageInput label="Gallery images" multiple accept="image/png,image/jpeg" />,
   play: async ({ canvasElement }) => {
-    const imageInput = canvasElement.querySelector<JBImageInputWebComponent>('jb-image-input');
+    const imageInput = canvasElement.querySelector<JBImageInputWebComponent>("jb-image-input");
     const nativeInput = imageInput?.shadowRoot?.querySelector<HTMLInputElement>('input[type="file"]');
 
     expect(imageInput?.multiple).toBe(true);
-    expect(imageInput?.accept).toBe('image/png,image/jpeg');
-    expect(imageInput?.getAttribute('accept')).toBe('image/png,image/jpeg');
-    expect(nativeInput?.accept).toBe('image/png,image/jpeg');
+    expect(imageInput?.accept).toBe("image/png,image/jpeg");
+    expect(imageInput?.getAttribute("accept")).toBe("image/png,image/jpeg");
+    expect(nativeInput?.accept).toBe("image/png,image/jpeg");
   },
 };
 
-const createSvgFile = (name: string, color: string) => new File(
-  [`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="${color}"/></svg>`],
-  name,
-  { type: 'image/svg+xml' },
-);
-const initialImage = createSvgFile('initial.svg', 'blue');
-const liveImage = createSvgFile('live.svg', 'red');
+const createSvgFile = (name: string, color: string) =>
+  new File([`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="${color}"/></svg>`], name, { type: "image/svg+xml" });
+const initialImage = createSvgFile("initial.svg", "blue");
+const liveImage = createSvgFile("live.svg", "red");
 
 export const InitialValue: Story = {
-  render: (args) => {
+  render: args => {
     const formRef = useRef<HTMLFormElement>(null);
     return (
       <form ref={formRef}>
         <JBImageInput<File> label={args.label} initialValue={args.initialValue as File | null | undefined} />
-        <JBButton type="button" onClick={() => formRef.current?.reset()}>Reset</JBButton>
+        <JBButton type="button" onClick={() => formRef.current?.reset()}>
+          Reset
+        </JBButton>
       </form>
     );
   },
   args: {
-    label: 'initial image',
+    label: "initial image",
     initialValue: initialImage,
   },
   play: async ({ canvasElement }) => {
-    const imageInput = canvasElement.querySelector<JBImageInputWebComponent<File>>('jb-image-input');
-    const resetButton = canvasElement.querySelector('jb-button')?.shadowRoot?.querySelector<HTMLButtonElement>('button');
+    const imageInput = canvasElement.querySelector<JBImageInputWebComponent<File>>("jb-image-input");
+    const resetButton = canvasElement.querySelector("jb-button")?.shadowRoot?.querySelector<HTMLButtonElement>("button");
 
     expect(imageInput).toBeTruthy();
     expect(resetButton).toBeTruthy();
 
     await waitFor(() => {
-      expect(imageInput?.initialValue?.name).toBe('initial.svg');
+      expect(imageInput?.initialValue?.name).toBe("initial.svg");
       expect(imageInput?.value).toBe(imageInput?.initialValue);
       expect(imageInput?.isDirty).toBe(false);
     });
 
-    imageInput!.value = createSvgFile('live.svg', 'red');
+    imageInput!.value = createSvgFile("live.svg", "red");
 
     await waitFor(() => {
-      expect(imageInput?.value?.name).toBe('live.svg');
+      expect(imageInput?.value?.name).toBe("live.svg");
       expect(imageInput?.isDirty).toBe(true);
     });
 
-    imageInput!.initialValue = createSvgFile('next.svg', 'green');
+    imageInput!.initialValue = createSvgFile("next.svg", "green");
 
-    expect(imageInput?.initialValue?.name).toBe('next.svg');
-    expect(imageInput?.value?.name).toBe('live.svg');
+    expect(imageInput?.initialValue?.name).toBe("next.svg");
+    expect(imageInput?.value?.name).toBe("live.svg");
     expect(imageInput?.isDirty).toBe(true);
 
     await userEvent.click(resetButton!);
 
     await waitFor(() => {
       expect(imageInput?.value).toBe(imageInput?.initialValue);
-      expect(imageInput?.value?.name).toBe('next.svg');
+      expect(imageInput?.value?.name).toBe("next.svg");
       expect(imageInput?.isDirty).toBe(false);
     });
 
-    const cleanInitialImage = createSvgFile('clean.svg', 'purple');
+    const cleanInitialImage = createSvgFile("clean.svg", "purple");
     imageInput!.initialValue = cleanInitialImage;
 
     await waitFor(() => {
@@ -152,11 +154,11 @@ export const InitialValueDoesNotOverrideValue: Story = {
     value: liveImage,
   },
   play: async ({ canvasElement }) => {
-    const imageInput = canvasElement.querySelector<JBImageInputWebComponent<File>>('jb-image-input');
+    const imageInput = canvasElement.querySelector<JBImageInputWebComponent<File>>("jb-image-input");
 
     await waitFor(() => {
-      expect(imageInput?.initialValue?.name).toBe('initial.svg');
-      expect(imageInput?.value?.name).toBe('live.svg');
+      expect(imageInput?.initialValue?.name).toBe("initial.svg");
+      expect(imageInput?.value?.name).toBe("live.svg");
       expect(imageInput?.isDirty).toBe(true);
     });
   },
@@ -168,10 +170,10 @@ export const ExplicitNullValueDoesNotFallBackToInitialValue: Story = {
     value: null,
   },
   play: async ({ canvasElement }) => {
-    const imageInput = canvasElement.querySelector<JBImageInputWebComponent<File>>('jb-image-input');
+    const imageInput = canvasElement.querySelector<JBImageInputWebComponent<File>>("jb-image-input");
 
     await waitFor(() => {
-      expect(imageInput?.initialValue?.name).toBe('initial.svg');
+      expect(imageInput?.initialValue?.name).toBe("initial.svg");
       expect(imageInput?.value).toBeNull();
       expect(imageInput?.isDirty).toBe(true);
     });
@@ -182,25 +184,25 @@ export const Required: Story = {
   args: {
     message: "extra message",
     required: true,
-  }
+  },
 };
 export const RequiredWithMessage: Story = {
   args: {
     message: "extra message",
     required: "you must fill this field to continue",
-  }
+  },
 };
 
 export const ActionTest: Story = {
-  render: (args) => <JBImageInputActionTest {...args}></JBImageInputActionTest>
+  render: args => <JBImageInputActionTest {...args}></JBImageInputActionTest>,
 };
 
 export const WithPlaceHolder: Story = {
-  render: (args) => (
+  render: args => (
     <JBImageInput {...args}>
-      <div slot="placeholder" style={{ width: '100%', height: '100%' }}>
-        <div style={{ width: '100%', height: '100%', background: 'red', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>custom placeholder</div>
+      <div slot="placeholder" style={{ width: "100%", height: "100%" }}>
+        <div style={{ width: "100%", height: "100%", background: "red", display: "flex", justifyContent: "center", alignItems: "center" }}>custom placeholder</div>
       </div>
     </JBImageInput>
-  )
+  ),
 };

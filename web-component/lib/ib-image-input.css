@@ -2,6 +2,7 @@
     display: block;
     width: var(--width);
     height: var(--height);
+    container-type: size;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     corner-shape: var(--box-corner-shape);
@@ -36,12 +37,62 @@
         outline: 2px solid var(--jb-image-input-focus-ring-color, Highlight);
         outline-offset: 2px;
     }
-    /* &.--has-error {
-         border: solid 1px #ff1229;
-         border-bottom: solid 3px #ff1229;
-         background-color: #fdf1f1;
-     }*/
+    .title {
+        color: var(--placeholder-title-color);
+        font-variation-settings: "wght" 600;
+        line-height: 1.5rem;
+        text-box-trim: trim-both;
+        text-box-edge: ex alphabetic;
+        font-size: 1rem;
 
+        @container (max-height:3rem) {
+        font-size: 0.75rem;
+        line-height: 0.75rem;
+        }
+    }
+
+    .icon-wrapper {
+        height: 4rem;
+
+        @container (max-height: 8rem) {
+        height: 100%;
+        }
+
+        svg,
+        jb-loading {
+        height: 100%;
+        width: auto;
+        aspect-ratio: 1 / 1;
+        fill: var(--icon-base-color);
+        color: var(--icon-base-color);
+
+        .primary-part {
+            fill: var(--icon-primary-color);
+            color: var(--icon-primary-color);
+        }
+
+        }
+    }
+    .section-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: var(--padding);
+        gap: 0.5rem;
+        box-sizing: border-box;
+
+        @container (max-height: 5rem) {
+            flex-direction: row;
+        }
+
+        @container (max-height: 4rem) {
+            padding: 0.5rem;
+        }
+    }
     &[status="empty"] {
         .placeholder-wrapper {
             display: flex;
@@ -57,19 +108,8 @@
         background-color: var(--placeholder-bg-color);
 
         .default-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            gap: 0.25rem;
-            padding: 0.5rem;
-
             .icon-wrapper {
                 svg {
-                    width: 4rem;
-                    height: 4rem;
                     fill: var(--placeholder-neutral-color);
 
                     .cls-1 {
@@ -108,31 +148,54 @@
         }
     }
 
-    :host([is-uploading]) & {
-        .upload-loading-wrapper {
-            display: flex;
-        }
-    }
-
     .upload-loading-wrapper {
-        position: relative;
-        justify-content: center;
-        align-items: center;
+        width: 100%;
+        height: 100%;
         overflow: hidden;
-        background: var(--loading-bg, transparent);
         display: none;
+
+        .upload-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
 
         .upload-bg {
             position: absolute;
-            inset: 0;
-            background: var(--loading-bg, transparent);
+            top: 0;
+            left: 0;
+            width: 100%;
+            transition: all 0.3s 0s ease;
+            height: 100%;
+            background: var(--loading-bg);
+            z-index: 0;
             clip-path: polygon(0 0, 0 100%, var(--upload-percent, 0%) 100%, var(--upload-percent, 0%) 0);
-            transition: clip-path 0.3s ease;
+            filter:invert(1);
         }
 
-        span {
+        .loading-content {
             position: relative;
             z-index: 1;
+
+            .loading-icon {
+            --jb-loading-color: var(--upload-loading-color);
+            }
+
+            .uploading-title {
+            color: var(--loading-color);
+            }
+        }
+        .progress-top-level {
+            position: absolute;
+            background-color: #fff;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            mix-blend-mode: difference;
+            transition: all 0.3s 0s ease;
+            clip-path: polygon(0 0, 0 100%, var(--upload-percent, 0%) 100%, var(--upload-percent, 0%) 0);
+        }
         }
     }
 

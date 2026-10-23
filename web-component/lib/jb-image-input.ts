@@ -38,7 +38,11 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   set isAutoValidationDisabled(value: boolean) {
     this.#isAutoValidationDisabled = value;
   }
-  #status: string | null = null;
+  /**
+   * used to know prev state of the image-input to hep us rollback (ex: when loading get false we rollback to prev status)
+   */
+  #prevStatus: ViewStatus | null = null;
+  #status: ViewStatus | null = null;
   #virtualInputFile!: HTMLInputElement;
   #elements!: JBImagesImageInputElements;
   get selectedImageType() {
@@ -97,8 +101,14 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   }
   set isUploading(value: boolean) {
     this.#isUploading = Boolean(value);
-    this.toggleAttribute("is-uploading", this.#isUploading);
     if (this.#internals) this.#internals.ariaBusy = this.#isUploading ? "true" : "false";
+    if(value){
+      this.#setStatus("uploading");
+      this.#internals?.states.add("uploading")
+    }else if(this.#status == "uploading"){
+      this.#setStatus(this.#prevStatus??"empty");
+      this.#internals?.states.delete("uploading")
+    }
   }
   get isLoading(): boolean {
     return this.#isUploading || this.#status === "uploading";
@@ -413,6 +423,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   }
   #setStatus(status: ViewStatus) {
     this.#elements.webComponent.setAttribute("status", status);
+    this.#prevStatus = this.#status;
     this.#status = status;
     if (this.#internals && !this.#isUploading) this.#internals.ariaBusy = this.isLoading ? "true" : "false";
   }
