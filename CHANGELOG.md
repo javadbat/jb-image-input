@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.3.0] - 2026-10-23
+
+### Added
+
+- loading progress bar and UI to show uploading state
+
 ## [4.2.0] - 2026-09-28
 
 ### Added

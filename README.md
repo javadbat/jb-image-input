@@ -8,8 +8,8 @@
 Image input web component that lets the user select an image, preview it, and validate it.
 
 - Supports custom placeholder, upload, and overlay slots.
-- Shows a loading spinner, progress bar, and title during externally managed uploads.
-- Supports required and max file size validation through `jb-validation`.
+- Supports required and max file size validation through `jb-validation`.`
+- fully customizable with slots so you can use it as a headless component
 
 ## When to use
 
