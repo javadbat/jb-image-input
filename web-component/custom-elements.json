@@ -67,7 +67,7 @@
             }
             ,{
               "name": "is-uploading",
-              "description": "Shows externally managed upload loading state.",
+              "description": "Sets isUploading and triggers the uploading custom state. While uploading, the component shows a loading spinner, progress background, and title. See the upload slot and uploading CSS state.",
               "type": { "text": "boolean" }
             }
           ],
@@ -131,7 +131,7 @@
             {
               "kind": "field",
               "name": "isUploading",
-              "description": "Whether externally managed upload loading is shown.",
+              "description": "Whether externally managed upload loading is shown. When true, sets status=\"uploading\", adds the uploading custom state, and displays the loading spinner, progress background, and uploading title.",
               "type": { "text": "boolean" }
             },
             {
@@ -333,6 +333,14 @@
               "description": "Custom content shown while the component status is empty."
             },
             {
+              "name": "upload",
+              "description": "Replaces the entire upload loading content, including the progress background, loading spinner, and uploading title."
+            },
+            {
+              "name": "uploader-icon",
+              "description": "Replaces the loading icon inside the upload content. Defaults to jb-loading."
+            },
+            {
               "name": "overlay",
               "description": "Replaces the full image overlay shown over the preview image."
             },
@@ -345,12 +353,28 @@
             {
               "name": "message",
               "description": "The helper or validation message element inside the default placeholder."
+            },
+            {
+              "name": "loading upload-loading",
+              "description": "The jb-loading spinner in the upload loading area."
+            },
+            {
+              "name": "uploading-title",
+              "description": "The upload status title text."
+            },
+            {
+              "name": "progress-top-level",
+              "description": "The progress overlay element that masks the upload background based on uploadPercent."
             }
           ],
           "cssStates": [
             {
               "name": "disabled",
               "description": "Applied when the disabled property is true."
+            },
+            {
+              "name": "uploading",
+              "description": "Applied when isUploading is true or status is \"uploading\". Shows the loading spinner, progress background, and uploading title."
             }
           ],
           "cssProperties": [
@@ -413,6 +437,14 @@
             {
               "name": "--jb-image-input-placeholder-title-color",
               "description": "Placeholder title color."
+            },
+            {
+              "name": "--jb-image-input-loading-color",
+              "description": "Loading spinner color. Controls the color of the jb-loading spinner shown during upload."
+            },
+            {
+              "name": "--jb-image-input-loading-bg",
+              "description": "Upload progress background. Shown as a gradient by default; clipped by uploadPercent via clip-path."
             }
           ]
         }

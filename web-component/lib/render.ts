@@ -24,7 +24,7 @@ export function renderHTML(): string {
             </g>
           </svg>
         </span>
-        <span class="placeholder-title">${dictionary.get(i18n, "chooseImage")}</span>
+        <span class="placeholder-title title">${dictionary.get(i18n, "chooseImage")}</span>
         <span class="message-box" part="message" role="status" aria-live="polite" aria-atomic="true"></span>
       </span>
       

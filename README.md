@@ -7,7 +7,8 @@
 
 Image input web component that lets the user select an image, preview it, and validate it.
 
-- Supports custom placeholder and overlay slots.
+- Supports custom placeholder, upload, and overlay slots.
+- Shows a loading spinner, progress bar, and title during externally managed uploads.
 - Supports required and max file size validation through `jb-validation`.
 
 ## When to use
@@ -54,7 +55,7 @@ import 'jb-image-input';
 | `required` | `boolean \| string` | `false` | Enables required validation. A string value is used as the required error message. See [required validation](#required-validation) and the [required message demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message). |
 | `multiple` | `boolean` | `false` | Lets the hidden native file input accept multiple files. The component still previews the first file. See [multi image selector](#multi-image-selector) and the [multiple selection demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection). |
 | `accept` | `string` | common image types | Native file accept string forwarded to the hidden file input. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
-| `is-uploading` | `boolean` | `false` | Shows externally controlled upload loading state. |
+| `is-uploading` | `boolean` | `false` | Shows externally controlled upload loading state. Sets `isUploading`, triggers the `uploading` custom state, and sets `status="uploading"` so the loading spinner, progress background, and uploading title are displayed. |
 | `disabled` | `boolean` | `false` | Disables file selection and overlay actions. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-style--gallery) |
 
 ### Properties
@@ -72,7 +73,7 @@ import 'jb-image-input';
 | `multiple` | `boolean` | no | Controls the hidden native file input `multiple` attribute. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
 | `required` | `boolean` | no | Enables required validation. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required) |
 | `disabled` | `boolean` | no | Disables file selection and overlay actions, and sets disabled accessibility/custom state. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-style--gallery) |
-| `isUploading` | `boolean` | no | Shows externally managed upload loading state. |
+| `isUploading` | `boolean` | no | Shows externally managed upload loading state. When true, sets `status="uploading"`, adds the `uploading` custom state, and displays the loading spinner, progress background, and uploading title. When set back to false, the component restores the previous status. |
 | `isLoading` | `boolean` | yes | Computed aggregate loading state. |
 | `status` | `'empty' \| 'uploading' \| 'uploaded' \| 'downloaded' \| null` | yes | Current visual state. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
 | `form` | `HTMLFormElement \| null` | yes | Associated form from `ElementInternals`. |
@@ -122,6 +123,16 @@ When you set `value` programmatically:
 
 The default delete action uses `jb-icon-delete`; its lid animation plays while the delete control is hovered.
 
+### Upload loading animation
+
+When `isUploading` is `true`, the component switches to `status="uploading"` and adds the `uploading` custom state. The upload area then displays:
+
+- A `jb-loading` spinner (slotted via `uploader-icon`) and an "Uploading" title.
+- A gradient progress background whose filled portion is driven by `uploadPercent` (0–100).
+- A progress overlay (`progress-top-level`) that masks the background.
+
+When `isUploading` is set back to `false`, the component restores the previous status (`empty`, `uploaded`, or `downloaded`).
+
 ```js
 const imageInput = document.querySelector('jb-image-input');
 
@@ -135,6 +146,16 @@ imageInput.downloader = (value, config) => {
         reader.readAsDataURL(blob);
       }));
 };
+
+imageInput.addEventListener('change', async () => {
+    const file = imageInput.value;
+    imageInput.isUploading = true;
+    imageInput.uploadPercent = 0;
+    await uploadFile(file, (percent) => {
+        imageInput.uploadPercent = percent;
+    });
+    imageInput.isUploading = false;
+});
 ```
 
 | downloader argument | description |
@@ -213,11 +234,13 @@ document.querySelector('jb-image-input').accept = 'image/jpeg,image/jpg,image/pn
 
 ## Slots
 
-Use the [custom placeholder demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--with-place-holder) to see the `placeholder` slot in context.
+Use the [custom placeholder demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--with-place-holder) to see the `placeholder` slot in context, and see the [uploading demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--uploading-state) for the `upload` slot.
 
 | slot | description |
 | --- | --- |
 | `placeholder` | Custom content shown while the component status is `empty`. |
+| `upload` | Replaces the entire upload loading content, including the progress background, loading spinner, and uploading title. |
+| `uploader-icon` | Replaces the loading icon inside the upload content. Defaults to `jb-loading`. |
 | `overlay` | Replaces the full image overlay shown over the preview image. |
 | `overlay-content` | Replaces the default overlay controls while keeping the default overlay container. |
 
@@ -234,18 +257,30 @@ Use the [custom placeholder demo](https://javadbat.github.io/design-system/?path
 | part | description |
 | --- | --- |
 | `message` | Helper or validation message inside the default placeholder. |
+| `loading upload-loading` | The `jb-loading` spinner in the upload loading area. |
+| `uploading-title` | The upload status title text. |
+| `progress-top-level` | The progress overlay element that masks the upload background based on `uploadPercent`. |
 
 | custom state | description |
 | --- | --- |
 | `disabled` | Applied when `disabled` is true. |
+| `uploading` | Applied when `isUploading` is true or `status` is `uploading`. Shows the loading spinner, progress background, and uploading title. |
 
 ```css
 jb-image-input::part(message) {
   font-weight: 600;
 }
 
+jb-image-input::part(uploading-title) {
+  font-weight: 600;
+}
+
 jb-image-input:state(disabled) {
   opacity: 0.5;
+}
+
+jb-image-input:state(uploading) {
+  --jb-loading-color: var(--jb-image-input-loading-color, var(--jb-neutral));
 }
 ```
 
@@ -260,6 +295,8 @@ jb-image-input.avatar-input {
   --jb-image-input-width: 10rem;
   --jb-image-input-height: 10rem;
   --jb-image-input-border-radius: 50%;
+  --jb-image-input-loading-color: #6366f1;
+  --jb-image-input-loading-bg: linear-gradient(90deg, #3b82f6, #8b5cf6);
 }
 ```
 
@@ -285,6 +322,7 @@ The [normal image input demo](https://javadbat.github.io/design-system/?path=/st
 - Use `value` for the stored/submitted image value and `file` for the selected local `File`.
 - Provide `downloader` when a stored value needs custom preview conversion.
 - Keep submitted values compatible with `ElementInternals.setFormValue()`: `File`, `string`, `FormData`, or `null`.
+- Set `isUploading` to `true` during upload and update `uploadPercent` (0–100) to drive the progress bar; set both back when done so the component restores the previous status.
 - Use `image-selected` when implementing multi-image selection; the component itself previews/uploads the first selected file.
 - Use `accept`, `maxFileSize`, `validation.list`, and `required` instead of custom file filtering logic when possible.
 - This package includes [`custom-elements.json`](./custom-elements.json) and points to it with the package.json `customElements` field. The field is documented by the Custom Elements Manifest project in [Referencing manifests from npm packages](https://github.com/webcomponents/custom-elements-manifest#referencing-manifests-from-npm-packages).

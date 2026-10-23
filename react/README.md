@@ -49,7 +49,7 @@ Use `jb-file-input` for non-image files.
 | `message` | `string` | Helper text shown in the placeholder message area. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
 | `required` | `boolean \| string` | Enables required validation. A string value is used as the required error message. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message) |
 | `uploadType` | `string` | Forwarded as `upload-type`; kept for compatibility. Uploading is managed by the application. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
-| `isUploading` | `boolean` | Shows externally managed upload loading state. |
+| `isUploading` | `boolean` | When true, displays the upload loading animation (spinner, progress bar, title) and sets `status="uploading"` with the `uploading` custom state. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--uploading-state) |
 | `uploadPercent` | `number \| null` | Sets the externally managed upload progress percentage. |
 
 ## Events
@@ -138,6 +138,20 @@ Use the [custom placeholder demo](https://javadbat.github.io/design-system/?path
 </JBImageInput>
 ```
 
+## Custom upload slot
+
+When `isUploading` is true, the component shows a loading spinner, progress bar, and "Uploading" title inside the `upload` slot. You can replace the loading icon via the `uploader-icon` slot. See the [uploading demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--uploading-state).
+
+```jsx
+<JBImageInput
+  label="Profile image"
+  isUploading={isUploading}
+  uploadPercent={uploadPercent}
+>
+  <my-spinner slot="uploader-icon" />
+</JBImageInput>
+```
+
 ## Custom style
 
 The React component uses the same CSS variables as the web component. See the [style gallery](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-style--gallery) and shared [styling documentation](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-styling--docs).
@@ -147,6 +161,8 @@ The React component uses the same CSS variables as the web component. See the [s
   --jb-image-input-width: 10rem;
   --jb-image-input-height: 10rem;
   --jb-image-input-border-radius: 50%;
+  --jb-image-input-loading-color: #6366f1;
+  --jb-image-input-loading-bg: linear-gradient(90deg, #3b82f6, #8b5cf6);
 }
 ```
 
@@ -156,11 +172,19 @@ The React component uses the same CSS variables as the web component. See the [s
 
 ## CSS parts and states
 
-The React wrapper exposes the same CSS parts, states, and slot names as the web component. Use JSX children with `slot="placeholder"` or other documented slot names for custom placeholder, upload, and overlay content. See the shared [CSS parts and states guidance](../README.md#css-parts-and-states).
+The React wrapper exposes the same CSS parts, states, and slot names as the web component. Use JSX children with `slot="placeholder"`, `slot="upload"`, `slot="uploader-icon"`, or other documented slot names for custom placeholder, upload, and overlay content. See the shared [CSS parts and states guidance](../README.md#css-parts-and-states).
 
 ```css
-.avatar-input::part(image) {
-  object-fit: cover;
+.avatar-input::part(message) {
+  font-weight: 600;
+}
+
+.avatar-input::part(uploading-title) {
+  font-weight: 600;
+}
+
+.avatar-input:state(uploading) {
+  --jb-loading-color: var(--jb-image-input-loading-color, var(--jb-neutral));
 }
 ```
 
@@ -182,6 +206,7 @@ For web-component behavior, events, slots, CSS variables, and the full API, see 
 - Import `JBImageInput` from `jb-image-input/react`; the wrapper imports and registers the underlying `jb-image-input` web component.
 - Use `value` for stored/submitted image data and `file` when injecting a local `File`.
 - Use `onChange` to upload the selected `File`, assign the returned stored value yourself, and use `downloader` to transform stored values into preview image data URLs.
+- Set `isUploading` to `true` during upload and update `uploadPercent` (0–100) to drive the progress bar; set it back to `false` when done so the component restores the previous status.
 - Keep submitted values compatible with `ElementInternals.setFormValue()`: `File`, `string`, `FormData`, or `null`.
 - Use `onImageSelected` for multi-image flows; the component itself previews the first selected file.
 - The default delete action uses `jb-icon-delete` and animates while hovered.
