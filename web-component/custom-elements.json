@@ -64,8 +64,15 @@
               "type": {
                 "text": "boolean"
               }
-            }
-            ,{
+            },
+            {
+              "name": "overlay-text",
+              "description": "Overrides the main action button text shown in the image overlay. Use together with onOverlayClick to customize overlay action behavior.",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
               "name": "is-uploading",
               "description": "Sets isUploading and triggers the uploading custom state. While uploading, the component shows a loading spinner, progress background, and title. See the upload slot and uploading CSS state.",
               "type": { "text": "boolean" }
@@ -347,6 +354,10 @@
             {
               "name": "overlay-content",
               "description": "Replaces the default overlay controls while keeping the default overlay container."
+            },
+            {
+              "name": "overlay-extra-actions",
+              "description": "You can add your own custom button on overlay menu"
             }
           ],
           "cssParts": [

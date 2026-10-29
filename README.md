@@ -57,6 +57,7 @@ import 'jb-image-input';
 | `accept` | `string` | common image types | Native file accept string forwarded to the hidden file input. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
 | `is-uploading` | `boolean` | `false` | Shows externally controlled upload loading state. Sets `isUploading`, triggers the `uploading` custom state, and sets `status="uploading"` so the loading spinner, progress background, and uploading title are displayed. |
 | `disabled` | `boolean` | `false` | Disables file selection and overlay actions. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-style--gallery) |
+| `overlay-text` | `string` | — | Overrides the main action button text shown in the image overlay. |
 
 ### Properties
 
@@ -73,6 +74,7 @@ import 'jb-image-input';
 | `multiple` | `boolean` | no | Controls the hidden native file input `multiple` attribute. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
 | `required` | `boolean` | no | Enables required validation. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required) |
 | `disabled` | `boolean` | no | Disables file selection and overlay actions, and sets disabled accessibility/custom state. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput-style--gallery) |
+| `overlay-text` | `string` | no | Overrides the main action button text shown in the image overlay. |
 | `isUploading` | `boolean` | no | Shows externally managed upload loading state. When true, sets `status="uploading"`, adds the `uploading` custom state, and displays the loading spinner, progress background, and uploading title. When set back to false, the component restores the previous status. |
 | `isLoading` | `boolean` | yes | Computed aggregate loading state. |
 | `status` | `'empty' \| 'uploading' \| 'uploaded' \| 'downloaded' \| null` | yes | Current visual state. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
@@ -102,7 +104,21 @@ import 'jb-image-input';
 | `download-start` | `{ value: TValue }` | Cancelable event fired before a non-`File` value is converted to a preview. Prevent it when your application handles preview loading itself. |
 | `image-selected` | `{ files: FileList }` | Fired after the hidden native file input changes. Use this for multi-image flows. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
 | `max-size-exceed` | `{ file: File }` | Fired when the selected file is larger than `maxFileSize`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--max-file-size) |
+| `overlay-click` | none | Fired when the image overlay is clicked. Cancellable via `preventDefault()`. When prevented, the default overlay action (opening the image selector) is skipped, so you can run a custom action instead. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--overlay-action) |
 | `invalid` | none | Fired when `checkValidity()` or `reportValidity()` finds an invalid value. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--required-with-message) |
+
+## Slots
+
+| slot | description |
+| --- | --- |
+| `placeholder` | Replaces the entire placeholder area with custom content. |
+| `placeholder-icon` | Replaces the default placeholder icon with a custom SVG or element. |
+| `upload` | Replaces the entire upload loading area (spinner, progress, title). |
+| `uploader-icon` | Replaces the loading spinner icon inside the upload area. |
+| `overlay` | Replaces the entire image overlay window. |
+| `overlay-content` | Replaces the content shown inside the image overlay window. |
+| `overlay-extra-actions` | Adds extra action buttons (e.g., "Use image", "Share") inside the image overlay, to the right of the main action button. |
+
 
 ## Value, file, and preview
 
@@ -297,6 +313,7 @@ jb-image-input.avatar-input {
   --jb-image-input-border-radius: 50%;
   --jb-image-input-loading-color: #6366f1;
   --jb-image-input-loading-bg: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  --jb-image-input-corner-shape: 8px; /* Optional: overrides corner shape used by :host and error-overlay */
 }
 ```
 

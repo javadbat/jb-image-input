@@ -51,6 +51,8 @@ Use `jb-file-input` for non-image files.
 | `uploadType` | `string` | Forwarded as `upload-type`; kept for compatibility. Uploading is managed by the application. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
 | `isUploading` | `boolean` | When true, displays the upload loading animation (spinner, progress bar, title) and sets `status="uploading"` with the `uploading` custom state. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--uploading-state) |
 | `uploadPercent` | `number \| null` | Sets the externally managed upload progress percentage. |
+| `overlayText` | `string` | Overrides the main action button text shown in the image overlay. |
+| `onOverlayClick` | `(e) => void` | Fired when the image overlay is clicked. Cancellable via `e.preventDefault()`. When prevented, the default overlay action (opening the image selector) is skipped, so you can run a custom action instead. See the [overlay-click demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--overlay-action). |
 
 ## Events
 
@@ -59,6 +61,7 @@ Use `jb-file-input` for non-image files.
 | `onChange` | `change` | Fired when a file is selected or the selected image is deleted. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--bridge-and-value) |
 | `onImageSelected` | `image-selected` | Fired with `event.detail.files` after the native file input changes. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--multiple-selection) |
 | `onMaxSizeExceed` | `max-size-exceed` | Fired with `event.detail.file` when a selected file is larger than `maxFileSize`. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--max-file-size) |
+| `onOverlayClick` | `overlay-click` | Fired when the image overlay is clicked. Cancellable via `e.preventDefault()`. When prevented, the default overlay action (opening the image selector) is skipped, so you can run a custom action instead. See the [overlay-click demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--overlay-action). |
 | `onDownloadStart` | `download-start` | Fired before a stored value is converted into a preview; call `preventDefault()` to handle preview loading yourself. |
 | `onLoad` | `load` | Wired by the wrapper for compatibility with lazy-loaded custom elements. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
 | `onInit` | `init` | Wired by the wrapper for compatibility with lazy-loaded custom elements. [Demo](https://javadbat.github.io/design-system/?path=/story/components-form-elements-jbimageinput--normal) |
@@ -169,6 +172,17 @@ The React component uses the same CSS variables as the web component. See the [s
 ```jsx
 <JBImageInput className="avatar-input" />
 ```
+## Slots
+
+The React wrapper exposes the same slots as the web component. Use JSX children with `slot="placeholder"`, `slot="placeholder-icon"`, `slot="upload"`, `slot="uploader-icon"`, or `slot="overlay-extra-actions"` for custom placeholder, upload, and overlay content.
+
+| slot | description |
+| --- | --- |
+| `placeholder` | Replaces the entire placeholder area with custom content. |
+| `placeholder-icon` | Replaces the default placeholder icon with a custom SVG or element. |
+| `upload` | Replaces the entire upload loading area (spinner, progress, title). |
+| `uploader-icon` | Replaces the loading spinner icon inside the upload area. |
+| `overlay-extra-actions` | Adds extra action buttons inside the image overlay, to the right of the main action button. |
 
 ## CSS parts and states
 
