@@ -192,7 +192,22 @@ export const RequiredWithMessage: Story = {
     required: "you must fill this field to continue",
   },
 };
-
+export const OverlayAction: Story = {
+  args: {
+    message: "when you select an image overlay window on hover has different main action than reselect",
+    overlayText:"Alert file name",
+    onOverlayClick(e) {
+      e.preventDefault();
+      alert((e.target.value as File).name)
+    },
+  },
+};
+export const OverlayExtraActionButtons: Story = {
+  args: {
+    message: "when you select an image overlay window on hover has extra primary button",
+    children:<JBButton slot="overlay-extra-actions">Extra</JBButton>
+  },
+};
 export const ActionTest: Story = {
   render: args => <JBImageInputActionTest {...args}></JBImageInputActionTest>,
 };

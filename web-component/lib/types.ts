@@ -9,7 +9,8 @@ export type JBImagesImageInputElements = {
     image:HTMLImageElement;
     overlay:{
         container:HTMLDivElement,
-        reselectButton:HTMLButtonElement,
+        mainButton:HTMLButtonElement,
+        overlayExtraActionsSlot:HTMLSlotElement,
         deleteButton:HTMLElement,
         downloadButton:HTMLElement
     }

@@ -18,6 +18,7 @@ export type EventProps<TValue> = {
   onImageSelected?: (e: JBImageInputEventType<CustomEvent, TValue>) => void,
   onMaxSizeExceed?: (e: JBImageInputEventType<Event, TValue>) => void,
   onDownloadStart?: (e: JBImageInputEventType<CustomEvent<{ value: TValue }>, TValue>) => void,
+  onOverlayClick?:(e: JBImageInputEventType<MouseEvent, TValue>) => void
 }
 export function useEvents<TValue>(element: RefObject<JBImageInputWebComponent<TValue> | null>, props: EventProps<TValue>) {
   useEvent(element, 'load', props.onLoad, true);
@@ -26,5 +27,6 @@ export function useEvents<TValue>(element: RefObject<JBImageInputWebComponent<TV
   useEvent(element, "image-selected", props.onImageSelected);
   useEvent(element, "max-size-exceed", props.onMaxSizeExceed);
   useEvent(element, "download-start", props.onDownloadStart);
+  useEvent(element, "overlay-click", props.onOverlayClick);
 
 }

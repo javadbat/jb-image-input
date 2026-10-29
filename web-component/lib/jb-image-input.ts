@@ -1,26 +1,20 @@
-import { defineWebComponent, JBBaseComponent, parseBooleanAttribute } from "jb-core";
+import { createMouseEvent, defineWebComponent, JBBaseComponent, parseBooleanAttribute } from "jb-core";
 import { type ShowValidationErrorParameters, ValidationHelper, type ValidationItem, type ValidationResult, type WithValidation } from "jb-validation";
-import type { JBFormInputStandards } from 'jb-form';
+import type { JBFormInputStandards } from "jb-form";
 import CSS from "./ib-image-input.css";
 import VariablesCSS from "./variables.css";
-import type {
-  JBImageInputConfig,
-  JBImageInputDownloader,
-  JBImagesImageInputElements,
-  ValidationValue,
-  ViewStatus,
-} from "./types";
-import { registerDefaultVariables } from 'jb-core/theme';
+import type { JBImageInputConfig, JBImageInputDownloader, JBImagesImageInputElements, ValidationValue, ViewStatus } from "./types";
+import { registerDefaultVariables } from "jb-core/theme";
 import { renderHTML } from "./render";
 import { dictionary } from "./i18n";
 import { i18n } from "jb-core/i18n";
 import type { JBIconDeleteWebComponent } from "jb-icons/delete";
-export * from './types.js';
+export * from "./types.js";
 export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent implements WithValidation<ValidationValue<TValue | null>>, JBFormInputStandards<TValue | null> {
   static get formAssociated() {
     return true;
   }
-  //TODO: this component need refactor for ui design to show better loading in download & upload and better effect for succeed upload and Download
+  //TODO: this component need refactor for ui design to show better loading in download and better effect for succeed upload and Download
   get value() {
     return this.#value;
   }
@@ -102,12 +96,12 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   set isUploading(value: boolean) {
     this.#isUploading = Boolean(value);
     if (this.#internals) this.#internals.ariaBusy = this.#isUploading ? "true" : "false";
-    if(value){
+    if (value) {
       this.#setStatus("uploading");
-      this.#internals?.states.add("uploading")
-    }else if(this.#status == "uploading"){
-      this.#setStatus(this.#prevStatus??"empty");
-      this.#internals?.states.delete("uploading")
+      this.#internals?.states.add("uploading");
+    } else if (this.#status == "uploading") {
+      this.#setStatus(this.#prevStatus ?? "empty");
+      this.#internals?.states.delete("uploading");
     }
   }
   get isLoading(): boolean {
@@ -144,7 +138,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     if (this.#elements) {
       this.#elements.overlay.deleteButton.toggleAttribute("disabled", value);
       this.#elements.overlay.downloadButton.toggleAttribute("disabled", value);
-      this.#elements.overlay.reselectButton.disabled = value;
+      this.#elements.overlay.mainButton.disabled = value;
       this.#elements.placeHolderWrapper.disabled = value;
       this.#elements.previewButton.disabled = value;
     }
@@ -172,19 +166,19 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     getValue: () => ({ file: this.#file, value: this.#value }),
     getValidations: this.#getInsideValidation.bind(this),
     setValidationResult: this.#setValidationResult.bind(this),
-    getValueString: () => this.fileName ?? ""
+    getValueString: () => this.fileName ?? "",
   });
   get validation() {
     return this.#validation;
   }
   get name() {
-    return this.getAttribute('name') || '';
+    return this.getAttribute("name") || "";
   }
   set name(value: string) {
     if (value) {
-      this.setAttribute('name', value);
+      this.setAttribute("name", value);
     } else {
-      this.removeAttribute('name');
+      this.removeAttribute("name");
     }
   }
   #initialValue: TValue | null = null;
@@ -204,7 +198,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     this.#isDirty = false;
     this.#setValue(this.initialValue);
     this.#validation.reset();
-    this.#internals?.setValidity({}, '');
+    this.#internals?.setValidity({}, "");
   }
   formResetCallback() {
     this.reset();
@@ -249,14 +243,15 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
       previewButton: shadowRoot.querySelector(".image-preview-button")!,
       overlay: {
         container: shadowRoot.querySelector(".image-overlay")!,
-        reselectButton: shadowRoot.querySelector(".image-overlay .reselect-button")!,
+        mainButton: shadowRoot.querySelector(".image-overlay .reselect-button")!,
         deleteButton: shadowRoot.querySelector(".image-overlay .delete-button")!,
-        downloadButton: shadowRoot.querySelector(".image-overlay .download-button")!
+        downloadButton: shadowRoot.querySelector(".image-overlay .download-button")!,
+        overlayExtraActionsSlot:shadowRoot.querySelector(`.image-overlay slot[name="overlay-extra-actions"]`)!,
       },
       errorOverlay: {
         container: shadowRoot.querySelector(".error-overlay")!,
-        message: shadowRoot.querySelector('.error-overlay .error-message')!
-      }
+        message: shadowRoot.querySelector(".error-overlay .error-message")!,
+      },
     };
     this.#updateUploadPercent();
   }
@@ -272,9 +267,9 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     this.#createVirtualInputFile();
   }
   #registerEventListener() {
-    this.#elements.placeHolderWrapper.addEventListener("click", this.openImageSelector.bind(this));
+    this.#elements.placeHolderWrapper.addEventListener("click", this.#onPlaceholderClick.bind(this));
     this.#elements.previewButton.addEventListener("click", this.openImageSelector.bind(this));
-    this.#elements.overlay.container.addEventListener("click", this.openImageSelector.bind(this));
+    this.#elements.overlay.container.addEventListener("click", this.#onOverlayClick.bind(this));
     this.#elements.overlay.deleteButton.addEventListener("click", this.#onDeleteButtonClick.bind(this));
     this.#elements.overlay.downloadButton.addEventListener("click", this.#onDownloadButtonClick.bind(this));
 
@@ -289,28 +284,39 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     this.#virtualInputFile.type = "file";
     this.#virtualInputFile.accept = this.accept;
     this.#virtualInputFile.disabled = this.disabled;
-    this.#virtualInputFile.addEventListener("change", (e) =>
-      this.#onImageSelected(e)
-    );
+    this.#virtualInputFile.addEventListener("change", e => this.#onImageSelected(e));
   }
-  /**
-   * @public 
-   * @description will open image selector
-   */
-  openImageSelector(event?: Event) {
-    const path = event?.composedPath();
-    if (this.disabled) {
-      event?.preventDefault();
-      event?.stopPropagation();
+
+  #onOverlayClick(e: MouseEvent) {
+    const path = e?.composedPath();
+    if (path?.includes(this.#elements.overlay.downloadButton) || path?.includes(this.#elements.overlay.deleteButton) || path?.includes(this.#elements.overlay.overlayExtraActionsSlot)) {
       return;
     }
-    if(path?.includes(this.#elements.overlay.downloadButton) || path?.includes(this.#elements.overlay.deleteButton)){
+    const event = createMouseEvent("overlay-click",e,{cancelable:true});
+    this.dispatchEvent(event);
+    if(event.defaultPrevented) return;
+    this.openImageSelector();
+  }
+  #onPlaceholderClick(e: MouseEvent) {
+    if (this.disabled) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    this.openImageSelector();
+  }
+  /**
+   * @public
+   * @description will open image selector
+   */
+  openImageSelector() {
+    if (this.disabled) {
       return;
     }
     this.#virtualInputFile.click();
   }
   static get observedAttributes() {
-    return ["required", "label", "multiple", "message", "disabled", "image-alt", "is-uploading", "accept"];
+    return ["required", "label", "multiple", "message", "disabled", "image-alt", "is-uploading", "accept", "overlay-text"];
   }
   attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
     // do something when an attribute has changed
@@ -346,6 +352,8 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
       case "accept":
         this.#setAccept(value ?? "");
         break;
+      case "overlay-text":
+        this.#elements.overlay.mainButton.innerText = value;
     }
   }
   #dispatchOnImagesSelected(files: FileList) {
@@ -400,7 +408,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   static ExtractBase64ImageFromFile(file: File): Promise<string> {
     return new Promise((resolved, rejected) => {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         const mainImageSource = e.target?.result as string;
         if (mainImageSource) {
           resolved(mainImageSource);
@@ -475,13 +483,13 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
           }
           if (file.size >= this.#maxFileSize!) {
             const sizeFormatter = new Intl.NumberFormat(i18n.locale, {
-              style: 'unit',
-              unit: 'byte',
+              style: "unit",
+              unit: "byte",
               notation: "compact",
               unitDisplay: "narrow",
-            })
+            });
 
-            return dictionary.get(i18n, "maxSizeExceed")(sizeFormatter.format(this.#maxFileSize!), sizeFormatter.format(file.size))
+            return dictionary.get(i18n, "maxSizeExceed")(sizeFormatter.format(this.#maxFileSize!), sizeFormatter.format(file.size));
           }
           return true;
         },
@@ -492,26 +500,26 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     return ValidationList;
   }
   /**
- * @public
- * @description this method used to check for validity but doesn't show error to user and just return the result
- * this method used by #internal of component
- */
+   * @public
+   * @description this method used to check for validity but doesn't show error to user and just return the result
+   * this method used by #internal of component
+   */
   checkValidity(): boolean {
     const validationResult = this.#validation.checkValiditySync({ showError: false });
     if (!validationResult.isAllValid) {
-      const event = new CustomEvent('invalid');
+      const event = new CustomEvent("invalid");
       this.dispatchEvent(event);
     }
     return validationResult.isAllValid;
   }
   /**
-  * @public
- * @description this method used to check for validity and show error to user
- */
+   * @public
+   * @description this method used to check for validity and show error to user
+   */
   reportValidity(): boolean {
     const validationResult = this.#validation.checkValiditySync({ showError: true });
     if (!validationResult.isAllValid) {
-      const event = new CustomEvent('invalid');
+      const event = new CustomEvent("invalid");
       this.dispatchEvent(event);
     }
     return validationResult.isAllValid;
@@ -521,14 +529,18 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
    */
   #setValidationResult(result: ValidationResult<ValidationValue<TValue>>) {
     if (result.isAllValid) {
-      this.#internals?.setValidity({}, '');
+      this.#internals?.setValidity({}, "");
     } else {
       const states: ValidityStateFlags = {};
       let message = "";
-      result.validationList.forEach((res) => {
+      result.validationList.forEach(res => {
         if (!res.isValid) {
-          if (res.validation.stateType) { states[res.validation.stateType] = true; }
-          if (message == '') { message = res.message ?? ""; }
+          if (res.validation.stateType) {
+            states[res.validation.stateType] = true;
+          }
+          if (message == "") {
+            message = res.message ?? "";
+          }
         }
       });
       this.#internals?.setValidity(states, message);
@@ -557,7 +569,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     if (this.disabled) {
       return;
     }
-    const base64String = this.#elements.image.getAttribute('src') ?? "";
+    const base64String = this.#elements.image.getAttribute("src") ?? "";
     const imageType = base64String.match(/[^:/]\w+(?=;|,)/)?.[0] ?? "";
     const a = document.createElement("a");
     a.href = base64String;
@@ -573,9 +585,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
     this.#updateFormValue();
     if (value instanceof File) {
       this.#file = value;
-      JBImageInputWebComponent.ExtractBase64ImageFromFile(value).then(
-        this.#onSuccessImageDownload.bind(this)
-      );
+      JBImageInputWebComponent.ExtractBase64ImageFromFile(value).then(this.#onSuccessImageDownload.bind(this));
     } else {
       const event = new CustomEvent("download-start", {
         cancelable: true,
@@ -585,9 +595,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
       if (event.defaultPrevented) return;
 
       this.#setStatus("uploaded");
-      const downloader = this.downloader ?? (
-        typeof value === "string" ? this.#downloadImageFromUrl.bind(this) : undefined
-      );
+      const downloader = this.downloader ?? (typeof value === "string" ? this.#downloadImageFromUrl.bind(this) : undefined);
       if (downloader) {
         Promise.resolve(downloader(value, this.config))
           .then(this.#onSuccessImageDownload.bind(this))
@@ -611,9 +619,7 @@ export class JBImageInputWebComponent<TValue = File> extends JBBaseComponent imp
   async #downloadImageFromUrl(value: TValue): Promise<string> {
     const response = await fetch(value as string);
     if (!response.ok) throw new Error(`Unable to download image: ${response.status}`);
-    return JBImageInputWebComponent.ExtractBase64ImageFromFile(
-      new File([await response.blob()], "image", { type: response.headers.get("content-type") ?? "" })
-    );
+    return JBImageInputWebComponent.ExtractBase64ImageFromFile(new File([await response.blob()], "image", { type: response.headers.get("content-type") ?? "" }));
   }
 }
 defineWebComponent("jb-image-input", JBImageInputWebComponent);

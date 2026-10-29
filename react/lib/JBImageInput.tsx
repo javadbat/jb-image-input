@@ -11,16 +11,16 @@ export type { JBImageInputConfig, JBImageInputDownloader };
 
 export function JBImageInput<TValue>(props: Props<TValue>) {
   const element = useRef<JBImageInputWebComponent<TValue> | null>(null);
-  const { accept, ref, downloader, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value, onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed, onDownloadStart, uploadType, isUploading, uploadPercent, ...otherProps } = props;
+  const { accept,overlayText, ref, downloader, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value, onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed, onDownloadStart, onOverlayClick, uploadType, isUploading, uploadPercent, ...otherProps } = props;
   useImperativeHandle(ref,
     () => (element.current ?? undefined),
-    [element]);
+    []);
     
   useJBImageInputAttribute(element, { accept, downloader, config, disabled, file, initialValue, label, maxFileSize, message, multiple, name, required, validationList, value, isUploading, uploadPercent });
-  useEvents(element, { onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed, onDownloadStart });
+  useEvents(element, { onChange, onImageSelected, onInit, onLoad, onMaxSizeExceed, onDownloadStart, onOverlayClick });
 
   return (
-    <jb-image-input ref={element} upload-type={uploadType || 'AUTO'} {...otherProps}>
+    <jb-image-input ref={element} upload-type={uploadType || 'AUTO'} overlay-text={overlayText} {...otherProps}>
       {props.children}
     </jb-image-input>
   );
@@ -29,6 +29,7 @@ type ImageInputProps<TValue> = EventProps<TValue> & JBImageInputAttributes<TValu
   uploadType?: string,
   isUploading?: boolean,
   uploadPercent?: number | null,
+  overlayText?:string,
   ref?: ForwardedRef<JBImageInputWebComponent<TValue> | null | undefined>
 }
 export type Props<TValue> = ImageInputProps<TValue> & JBElementStandardProps<JBImageInputWebComponent, keyof ImageInputProps<TValue>>
